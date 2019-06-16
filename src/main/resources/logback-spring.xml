@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="APP_LOG" value="${APP_LOG:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/log/app/app.log}"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
+
+    <appender name="APP_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%message%n</Pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <file>${APP_LOG}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG}.%d{yyyy-MM-dd}.%i</fileNamePattern>
+            <maxHistory>365</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ASYNC-APP_LOG" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- https://logback.qos.ch/manual/appenders.html -->
+        <appender-ref ref="APP_FILE"/>
+        <!-- By default, when the blocking queue has 20% capacity remaining, it will drop events of level TRACE, DEBUG and INFO, keeping only events of level WARN and ERROR. To keep all events, set discardingThreshold to 0. -->
+        <discardingThreshold>80</discardingThreshold>
+        <!-- Use maxFlushTime to specify a maximum queue flush timeout in milliseconds -->
+        <maxFlushTime>2000</maxFlushTime>
+        <neverBlock>true</neverBlock>
+    </appender>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+            </pattern>
+        </encoder>
+    </appender>
+    <logger name="AppLogger">
+        <appender-ref ref="ASYNC-APP_LOG"/>
+    </logger>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>
+                %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}
+            </pattern>
+        </encoder>
+    </appender>
+    <logger name="org.springframework" level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="springfox.documentation" level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.apache" level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="top.potens" level="DEBUG" additivity="false"><appender-ref ref="STDOUT" /></logger>
+    <logger name="top.potens.web.dao.db" level="ERROR" additivity="false"><appender-ref ref="STDOUT" /></logger>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

@@ -1,0 +1,4 @@
+mybatis:
+  mapperLocations: classpath*:mappings/*/*.xml
+logging:
+  path: d:/tmp/

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <context id="Tables" targetRuntime="MyBatis3">
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <plugin type="top.potens.framework.plugin.OverIsMergeAblePlugin" />
+
+        <!-- 生成的对象可序列化 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!-- 去除自动生成的注释  -->
+            <property name="suppressAllComments" value="true" />
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+
+        <!-- JDBC驱动 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://potens.top:7306/web?useSSL=false"
+                        userId="web" password="dsqdq2333#$%">
+        </jdbcConnection>
+        <!-- 类型转换 -->
+        <javaTypeResolver type="top.potens.framework.plugin.MyFullyQualifiesJavaTypePlugin">
+            <property name="forceBigDecimals" value="true" />
+        </javaTypeResolver>
+
+        <!-- 自动生成的Model  必须存在的文件夹，不然无法生成 -->
+        <javaModelGenerator targetPackage="top.potens.web.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+        <!-- 自动生成的sqlMapper.xml -->
+        <sqlMapGenerator targetPackage="auto" targetProject="src/main/resources/mappings">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+
+
+
+
+
+        <!-- 自动生成的IMapper.java 操作接口 -->
+        <javaClientGenerator targetPackage="top.potens.web.dao.db.tool.auto" targetProject="src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table tableName="member" delimitIdentifiers="true">
+            <generatedKey column="member_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="member_auth" delimitIdentifiers="true">
+            <generatedKey column="member_auth_id" sqlStatement="MySql" identity="true" />
+        </table>
+
+    </context>
+</generatorConfiguration>
