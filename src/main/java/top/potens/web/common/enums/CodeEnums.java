@@ -5,7 +5,13 @@ package top.potens.web.common.enums;
  */
 public enum CodeEnums {
     SUC("0", "成功"),
-    MEMBER_NOT_FOUND("10000", "用户不存在");
+    PARAM_ERROR("10000", "参数不匹配"),
+    MEMBER_NOT_FOUND("10100", "用户不存在"),
+    MEMBER_EXIST_MORE("10101", "用户已经存在"),
+    MEMBER_EXIST("10102", "用户已经存在"),
+    MEMBER_MOBILE_INPUT_ERROR("10103", "手机号输入错误"),
+    MEMBER_MAIL_INPUT_ERROR("10104", "邮箱输入错误");
+
 
 
     private String msg;

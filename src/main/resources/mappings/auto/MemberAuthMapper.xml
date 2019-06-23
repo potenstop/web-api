@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.potens.web.dao.db.tool.auto.MemberAuthMapper">
+<mapper namespace="top.potens.web.dao.db.auto.MemberAuthMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.MemberAuth">
     <result column="member_auth_id" jdbcType="INTEGER" property="memberAuthId" />
     <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="identity_type" jdbcType="TINYINT" property="identityType" />
     <result column="identifier" jdbcType="VARCHAR" property="identifier" />
     <result column="credential" jdbcType="VARCHAR" property="credential" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    member_auth_id, member_id, identity_type, identifier, credential
+    member_auth_id, member_id, identity_type, identifier, credential, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.MemberAuthExample" resultMap="BaseResultMap">
     select
@@ -94,9 +96,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `member_auth` (member_id, identity_type, identifier, 
-      credential)
+      credential, create_time, update_time
+      )
     values (#{memberId,jdbcType=INTEGER}, #{identityType,jdbcType=TINYINT}, #{identifier,jdbcType=VARCHAR}, 
-      #{credential,jdbcType=VARCHAR})
+      #{credential,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.MemberAuth">
     <selectKey keyProperty="memberAuthId" order="AFTER" resultType="java.lang.Integer">
@@ -116,6 +120,12 @@
       <if test="credential != null">
         credential,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
@@ -129,6 +139,12 @@
       </if>
       <if test="credential != null">
         #{credential,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -156,6 +172,12 @@
       <if test="record.credential != null">
         credential = #{record.credential,jdbcType=VARCHAR},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -167,7 +189,9 @@
       member_id = #{record.memberId,jdbcType=INTEGER},
       identity_type = #{record.identityType,jdbcType=TINYINT},
       identifier = #{record.identifier,jdbcType=VARCHAR},
-      credential = #{record.credential,jdbcType=VARCHAR}
+      credential = #{record.credential,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

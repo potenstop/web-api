@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.potens.web.dao.db.tool.auto.MemberMapper">
+<mapper namespace="top.potens.web.dao.db.auto.MemberMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.Member">
     <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />

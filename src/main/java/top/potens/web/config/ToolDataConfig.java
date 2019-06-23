@@ -28,7 +28,7 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = ToolDataConfig.PACKAGE, sqlSessionTemplateRef = "sqlSessionTemplate")
 public class ToolDataConfig {
 
-    static final String PACKAGE = "top.potens.web.dao.db.tool";
+    static final String PACKAGE = "top.potens.web.dao.db";
 
     //@Value("${data.master.url}")
     private String masterUrl = "jdbc:mysql://potens.top:7306/web?useSSL=false";

@@ -46,7 +46,7 @@
 
 
         <!-- 自动生成的IMapper.java 操作接口 -->
-        <javaClientGenerator targetPackage="top.potens.web.dao.db.tool.auto" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="top.potens.web.dao.db.auto" targetProject="src/main/java"
                              type="XMLMAPPER">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
