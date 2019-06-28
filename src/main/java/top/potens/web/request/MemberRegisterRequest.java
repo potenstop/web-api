@@ -14,7 +14,6 @@ import javax.validation.constraints.Pattern;
  */
 public class MemberRegisterRequest {
     @ApiModelProperty(value = "用户昵称", example = "potens")
-    @NotBlank
     private String nickname;
 
     @ApiModelProperty(value = "认证密码", example = "123456")
@@ -22,7 +21,6 @@ public class MemberRegisterRequest {
     private String credential;
 
     @ApiModelProperty(value = "对应类型的凭证", example = "15712345678")
-    @NotBlank
     private String identifier;
 
     @ApiModelProperty(value = "类型", example = "1")

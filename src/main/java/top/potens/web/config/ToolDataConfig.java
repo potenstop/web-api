@@ -67,7 +67,7 @@ public class ToolDataConfig {
     }
     @Bean("masterTransactionManager")
     @Primary
-    public DataSourceTransactionManager createWeekendTransactionManager(@Qualifier("masterDataSource") DataSource dataSource) {
+    public DataSourceTransactionManager createTransactionManager(@Qualifier("masterDataSource") DataSource dataSource) {
         DataSourceTransactionManager manager = new DataSourceTransactionManager();
         manager.setDataSource(dataSource);
         return manager;

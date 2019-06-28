@@ -1,6 +1,7 @@
 package top.potens.web.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,15 +93,8 @@ public class MemberServiceImpl implements MemberService {
             throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
         }
     }
-
-    /**
-     * 检查用户是否存在
-     * @param identityType  类型
-     * @param identifier    标识
-     * @param credential    密码
-     * @return              true 存在 false 不存在
-     */
-    private Boolean existAuth(@NotBlank Integer identityType, @NotBlank String identifier, String credential) {
+    @Override
+    public MemberAuth existAuth(@NotBlank Integer identityType, @NotBlank String identifier, String credential) {
         MemberAuthExample memberAuthExample = new MemberAuthExample();
         memberAuthExample.createCriteria()
                 .andIdentityTypeEqualTo(identityType)
@@ -108,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
         List<MemberAuth> memberAuthList = memberAuthMapper.selectByExample(memberAuthExample);
         if (memberAuthList.isEmpty()) {
             AppUtil.info("查询用户auth 不存在 identityType:[{}] identifier:[{}] credential:[{}]", identityType, identifier, credential);
-            return false;
+            return null;
         }
         if (memberAuthList.size() != 1) {
             AppUtil.error("查询用户auth 存在多个 identityType:[{}] identifier:[{}] credential:[{}] memberAuthList:[{}]", identityType, identifier, credential, JSON.toJSONString(memberAuthList));
@@ -117,20 +111,20 @@ public class MemberServiceImpl implements MemberService {
         if (credential != null) {
             MemberAuth memberAuth = memberAuthList.get(0);
             if (memberAuth.getCredential().equals(credential)) {
-                return true;
+                return memberAuth;
             } else {
                 AppUtil.info("查询用户auth credential不匹配 identityType:[{}] identifier:[{}] credential:[{}]", identityType, identifier, credential);
-                return false;
+                return null;
             }
         } else {
-            return true;
+            return memberAuthList.get(0);
         }
     }
-
-    public void insertByMobile(MemberRegisterRequest request) {
+    @Override
+    public Integer insertByMobile(MemberRegisterRequest request) {
         // 1 检查用户是否存在
-        Boolean existAuth = this.existAuth(MemberConstant.IdentityType.MOBILE, request.getIdentifier(), null);
-        if (existAuth) {
+        MemberAuth existMemberAuth = this.existAuth(MemberConstant.IdentityType.MOBILE, request.getIdentifier(), null);
+        if (existMemberAuth != null) {
             AppUtil.warn("添加用户 用户存在 mobile:[{}]", request.getIdentifier());
             throw new ApiException(CodeEnums.MEMBER_EXIST.getCode(), CodeEnums.MEMBER_EXIST.getMsg());
         }
@@ -142,9 +136,38 @@ public class MemberServiceImpl implements MemberService {
         memberAuth.setIdentifier(request.getIdentifier());
         memberAuth.setCredential(request.getCredential());
         this.createMember(member, memberAuth);
+        return member.getMemberId();
     }
-    private void insertByMail(Member member) {
+    @Override
+    public Integer insertByMail(MemberRegisterRequest request) {
+        // 1 检查用户是否存在
+        MemberAuth existMemberAuth = this.existAuth(MemberConstant.IdentityType.MAIL, request.getIdentifier(), null);
+        if (existMemberAuth != null) {
+            AppUtil.warn("添加用户 用户存在 mail:[{}]", request.getIdentifier());
+            throw new ApiException(CodeEnums.MEMBER_EXIST.getCode(), CodeEnums.MEMBER_EXIST.getMsg());
+        }
+        // 2 插入数据库
+        Member member = new Member();
+        member.setNickname(request.getNickname());
+        MemberAuth memberAuth = new MemberAuth();
+        memberAuth.setIdentityType(MemberConstant.IdentityType.MAIL);
+        memberAuth.setIdentifier(request.getIdentifier());
+        memberAuth.setCredential(request.getCredential());
+        this.createMember(member, memberAuth);
+        return member.getMemberId();
+    }
 
+    @Override
+    public Integer insertByUuid(String uuid) {
+        Member member = new Member();
+        member.setNickname("");
+        member.setAvatar("");
+        MemberAuth memberAuth = new MemberAuth();
+        memberAuth.setIdentityType(MemberConstant.IdentityType.VISITOR);
+        memberAuth.setIdentifier(uuid);
+        memberAuth.setCredential("");
+        createMember(member, memberAuth);
+        return member.getMemberId();
     }
 
 }
