@@ -29,4 +29,24 @@ public interface CodeService {
      * @return          执行结果
      */
     String runJava(String code);
+    /**
+     *
+     * 方法功能描述: 运行java代码
+     *
+     * @author yanshaowen
+     * @date 2019/6/27 18:10
+     * @param code      代码
+     * @return          执行结果
+     */
+    String runPython(String code);
+    /**
+     *
+     * 方法功能描述: 运行ruby代码
+     *
+     * @author yanshaowen
+     * @date 2019/6/27 18:10
+     * @param code      代码
+     * @return          执行结果
+     */
+    String runRuby(String code);
 }

@@ -33,9 +33,9 @@ public class MyCorsFilter implements Filter {
         res.addHeader("Access-Control-Allow-Credentials", "true");
         res.addHeader("Access-Control-Allow-Origin", "*");
         res.addHeader("Access-Control-Allow-Methods", "*");
-        res.addHeader("Access-Control-Allow-Headers", "*");
+        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         if (HttpMethod.OPTIONS.name().equals(req.getMethod())) {
-            response.getWriter().println("ok");
+            // response.getWriter().println("ok");
             return;
         }
         chain.doFilter(request, response);

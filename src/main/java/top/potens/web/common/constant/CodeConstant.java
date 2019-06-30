@@ -11,12 +11,20 @@ package top.potens.web.common.constant;
 public class CodeConstant {
     public static class CodeType {
         /**
-         * nodejs
+         * javascript
          */
-        public final static String JAVA_SCRIPT = " ";
+        public final static String JAVA_SCRIPT = "javascript";
         /**
          * java
          */
         public final static String JAVA = "java";
+        /**
+         * python
+         */
+        public final static String PYTHON = "python";
+        /**
+         * ruby
+         */
+        public final static String RUBY = "ruby";
     }
 }

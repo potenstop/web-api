@@ -1,5 +1,7 @@
 package top.potens.framework.model;
 
+import top.potens.framework.serialization.JSON;
+
 /**
  * Created by wenshao on 2019/6/16.
  */
@@ -35,5 +37,10 @@ public class ApiResult<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

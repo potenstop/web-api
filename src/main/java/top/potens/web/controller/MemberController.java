@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppUtil;
@@ -15,7 +14,6 @@ import top.potens.framework.serialization.JSON;
 import top.potens.web.bmo.MemberAuthInfoBO;
 import top.potens.web.common.constant.MemberConstant;
 import top.potens.web.common.enums.CodeEnums;
-import top.potens.web.model.Member;
 import top.potens.web.model.MemberAuth;
 import top.potens.web.request.MemberRegisterRequest;
 import top.potens.web.response.MemberAuthBaseResponse;
@@ -51,7 +49,7 @@ public class MemberController {
     }
 
     @GetMapping("/by-id")
-    @Validated
+    @ApiOperation(value = "按id获取一条记录")
     public ApiResult<MemberAuthBaseResponse> memberById(
             @ApiParam(value = "memberId", example = "1") @RequestParam(required = true) @NotNull Integer memberId
     ) {
@@ -65,7 +63,6 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    @Validated
     @ApiOperation(value = "注册接口")
     public ApiResult<MemberAuthBaseResponse> MemberRegister(@RequestBody @Valid MemberRegisterRequest request) {
         AppUtil.info("注册用户接口 request:[{}]", JSON.toJSONString(request));
