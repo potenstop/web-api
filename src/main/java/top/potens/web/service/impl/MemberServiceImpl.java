@@ -1,7 +1,6 @@
 package top.potens.web.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,14 @@ import top.potens.web.model.MemberAuth;
 import top.potens.web.model.MemberAuthExample;
 import top.potens.web.model.MemberExample;
 import top.potens.web.request.MemberRegisterRequest;
+import top.potens.web.request.OrderNeo4jRequest;
 import top.potens.web.service.MemberService;
+import top.potens.web.service.noe4j.Neo4jService;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Created by wenshao on 2019/6/16.
@@ -35,7 +36,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final MemberAuthMapper memberAuthMapper;
-
+    private final Neo4jService neo4JService;
 
     @Transactional(rollbackFor = Exception.class)
     public void createMember(Member member, MemberAuth memberAuth) {

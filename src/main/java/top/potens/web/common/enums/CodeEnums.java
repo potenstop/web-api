@@ -11,7 +11,8 @@ public enum CodeEnums {
     MEMBER_EXIST("10102", "用户已经存在"),
     MEMBER_MOBILE_INPUT_ERROR("10103", "手机号输入错误"),
     MEMBER_MAIL_INPUT_ERROR("10104", "邮箱输入错误"),
-    CODE_COMPILER_ERROR("10105", "执行失败");
+    CODE_COMPILER_ERROR("10105", "执行失败"),
+    CITY_NOT_FOUND("10106", "城市没有找到");
 
     private String msg;
     private String code;
