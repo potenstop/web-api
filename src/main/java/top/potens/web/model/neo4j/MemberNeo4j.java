@@ -1,10 +1,12 @@
 package top.potens.web.model.neo4j;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.DateString;
 
 import java.util.Date;
 import java.util.Set;
@@ -28,8 +30,12 @@ public class MemberNeo4j {
 
     private String memberName;
 
+    @DateString("yyyy-MM-dd HH:mm:ss.SSS")
     private Date createTime;
 
     @Relationship(type = "AFFILIATION", direction = "OUTGOING")
     private AreaNeo4j cityAreaNeo4j;
+
+    @Relationship(type = "RECOMMEND", direction = "OUTGOING")
+    private MemberNeo4j fromMember;
 }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import top.potens.web.dao.neo4j.MyRepositoryImpl;
 
 import javax.sql.DataSource;
 
@@ -20,7 +21,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @ComponentScan(basePackages = "top.potens.web.service.neo4j")
-@EnableNeo4jRepositories(basePackages = "top.potens.web.dao.neo4j")
+@EnableNeo4jRepositories(basePackages = "top.potens.web.dao.neo4j", repositoryBaseClass = MyRepositoryImpl.class)
 @EnableTransactionManagement
 public class Neo4jConfig {
     //@Value("${data.master.url}")

@@ -14,4 +14,5 @@ import top.potens.web.model.neo4j.OrderNeo4j;
  */
 @Repository
 public interface OrderNeo4jRepository extends Neo4jRepository<OrderNeo4j, Long> {
+
 }

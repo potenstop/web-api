@@ -27,10 +27,10 @@ public class MemberNeo4jRequest {
     private String memberName;
 
     @NotNull
-    @ApiModelProperty(value = "创建时间", example = "2019-01-01 10:10:10")
+    @ApiModelProperty(value = "创建时间", example = "2019-01-01 10:10:10.0")
     private Date createTime;
 
     @NotNull
-    @ApiModelProperty(value = "用户所属城市code", example = "100000")
+    @ApiModelProperty(value = "用户所属城市code", example = "110100000000")
     private String partCityCode;
 }

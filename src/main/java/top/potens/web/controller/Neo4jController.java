@@ -16,11 +16,19 @@ import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.model.Area;
 import top.potens.web.model.neo4j.AreaNeo4j;
 import top.potens.web.model.neo4j.MemberNeo4j;
+import top.potens.web.model.neo4j.OrderNeo4j;
+import top.potens.web.model.neo4j.OrderProductNeo4j;
 import top.potens.web.request.MemberNeo4jRequest;
+import top.potens.web.request.OrderNeo4jRequest;
 import top.potens.web.service.AreaService;
 import top.potens.web.service.noe4j.Neo4jService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -71,6 +79,32 @@ public class Neo4jController {
         neo4JService.insertMember(memberNeo4j, request.getPartCityCode());
         result.setData(true);
         AppUtil.info("end-controller-memberAdd result:[{}]", JSON.toJSONString(result));
+        return result;
+    }
+    @PostMapping("/order/add")
+    @ApiOperation(value = "添加订单")
+    public ApiResult<Boolean> orderAdd(@RequestBody @Valid OrderNeo4jRequest request) {
+        AppUtil.info("start-controller-orderAdd");
+        ApiResult<Boolean> result = new ApiResult<>();
+        OrderNeo4j orderNeo4j = new OrderNeo4j();
+        orderNeo4j.setOrderId(request.getOrderId());
+        orderNeo4j.setPaidAmount(request.getPaidAmount());
+        orderNeo4j.setCreateTime(request.getCreateTime());
+        List<OrderProductNeo4j> orderProductNeo4js = new ArrayList<>();
+
+        List<OrderNeo4jRequest.OrderProductRequest> orderProductRequests = request.getOrderProductRequests();
+        orderProductRequests.forEach(value -> {
+            OrderProductNeo4j orderProductNeo4j = new OrderProductNeo4j();
+            orderProductNeo4j.setProductId(value.getProductId());
+            orderProductNeo4j.setProductName(value.getProductName());
+            orderProductNeo4j.setProductCount(value.getProductCount());
+            orderProductNeo4js.add(orderProductNeo4j);
+        });
+        HashSet<OrderProductNeo4j> orderProductNeo4js1 = new HashSet<>(orderProductNeo4js);
+        orderNeo4j.setProducts(orderProductNeo4js1);
+        neo4JService.insertOrder(orderNeo4j, request.getMemberId(), request.getDirectMember(), request.getIndirectMember());
+        result.setData(true);
+        AppUtil.info("end-controller-orderAdd result:[{}]", JSON.toJSONString(result));
         return result;
     }
 }

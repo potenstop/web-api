@@ -1,10 +1,13 @@
 package top.potens.web.dao.neo4j;
 
 import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.neo4j.annotation.QueryResult;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import top.potens.web.model.neo4j.MemberNeo4j;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,5 +44,9 @@ public interface MemberNeo4jRepository extends Neo4jRepository<MemberNeo4j, Long
     */
     @Query("match (:Member{memberId:{0} })-[r:AFFILIATION]->(:Area) delete r")
     Long deletePartCity(Integer memberId);
+
+    @Query(value = "MERGE (n: Member{memberId:{memberId} }) ON CREATE SET n.memberId = {memberId}, n.memberName = {memberName}, n.createTime = {createTime} " +
+            " ON MATCH SET n.memberName = {memberName}")
+    void createOrUpdate(@Param("memberId") Integer memberId, @Param("memberName") String memberName, @Param(value = "createTime") String createTime);
 }
 

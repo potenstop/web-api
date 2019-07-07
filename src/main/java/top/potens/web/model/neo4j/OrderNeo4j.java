@@ -1,10 +1,14 @@
 package top.potens.web.model.neo4j;
 
 import lombok.Data;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.DateString;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -18,8 +22,26 @@ import java.util.Set;
 @NodeEntity("Order")
 @Data
 public class OrderNeo4j {
+    @Id
+    @GeneratedValue
     private Long id;
+
+    private Integer orderId;
+
     private BigDecimal paidAmount;
+
+    @DateString("yyyy-MM-dd HH:mm:ss.SSS")
+    private Date createTime;
+
     @Relationship(type = "BUY", direction = "OUTGOING")
-    private Set<ProductNeo4j> products;
+    private Set<OrderProductNeo4j> products;
+
+    @Relationship(type = "BUY_ER", direction = "OUTGOING")
+    private MemberNeo4j memberNeo4j;
+
+    @Relationship(type = "DIRECT_MEMBER", direction = "OUTGOING")
+    private MemberNeo4j directMember;
+
+    @Relationship(type = "INDIRECT_MEMBER", direction = "OUTGOING")
+    private MemberNeo4j indirectMember;
 }

@@ -1,10 +1,8 @@
 package top.potens.framework.util;
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Period;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 /**
  * Created by wenshao on 2019/6/15.
  */
@@ -14,7 +12,7 @@ public class DateUtil {
      */
     public static final DateTimeFormatter FORMATTER_DATETIMESTAMP = DateTimeFormatter.ofPattern("yyyyMMddHHmmssS");
     /**
-     * yyyy-MM-dd HH:mm:ss
+     * yyyy-MM-dd HH:mm:ss.S
      */
     public static final DateTimeFormatter FORMATTER_DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
@@ -170,5 +168,21 @@ public class DateUtil {
         return period.getDays();
     }
 
-
+    /***
+     * date to string
+     * @param date
+     * @return
+     */
+    public static String getLocalDateStr(Date date) {
+        return getLocalDateStr(date, FORMATTER_DATETIME);
+    }
+    public static String getLocalDateStr(Date date, String formatter) {
+        return getLocalDateStr(date, DateTimeFormatter.ofPattern(formatter));
+    }
+    public static String getLocalDateStr(Date date, DateTimeFormatter dateTimeFormatter) {
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
+        return dateTimeFormatter.format(localDateTime);
+    }
 }
