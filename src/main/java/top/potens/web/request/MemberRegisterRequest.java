@@ -25,7 +25,7 @@ public class MemberRegisterRequest {
 
     @ApiModelProperty(value = "类型", example = "1")
     @NotNull
-    private Integer identityType;
+    private String channelCode;
 
     public String getNickname() {
         return nickname;
@@ -51,11 +51,11 @@ public class MemberRegisterRequest {
         this.identifier = identifier;
     }
 
-    public Integer getIdentityType() {
-        return identityType;
+    public String getChannelCode() {
+        return channelCode;
     }
 
-    public void setIdentityType(Integer identityType) {
-        this.identityType = identityType;
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
     }
 }

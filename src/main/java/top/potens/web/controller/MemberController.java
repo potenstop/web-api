@@ -12,12 +12,16 @@ import top.potens.framework.log.AppUtil;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.serialization.JSON;
 import top.potens.web.bmo.MemberAuthInfoBO;
+import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.constant.MemberConstant;
 import top.potens.web.common.enums.CodeEnums;
+import top.potens.web.model.Channel;
 import top.potens.web.model.MemberAuth;
 import top.potens.web.request.MemberRegisterRequest;
 import top.potens.web.response.MemberAuthBaseResponse;
+import top.potens.web.service.ChannelService;
 import top.potens.web.service.MemberService;
+import top.potens.web.service.logic.ContentCacheService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -34,6 +38,7 @@ import java.util.ArrayList;
 public class MemberController {
 
     private final MemberService memberService;
+    private final ContentCacheService contentCacheService;
 
     private MemberAuthBaseResponse convertMemberInfo(MemberAuthInfoBO memberAuthInfoBO) {
         MemberAuthBaseResponse memberAuthBaseResponse = new MemberAuthBaseResponse();
@@ -71,12 +76,12 @@ public class MemberController {
         memberService.validateRegisterParams(request);
         Integer memberId = null;
         // 2 插入数据
-        if (MemberConstant.IdentityType.MOBILE.equals(request.getIdentityType())) {
+        if (ChannelConstant.ChannelCode.SELF_TEL.equals(request.getChannelCode())) {
             memberId = memberService.insertByMobile(request);
-        } else if (MemberConstant.IdentityType.MAIL.equals(request.getIdentityType())) {
+        } else if (ChannelConstant.ChannelCode.SELF_MAIL.equals(request.getChannelCode())) {
             memberId = memberService.insertByMail(request);
         } else {
-            AppUtil.error("注册用户接口 未知的注册类型 type:[{}]", request.getIdentityType());
+            AppUtil.error("注册用户接口 未知的注册类型 channelCode:[{}]", request.getChannelCode());
             throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
         }
         // 3 查询用户数据
@@ -92,8 +97,9 @@ public class MemberController {
             @ApiParam(value = "uuid", example = "1") @RequestParam(required = true) @NotNull String uuid
     ) {
         AppUtil.info("游客注册登录接口 uuid:[{}]", uuid);
+        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
         ApiResult<MemberAuthBaseResponse> apiResult = new ApiResult<>();
-        MemberAuth memberAuth = memberService.existAuth(MemberConstant.IdentityType.VISITOR, uuid, null);
+        MemberAuth memberAuth = memberService.existAuth(channel.getChannelId(), uuid, null);
         Integer memberId = null;
         if (memberAuth == null) {
             // 根据uuid注册游客用户

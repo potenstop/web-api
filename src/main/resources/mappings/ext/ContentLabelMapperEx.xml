@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.potens.web.dao.db.ext.ContentLabelExMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.ContentLabel">
+    <result column="content_label_id" jdbcType="INTEGER" property="contentLabelId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="content_id" jdbcType="INTEGER" property="contentId" />
+    <result column="label_id" jdbcType="INTEGER" property="labelId" />
+  </resultMap>
+  <select id="insertOrUpdate" >
+    insert into content_label (content_id,label_id)  values(#{contentId,jdbcType=INTEGER}, #{labelId,jdbcType=INTEGER}) on  DUPLICATE key UPDATE label_id=#{labelId,jdbcType=INTEGER}
+  </select>
+</mapper>

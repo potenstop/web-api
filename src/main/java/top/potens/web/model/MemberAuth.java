@@ -6,17 +6,17 @@ import java.util.Date;
 public class MemberAuth implements Serializable {
     private Integer memberAuthId;
 
+    private Date createTime;
+
+    private Date updateTime;
+
     private Integer memberId;
 
-    private Integer identityType;
+    private Integer channelId;
 
     private String identifier;
 
     private String credential;
-
-    private Date createTime;
-
-    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -26,38 +26,6 @@ public class MemberAuth implements Serializable {
 
     public void setMemberAuthId(Integer memberAuthId) {
         this.memberAuthId = memberAuthId;
-    }
-
-    public Integer getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Integer memberId) {
-        this.memberId = memberId;
-    }
-
-    public Integer getIdentityType() {
-        return identityType;
-    }
-
-    public void setIdentityType(Integer identityType) {
-        this.identityType = identityType;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier == null ? null : identifier.trim();
-    }
-
-    public String getCredential() {
-        return credential;
-    }
-
-    public void setCredential(String credential) {
-        this.credential = credential == null ? null : credential.trim();
     }
 
     public Date getCreateTime() {
@@ -74,5 +42,37 @@ public class MemberAuth implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
+    }
+
+    public Integer getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Integer channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier == null ? null : identifier.trim();
+    }
+
+    public String getCredential() {
+        return credential;
+    }
+
+    public void setCredential(String credential) {
+        this.credential = credential == null ? null : credential.trim();
     }
 }

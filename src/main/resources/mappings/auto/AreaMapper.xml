@@ -3,12 +3,12 @@
 <mapper namespace="top.potens.web.dao.db.auto.AreaMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.Area">
     <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
     <result column="area_name" jdbcType="VARCHAR" property="areaName" />
     <result column="rank" jdbcType="TINYINT" property="rank" />
     <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    area_id, area_code, area_name, `rank`, parent_code, create_time, update_time
+    area_id, create_time, update_time, area_code, area_name, `rank`, parent_code
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.AreaExample" resultMap="BaseResultMap">
     select
@@ -95,11 +95,11 @@
     <selectKey keyProperty="areaId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `area` (area_code, area_name, `rank`, 
-      parent_code, create_time, update_time
+    insert into `area` (create_time, update_time, area_code, 
+      area_name, `rank`, parent_code
       )
-    values (#{areaCode,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{rank,jdbcType=TINYINT}, 
-      #{parentCode,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{areaCode,jdbcType=VARCHAR}, 
+      #{areaName,jdbcType=VARCHAR}, #{rank,jdbcType=TINYINT}, #{parentCode,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.Area">
@@ -108,6 +108,12 @@
     </selectKey>
     insert into `area`
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
       <if test="areaCode != null">
         area_code,
       </if>
@@ -120,14 +126,14 @@
       <if test="parentCode != null">
         parent_code,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="areaCode != null">
         #{areaCode,jdbcType=VARCHAR},
       </if>
@@ -139,12 +145,6 @@
       </if>
       <if test="parentCode != null">
         #{parentCode,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -160,6 +160,12 @@
       <if test="record.areaId != null">
         area_id = #{record.areaId,jdbcType=INTEGER},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.areaCode != null">
         area_code = #{record.areaCode,jdbcType=VARCHAR},
       </if>
@@ -172,12 +178,6 @@
       <if test="record.parentCode != null">
         parent_code = #{record.parentCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,12 +186,12 @@
   <update id="updateByExample" parameterType="map">
     update `area`
     set area_id = #{record.areaId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       area_code = #{record.areaCode,jdbcType=VARCHAR},
       area_name = #{record.areaName,jdbcType=VARCHAR},
       `rank` = #{record.rank,jdbcType=TINYINT},
-      parent_code = #{record.parentCode,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      parent_code = #{record.parentCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

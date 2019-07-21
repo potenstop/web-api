@@ -8,13 +8,13 @@ import java.util.Date;
  */
 public class DateUtil {
     /**
-     * yyyyMMddHHmmss
+     * yyyyMMddHHmmssSSS
      */
-    public static final DateTimeFormatter FORMATTER_DATETIMESTAMP = DateTimeFormatter.ofPattern("yyyyMMddHHmmssS");
+    public static final DateTimeFormatter FORMATTER_DATETIMESTAMP = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
     /**
-     * yyyy-MM-dd HH:mm:ss.S
+     * yyyy-MM-dd HH:mm:ss.SSS
      */
-    public static final DateTimeFormatter FORMATTER_DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+    public static final DateTimeFormatter FORMATTER_DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     /**
      * 获取当前日期
@@ -184,5 +184,14 @@ public class DateUtil {
         ZoneId zoneId = ZoneId.systemDefault();
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
         return dateTimeFormatter.format(localDateTime);
+    }
+    public static Date getLocalDate(String date, DateTimeFormatter dateTimeFormatter) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime parse = LocalDateTime.parse(date, dateTimeFormatter);
+        ZonedDateTime zdt = parse.atZone(zoneId);
+        return Date.from(zdt.toInstant());
+    }
+    public static Date getLocalDate(String date) {
+        return getLocalDate(date, FORMATTER_DATETIME);
     }
 }

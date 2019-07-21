@@ -41,6 +41,7 @@ public class AppUtil {
 
     public static void error(String message, Object... objects) {
         appLog.debug(LogLoaderFactory.newAppLog(LogLevel.ERROR, CurrentLineUtil.getStackTrace(), message).toString(), objects);
+        console.error(message, objects);
     }
 
     public static void error(String message, Throwable throwable, Object... objects) {
@@ -50,6 +51,7 @@ public class AppUtil {
     }
     public static void warn(String message, Object... objects) {
         appLog.warn(LogLoaderFactory.newAppLog(LogLevel.WARN, CurrentLineUtil.getStackTrace(), message).toString(), objects);
+        console.error(message, objects);
     }
 
     public static void warn(String message, Throwable throwable, Object... objects) {

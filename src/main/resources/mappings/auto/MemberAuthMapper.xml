@@ -3,12 +3,12 @@
 <mapper namespace="top.potens.web.dao.db.auto.MemberAuthMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.MemberAuth">
     <result column="member_auth_id" jdbcType="INTEGER" property="memberAuthId" />
-    <result column="member_id" jdbcType="INTEGER" property="memberId" />
-    <result column="identity_type" jdbcType="TINYINT" property="identityType" />
-    <result column="identifier" jdbcType="VARCHAR" property="identifier" />
-    <result column="credential" jdbcType="VARCHAR" property="credential" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="channel_id" jdbcType="TINYINT" property="channelId" />
+    <result column="identifier" jdbcType="VARCHAR" property="identifier" />
+    <result column="credential" jdbcType="VARCHAR" property="credential" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    member_auth_id, member_id, identity_type, identifier, credential, create_time, update_time
+    member_auth_id, create_time, update_time, member_id, channel_id, identifier, credential
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.MemberAuthExample" resultMap="BaseResultMap">
     select
@@ -95,11 +95,11 @@
     <selectKey keyProperty="memberAuthId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `member_auth` (member_id, identity_type, identifier, 
-      credential, create_time, update_time
+    insert into `member_auth` (create_time, update_time, member_id, 
+      channel_id, identifier, credential
       )
-    values (#{memberId,jdbcType=INTEGER}, #{identityType,jdbcType=TINYINT}, #{identifier,jdbcType=VARCHAR}, 
-      #{credential,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{memberId,jdbcType=INTEGER}, 
+      #{channelId,jdbcType=TINYINT}, #{identifier,jdbcType=VARCHAR}, #{credential,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.MemberAuth">
@@ -108,11 +108,17 @@
     </selectKey>
     insert into `member_auth`
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
       <if test="memberId != null">
         member_id,
       </if>
-      <if test="identityType != null">
-        identity_type,
+      <if test="channelId != null">
+        channel_id,
       </if>
       <if test="identifier != null">
         identifier,
@@ -120,31 +126,25 @@
       <if test="credential != null">
         credential,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="memberId != null">
         #{memberId,jdbcType=INTEGER},
       </if>
-      <if test="identityType != null">
-        #{identityType,jdbcType=TINYINT},
+      <if test="channelId != null">
+        #{channelId,jdbcType=TINYINT},
       </if>
       <if test="identifier != null">
         #{identifier,jdbcType=VARCHAR},
       </if>
       <if test="credential != null">
         #{credential,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -160,23 +160,23 @@
       <if test="record.memberAuthId != null">
         member_auth_id = #{record.memberAuthId,jdbcType=INTEGER},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.memberId != null">
         member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
-      <if test="record.identityType != null">
-        identity_type = #{record.identityType,jdbcType=TINYINT},
+      <if test="record.channelId != null">
+        channel_id = #{record.channelId,jdbcType=TINYINT},
       </if>
       <if test="record.identifier != null">
         identifier = #{record.identifier,jdbcType=VARCHAR},
       </if>
       <if test="record.credential != null">
         credential = #{record.credential,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -186,12 +186,12 @@
   <update id="updateByExample" parameterType="map">
     update `member_auth`
     set member_auth_id = #{record.memberAuthId,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=INTEGER},
-      identity_type = #{record.identityType,jdbcType=TINYINT},
-      identifier = #{record.identifier,jdbcType=VARCHAR},
-      credential = #{record.credential,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      member_id = #{record.memberId,jdbcType=INTEGER},
+      channel_id = #{record.channelId,jdbcType=TINYINT},
+      identifier = #{record.identifier,jdbcType=VARCHAR},
+      credential = #{record.credential,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

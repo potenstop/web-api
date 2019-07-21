@@ -36,7 +36,7 @@ public class MybatisLogInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         try{
-            MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];  // 获取xml中的一个select/update/insert/delete节点，主要描述的是一条SQL语句
+            MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];  // 获取xml中的一个select/update/insertContentNews/delete节点，主要描述的是一条SQL语句
             Object parameter = null;
             // 获取参数，if语句成立，表示sql语句有参数，参数格式是map形式
             if (invocation.getArgs().length > 1) {

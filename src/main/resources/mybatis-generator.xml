@@ -60,6 +60,30 @@
         <table tableName="area" delimitIdentifiers="true">
             <generatedKey column="area_id" sqlStatement="MySql" identity="true" />
         </table>
+        <table tableName="content" delimitIdentifiers="true">
+            <generatedKey column="content_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="channel" delimitIdentifiers="true">
+            <generatedKey column="channel_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="content_comment" delimitIdentifiers="true">
+            <generatedKey column="content_comment_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="content_label" delimitIdentifiers="true">
+            <generatedKey column="content_label_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="content_news" delimitIdentifiers="true">
+            <generatedKey column="content_news_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="content_zone_id" delimitIdentifiers="true">
+            <generatedKey column="channel_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="label" delimitIdentifiers="true">
+            <generatedKey column="label_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="content_zone" delimitIdentifiers="true">
+            <generatedKey column="content_zone_id" sqlStatement="MySql" identity="true" />
+        </table>
 
     </context>
 </generatorConfiguration>

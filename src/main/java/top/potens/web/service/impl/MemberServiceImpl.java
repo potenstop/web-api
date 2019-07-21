@@ -9,18 +9,18 @@ import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppUtil;
 import top.potens.framework.serialization.JSON;
 import top.potens.web.bmo.MemberAuthInfoBO;
+import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.constant.MemberConstant;
 import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.common.util.ValidateUtil;
 import top.potens.web.dao.db.auto.MemberAuthMapper;
 import top.potens.web.dao.db.auto.MemberMapper;
-import top.potens.web.model.Member;
-import top.potens.web.model.MemberAuth;
-import top.potens.web.model.MemberAuthExample;
-import top.potens.web.model.MemberExample;
+import top.potens.web.model.*;
 import top.potens.web.request.MemberRegisterRequest;
 import top.potens.web.request.OrderNeo4jRequest;
+import top.potens.web.service.ChannelService;
 import top.potens.web.service.MemberService;
+import top.potens.web.service.logic.ContentCacheService;
 import top.potens.web.service.noe4j.Neo4jService;
 
 import javax.validation.constraints.NotBlank;
@@ -37,6 +37,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final MemberAuthMapper memberAuthMapper;
     private final Neo4jService neo4JService;
+    private final ContentCacheService contentCacheService;
 
     @Transactional(rollbackFor = Exception.class)
     public void createMember(Member member, MemberAuth memberAuth) {
@@ -75,14 +76,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void validateRegisterParams(MemberRegisterRequest request) {
-        if (MemberConstant.IdentityType.MOBILE.equals(request.getIdentityType())) {
+        if (ChannelConstant.ChannelCode.SELF_TEL.equals(request.getChannelCode())) {
             // 检验手机号是否合法
             Boolean isTrue = ValidateUtil.mobile(request.getIdentifier());
             if (!isTrue) {
                 AppUtil.warn("注册参数校验 手机号输入格式错误 mobile:[{}]", request.getIdentifier());
                 throw new ApiException(CodeEnums.MEMBER_MOBILE_INPUT_ERROR.getCode(), CodeEnums.MEMBER_MOBILE_INPUT_ERROR.getMsg());
             }
-        } else if (MemberConstant.IdentityType.MAIL.equals(request.getIdentityType())) {
+        } else if (ChannelConstant.ChannelCode.SELF_TEL.equals(request.getChannelCode())) {
             // 检验邮箱地址是否合法
             Boolean isTrue = ValidateUtil.mail(request.getIdentifier());
             if (!isTrue) {
@@ -90,23 +91,24 @@ public class MemberServiceImpl implements MemberService {
                 throw new ApiException(CodeEnums.MEMBER_MAIL_INPUT_ERROR.getCode(), CodeEnums.MEMBER_MAIL_INPUT_ERROR.getMsg());
             }
         } else {
-            AppUtil.warn("注册参数校验 不支持的类型 type:[{}]", request.getIdentityType());
+            AppUtil.warn("注册参数校验 不支持的类型 channelCode:[{}]", request.getChannelCode());
             throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
         }
     }
     @Override
-    public MemberAuth existAuth(@NotBlank Integer identityType, @NotBlank String identifier, String credential) {
+    public MemberAuth existAuth(@NotNull Integer channelId, @NotBlank String identifier, String credential) {
+
         MemberAuthExample memberAuthExample = new MemberAuthExample();
         memberAuthExample.createCriteria()
-                .andIdentityTypeEqualTo(identityType)
+                .andChannelIdEqualTo(channelId)
                 .andIdentifierEqualTo(identifier);
         List<MemberAuth> memberAuthList = memberAuthMapper.selectByExample(memberAuthExample);
         if (memberAuthList.isEmpty()) {
-            AppUtil.info("查询用户auth 不存在 identityType:[{}] identifier:[{}] credential:[{}]", identityType, identifier, credential);
+            AppUtil.info("查询用户auth 不存在 identityType:[{}] channelId:[{}] credential:[{}]", channelId, identifier, credential);
             return null;
         }
         if (memberAuthList.size() != 1) {
-            AppUtil.error("查询用户auth 存在多个 identityType:[{}] identifier:[{}] credential:[{}] memberAuthList:[{}]", identityType, identifier, credential, JSON.toJSONString(memberAuthList));
+            AppUtil.error("查询用户auth 存在多个 identityType:[{}] channelId:[{}] credential:[{}] memberAuthList:[{}]", channelId, identifier, credential, JSON.toJSONString(memberAuthList));
             throw new ApiException(CodeEnums.MEMBER_EXIST_MORE.getCode(), CodeEnums.MEMBER_EXIST_MORE.getMsg());
         }
         if (credential != null) {
@@ -114,7 +116,7 @@ public class MemberServiceImpl implements MemberService {
             if (memberAuth.getCredential().equals(credential)) {
                 return memberAuth;
             } else {
-                AppUtil.info("查询用户auth credential不匹配 identityType:[{}] identifier:[{}] credential:[{}]", identityType, identifier, credential);
+                AppUtil.info("查询用户auth credential不匹配 identityType:[{}] channelId:[{}] credential:[{}]", channelId, identifier, credential);
                 return null;
             }
         } else {
@@ -123,8 +125,9 @@ public class MemberServiceImpl implements MemberService {
     }
     @Override
     public Integer insertByMobile(MemberRegisterRequest request) {
+        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_TEL);
         // 1 检查用户是否存在
-        MemberAuth existMemberAuth = this.existAuth(MemberConstant.IdentityType.MOBILE, request.getIdentifier(), null);
+        MemberAuth existMemberAuth = this.existAuth(channel.getChannelId(), request.getIdentifier(), null);
         if (existMemberAuth != null) {
             AppUtil.warn("添加用户 用户存在 mobile:[{}]", request.getIdentifier());
             throw new ApiException(CodeEnums.MEMBER_EXIST.getCode(), CodeEnums.MEMBER_EXIST.getMsg());
@@ -133,7 +136,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = new Member();
         member.setNickname(request.getNickname());
         MemberAuth memberAuth = new MemberAuth();
-        memberAuth.setIdentityType(MemberConstant.IdentityType.MOBILE);
+        memberAuth.setChannelId(channel.getChannelId());
         memberAuth.setIdentifier(request.getIdentifier());
         memberAuth.setCredential(request.getCredential());
         this.createMember(member, memberAuth);
@@ -141,8 +144,10 @@ public class MemberServiceImpl implements MemberService {
     }
     @Override
     public Integer insertByMail(MemberRegisterRequest request) {
+        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_MAIL);
+
         // 1 检查用户是否存在
-        MemberAuth existMemberAuth = this.existAuth(MemberConstant.IdentityType.MAIL, request.getIdentifier(), null);
+        MemberAuth existMemberAuth = this.existAuth(channel.getChannelId(), request.getIdentifier(), null);
         if (existMemberAuth != null) {
             AppUtil.warn("添加用户 用户存在 mail:[{}]", request.getIdentifier());
             throw new ApiException(CodeEnums.MEMBER_EXIST.getCode(), CodeEnums.MEMBER_EXIST.getMsg());
@@ -151,7 +156,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = new Member();
         member.setNickname(request.getNickname());
         MemberAuth memberAuth = new MemberAuth();
-        memberAuth.setIdentityType(MemberConstant.IdentityType.MAIL);
+        memberAuth.setChannelId(channel.getChannelId());
         memberAuth.setIdentifier(request.getIdentifier());
         memberAuth.setCredential(request.getCredential());
         this.createMember(member, memberAuth);
@@ -160,11 +165,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Integer insertByUuid(String uuid) {
+        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
         Member member = new Member();
         member.setNickname("");
         member.setAvatar("");
         MemberAuth memberAuth = new MemberAuth();
-        memberAuth.setIdentityType(MemberConstant.IdentityType.VISITOR);
+        memberAuth.setChannelId(channel.getChannelId());
         memberAuth.setIdentifier(uuid);
         memberAuth.setCredential("");
         createMember(member, memberAuth);

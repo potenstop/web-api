@@ -6,6 +6,7 @@ import top.potens.web.model.MemberAuth;
 import top.potens.web.request.MemberRegisterRequest;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by wenshao on 2019/6/16.
@@ -27,12 +28,12 @@ public interface MemberService {
 
     /**
      * 查询对应的auth记录 只能有一条
-     * @param identityType  类型
+     * @param channelId   渠道码
      * @param identifier    标识
      * @param credential    密码
      * @return              MemberAuth
      */
-    MemberAuth existAuth(@NotBlank Integer identityType, @NotBlank String identifier, String credential);
+    MemberAuth existAuth(@NotNull Integer channelId, @NotBlank String identifier, String credential);
 
     /**
      * 按手机号插入用户
