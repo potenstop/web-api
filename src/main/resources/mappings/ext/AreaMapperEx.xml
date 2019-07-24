@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.potens.web.dao.db.ext.AreaExMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.ContentLabel">
+    <result column="content_label_id" jdbcType="INTEGER" property="contentLabelId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="content_id" jdbcType="INTEGER" property="contentId" />
+    <result column="label_id" jdbcType="INTEGER" property="labelId" />
+  </resultMap>
+  <resultMap id="codeNameResultMap" type="top.potens.web.bmo.AreaCodeNameBo">
+    <result column="area_code" jdbcType="INTEGER" property="areaCode" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+  </resultMap>
+  <select id="selectCityList" resultMap="codeNameResultMap">
+    select DISTINCT(city_id) as area_code, city_name as area_name
+    from area
+  </select>
+</mapper>

@@ -14,9 +14,9 @@ public class Channel implements Serializable {
 
     private String channelCode;
 
-    private Integer memberCanLogin;
+    private Integer userCanLogin;
 
-    private Integer memberCheckCredential;
+    private Integer userCheckCredential;
 
     private static final long serialVersionUID = 1L;
 
@@ -60,19 +60,19 @@ public class Channel implements Serializable {
         this.channelCode = channelCode == null ? null : channelCode.trim();
     }
 
-    public Integer getMemberCanLogin() {
-        return memberCanLogin;
+    public Integer getUserCanLogin() {
+        return userCanLogin;
     }
 
-    public void setMemberCanLogin(Integer memberCanLogin) {
-        this.memberCanLogin = memberCanLogin;
+    public void setUserCanLogin(Integer userCanLogin) {
+        this.userCanLogin = userCanLogin;
     }
 
-    public Integer getMemberCheckCredential() {
-        return memberCheckCredential;
+    public Integer getUserCheckCredential() {
+        return userCheckCredential;
     }
 
-    public void setMemberCheckCredential(Integer memberCheckCredential) {
-        this.memberCheckCredential = memberCheckCredential;
+    public void setUserCheckCredential(Integer userCheckCredential) {
+        this.userCheckCredential = userCheckCredential;
     }
 }

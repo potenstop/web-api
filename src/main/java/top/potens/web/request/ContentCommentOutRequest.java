@@ -17,7 +17,7 @@ public class ContentCommentOutRequest {
 
     private Integer share;
 
-    private MemberOutRequest member;
+    private UserOutRequest user;
 
     public String getContent() {
         return this.content;
@@ -59,12 +59,12 @@ public class ContentCommentOutRequest {
         this.share = share;
     }
 
-    public MemberOutRequest getMember() {
-        return this.member;
+    public UserOutRequest getUser() {
+        return this.user;
     }
 
-    public void setMember(MemberOutRequest member) {
-        this.member = member;
+    public void setUser(UserOutRequest user) {
+        this.user = user;
     }
 
 }

@@ -51,11 +51,11 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="member" delimitIdentifiers="true">
-            <generatedKey column="member_id" sqlStatement="MySql" identity="true" />
+        <table tableName="user" delimitIdentifiers="true">
+            <generatedKey column="user_id" sqlStatement="MySql" identity="true" />
         </table>
-        <table tableName="member_auth" delimitIdentifiers="true">
-            <generatedKey column="member_auth_id" sqlStatement="MySql" identity="true" />
+        <table tableName="user_auth" delimitIdentifiers="true">
+            <generatedKey column="user_auth_id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="area" delimitIdentifiers="true">
             <generatedKey column="area_id" sqlStatement="MySql" identity="true" />

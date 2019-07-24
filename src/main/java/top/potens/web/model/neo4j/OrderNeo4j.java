@@ -37,11 +37,11 @@ public class OrderNeo4j {
     private Set<OrderProductNeo4j> products;
 
     @Relationship(type = "BUY_ER", direction = "OUTGOING")
-    private MemberNeo4j memberNeo4j;
+    private UserNeo4j userNeo4J;
 
-    @Relationship(type = "DIRECT_MEMBER", direction = "OUTGOING")
-    private MemberNeo4j directMember;
+    @Relationship(type = "DIRECT_USER", direction = "OUTGOING")
+    private UserNeo4j directUser;
 
-    @Relationship(type = "INDIRECT_MEMBER", direction = "OUTGOING")
-    private MemberNeo4j indirectMember;
+    @Relationship(type = "INDIRECT_USER", direction = "OUTGOING")
+    private UserNeo4j indirectUser;
 }

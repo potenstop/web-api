@@ -8,7 +8,7 @@
     <result column="out_comment_id" jdbcType="VARCHAR" property="outCommentId" />
     <result column="content_id" jdbcType="INTEGER" property="contentId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="against" jdbcType="INTEGER" property="against" />
     <result column="vote" jdbcType="INTEGER" property="vote" />
     <result column="share" jdbcType="INTEGER" property="share" />
@@ -73,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List">
     content_comment_id, create_time, update_time, out_comment_id, content_id, content, 
-    member_id, against, vote, `share`
+    user_id, against, vote, `share`
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.ContentCommentExample" resultMap="BaseResultMap">
     select
@@ -100,11 +100,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `content_comment` (create_time, update_time, out_comment_id, 
-      content_id, content, member_id, 
+      content_id, content, user_id, 
       against, vote, `share`
       )
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{outCommentId,jdbcType=VARCHAR}, 
-      #{contentId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER}, 
+      #{contentId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
       #{against,jdbcType=INTEGER}, #{vote,jdbcType=INTEGER}, #{share,jdbcType=INTEGER}
       )
   </insert>
@@ -129,8 +129,8 @@
       <if test="content != null">
         content,
       </if>
-      <if test="memberId != null">
-        member_id,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="against != null">
         against,
@@ -158,8 +158,8 @@
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="memberId != null">
-        #{memberId,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="against != null">
         #{against,jdbcType=INTEGER},
@@ -199,8 +199,8 @@
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=INTEGER},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.against != null">
         against = #{record.against,jdbcType=INTEGER},
@@ -224,7 +224,7 @@
       out_comment_id = #{record.outCommentId,jdbcType=VARCHAR},
       content_id = #{record.contentId,jdbcType=INTEGER},
       content = #{record.content,jdbcType=VARCHAR},
-      member_id = #{record.memberId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
       against = #{record.against,jdbcType=INTEGER},
       vote = #{record.vote,jdbcType=INTEGER},
       `share` = #{record.share,jdbcType=INTEGER}

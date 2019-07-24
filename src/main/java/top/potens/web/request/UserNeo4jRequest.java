@@ -11,20 +11,20 @@ import java.util.Date;
  * 功能描述:
  *
  * @author yanshaowen
- * @className MemberNeo4jRequest
+ * @className UserNeo4jRequest
  * @projectName web-api
  * @date 2019/7/5 14:49
  */
 @Data
-@ApiModel(description = "member neo4j 对象")
-public class MemberNeo4jRequest {
+@ApiModel(description = "user neo4j 对象")
+public class UserNeo4jRequest {
     @NotNull
     @ApiModelProperty(value = "用户id", example = "1")
-    private Integer memberId;
+    private Integer userId;
 
     @NotNull
     @ApiModelProperty(value = "用户名称", example = "123")
-    private String memberName;
+    private String userName;
 
     @NotNull
     @ApiModelProperty(value = "创建时间", example = "2019-01-01 10:10:10.0")

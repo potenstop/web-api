@@ -8,11 +8,11 @@ import top.potens.framework.util.DateUtil;
 import top.potens.web.common.constant.AreaConstant;
 import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.dao.neo4j.AreaNeo4jRepository;
-import top.potens.web.dao.neo4j.MemberNeo4jRepository;
+import top.potens.web.dao.neo4j.UserNeo4jRepository;
 import top.potens.web.dao.neo4j.OrderNeo4jRepository;
 import top.potens.web.dao.neo4j.OrderProductNeo4jRepository;
 import top.potens.web.model.neo4j.AreaNeo4j;
-import top.potens.web.model.neo4j.MemberNeo4j;
+import top.potens.web.model.neo4j.UserNeo4j;
 import top.potens.web.model.neo4j.OrderNeo4j;
 
 /**
@@ -28,7 +28,7 @@ import top.potens.web.model.neo4j.OrderNeo4j;
 public class Neo4jService {
     private final OrderNeo4jRepository orderNeo4jRepository;
     private final AreaNeo4jRepository areaNeo4jRepository;
-    private final MemberNeo4jRepository memberNeo4jRepository;
+    private final UserNeo4jRepository userNeo4JRepository;
     private final OrderProductNeo4jRepository orderProductNeo4JRepository;
 
     public AreaNeo4j insertArea(AreaNeo4j areaNeo4jParams) {
@@ -39,35 +39,35 @@ public class Neo4jService {
         return areaNeo4j;
     }
 
-    public MemberNeo4j insertMember(MemberNeo4j memberNeo4jParams, String partCityCode) {
+    public UserNeo4j insertUser(UserNeo4j userNeo4JParams, String partCityCode) {
         AreaNeo4j areaNeo4j = areaNeo4jRepository.findByAreaCode(partCityCode);
         if (areaNeo4j == null || !AreaConstant.Rank.CITY.equals(areaNeo4j.getRank())) {
             throw new ApiException(CodeEnums.CITY_NOT_FOUND.getCode(), CodeEnums.CITY_NOT_FOUND.getMsg());
         }
-        memberNeo4jParams.setCityAreaNeo4j(areaNeo4j);
-        memberNeo4jRepository.createOrUpdate(memberNeo4jParams.getMemberId(), memberNeo4jParams.getMemberName(), DateUtil.getLocalDateStr(memberNeo4jParams.getCreateTime()));
-        MemberNeo4j memberNeo4j = memberNeo4jRepository.findByMemberId(memberNeo4jParams.getMemberId());
-        if (memberNeo4j.getCityAreaNeo4j() == null || !areaNeo4j.getAreaCode().equals(memberNeo4j.getCityAreaNeo4j().getAreaCode())) {
-            memberNeo4jRepository.deletePartCity(memberNeo4j.getMemberId());
-            memberNeo4j.setCityAreaNeo4j(areaNeo4j);
-            return memberNeo4jRepository.save(memberNeo4j);
+        userNeo4JParams.setCityAreaNeo4j(areaNeo4j);
+        userNeo4JRepository.createOrUpdate(userNeo4JParams.getUserId(), userNeo4JParams.getUserName(), DateUtil.getLocalDateStr(userNeo4JParams.getCreateTime()));
+        UserNeo4j userNeo4J = userNeo4JRepository.findByUserId(userNeo4JParams.getUserId());
+        if (userNeo4J.getCityAreaNeo4j() == null || !areaNeo4j.getAreaCode().equals(userNeo4J.getCityAreaNeo4j().getAreaCode())) {
+            userNeo4JRepository.deletePartCity(userNeo4J.getUserId());
+            userNeo4J.setCityAreaNeo4j(areaNeo4j);
+            return userNeo4JRepository.save(userNeo4J);
         }
-        return memberNeo4j;
+        return userNeo4J;
     }
-    public OrderNeo4j insertOrder(OrderNeo4j orderNeo4jParams, Integer memberId, Integer directMember, Integer indirectMember) {
-        MemberNeo4j memberNeo4j = memberNeo4jRepository.findByMemberId(memberId);
-        if (memberNeo4j == null) {
-            throw new ApiException(CodeEnums.MEMBER_NOT_FOUND.getCode(), CodeEnums.MEMBER_NOT_FOUND.getMsg());
+    public OrderNeo4j insertOrder(OrderNeo4j orderNeo4jParams, Integer userId, Integer directUser, Integer indirectUser) {
+        UserNeo4j userNeo4J = userNeo4JRepository.findByUserId(userId);
+        if (userNeo4J == null) {
+            throw new ApiException(CodeEnums.USER_NOT_FOUND.getCode(), CodeEnums.USER_NOT_FOUND.getMsg());
         }
-        if (directMember != null) {
-            MemberNeo4j memberNeo4jD = memberNeo4jRepository.findByMemberId(directMember);
-            orderNeo4jParams.setDirectMember(memberNeo4jD);
+        if (directUser != null) {
+            UserNeo4j userNeo4JD = userNeo4JRepository.findByUserId(directUser);
+            orderNeo4jParams.setDirectUser(userNeo4JD);
         }
-        if (indirectMember != null) {
-            MemberNeo4j memberNeo4jI = memberNeo4jRepository.findByMemberId(indirectMember);
-            orderNeo4jParams.setIndirectMember(memberNeo4jI);
+        if (indirectUser != null) {
+            UserNeo4j userNeo4JI = userNeo4JRepository.findByUserId(indirectUser);
+            orderNeo4jParams.setIndirectUser(userNeo4JI);
         }
-        orderNeo4jParams.setMemberNeo4j(memberNeo4j);
+        orderNeo4jParams.setUserNeo4J(userNeo4J);
         return orderNeo4jRepository.save(orderNeo4jParams);
     }
 }

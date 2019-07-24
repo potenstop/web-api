@@ -16,16 +16,16 @@ import java.util.Set;
  * 功能描述:
  *
  * @author yanshaowen
- * @className MemberNeo4jRequest
+ * @className UserNeo4jRequest
  * @projectName web-api
  * @date 2019/7/5 14:49
  */
 @Data
-@ApiModel(description = "member order 对象")
+@ApiModel(description = "user order 对象")
 public class OrderNeo4jRequest {
     @NotNull
     @ApiModelProperty(value = "用户id", example = "1")
-    private Integer memberId;
+    private Integer userId;
 
     @NotNull
     @ApiModelProperty(value = "订单id", example = "1")
@@ -44,10 +44,10 @@ public class OrderNeo4jRequest {
     private List<OrderProductRequest> orderProductRequests;
 
     @ApiModelProperty(value = "订单直接推广人", example = "2")
-    private Integer directMember;
+    private Integer directUser;
 
     @ApiModelProperty(value = "订单间接推广人", example = "3")
-    private Integer indirectMember;
+    private Integer indirectUser;
 
 
     @Valid

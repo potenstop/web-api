@@ -12,11 +12,12 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
 
-import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,24 @@ import java.util.Map;
  */
 @Configuration
 @EnableCaching
-public class RedisConfiguration {
+public class CacheConfiguration {
+    private String masterUrl = "potens.top";
+    private Integer port = 7379;
+    private Integer database = 1;
+    private String password = "potens";
+
+    @Bean("cacheRedis")
+    public LettuceConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(masterUrl, port);
+        config.setPassword(password);
+        config.setDatabase(database);
+        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+                .commandTimeout(Duration.ofSeconds(10))
+                .shutdownTimeout(Duration.ZERO)
+                .build();
+
+        return new LettuceConnectionFactory(config, clientConfig);
+    }
     /*@Bean
     public RedisTemplate<String, Object> redisTemplate(
             LettuceConnectionFactory lettuceConnectionFactory) throws UnknownHostException {
@@ -75,8 +93,8 @@ public class RedisConfiguration {
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         return new RedisCacheManager(
                 RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory),
-                this.getRedisCacheConfigurationWithTtl(600), // 默认策略，未配置的 key 会使用这个
-                this.getRedisCacheConfigurationMap() // 指定 key 策略
+                this.getRedisCacheConfigurationWithTtl(600),
+                this.getRedisCacheConfigurationMap()
         );
     }
 
@@ -102,6 +120,7 @@ public class RedisConfiguration {
                         .SerializationPair
                         .fromSerializer(jackson2JsonRedisSerializer)
         ).entryTtl(Duration.ofSeconds(seconds));
+        // new JedisConnectionFactory()
 
         return redisCacheConfiguration;
     }

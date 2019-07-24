@@ -425,123 +425,123 @@ public class ChannelExample {
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginIsNull() {
-            addCriterion("member_can_login is null");
+        public Criteria andUserCanLoginIsNull() {
+            addCriterion("user_can_login is null");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginIsNotNull() {
-            addCriterion("member_can_login is not null");
+        public Criteria andUserCanLoginIsNotNull() {
+            addCriterion("user_can_login is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginEqualTo(Integer value) {
-            addCriterion("member_can_login =", value, "memberCanLogin");
+        public Criteria andUserCanLoginEqualTo(Integer value) {
+            addCriterion("user_can_login =", value, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginNotEqualTo(Integer value) {
-            addCriterion("member_can_login <>", value, "memberCanLogin");
+        public Criteria andUserCanLoginNotEqualTo(Integer value) {
+            addCriterion("user_can_login <>", value, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginGreaterThan(Integer value) {
-            addCriterion("member_can_login >", value, "memberCanLogin");
+        public Criteria andUserCanLoginGreaterThan(Integer value) {
+            addCriterion("user_can_login >", value, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginGreaterThanOrEqualTo(Integer value) {
-            addCriterion("member_can_login >=", value, "memberCanLogin");
+        public Criteria andUserCanLoginGreaterThanOrEqualTo(Integer value) {
+            addCriterion("user_can_login >=", value, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginLessThan(Integer value) {
-            addCriterion("member_can_login <", value, "memberCanLogin");
+        public Criteria andUserCanLoginLessThan(Integer value) {
+            addCriterion("user_can_login <", value, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginLessThanOrEqualTo(Integer value) {
-            addCriterion("member_can_login <=", value, "memberCanLogin");
+        public Criteria andUserCanLoginLessThanOrEqualTo(Integer value) {
+            addCriterion("user_can_login <=", value, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginIn(List<Integer> values) {
-            addCriterion("member_can_login in", values, "memberCanLogin");
+        public Criteria andUserCanLoginIn(List<Integer> values) {
+            addCriterion("user_can_login in", values, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginNotIn(List<Integer> values) {
-            addCriterion("member_can_login not in", values, "memberCanLogin");
+        public Criteria andUserCanLoginNotIn(List<Integer> values) {
+            addCriterion("user_can_login not in", values, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginBetween(Integer value1, Integer value2) {
-            addCriterion("member_can_login between", value1, value2, "memberCanLogin");
+        public Criteria andUserCanLoginBetween(Integer value1, Integer value2) {
+            addCriterion("user_can_login between", value1, value2, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCanLoginNotBetween(Integer value1, Integer value2) {
-            addCriterion("member_can_login not between", value1, value2, "memberCanLogin");
+        public Criteria andUserCanLoginNotBetween(Integer value1, Integer value2) {
+            addCriterion("user_can_login not between", value1, value2, "userCanLogin");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialIsNull() {
-            addCriterion("member_check_credential is null");
+        public Criteria andUserCheckCredentialIsNull() {
+            addCriterion("user_check_credential is null");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialIsNotNull() {
-            addCriterion("member_check_credential is not null");
+        public Criteria andUserCheckCredentialIsNotNull() {
+            addCriterion("user_check_credential is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialEqualTo(Integer value) {
-            addCriterion("member_check_credential =", value, "memberCheckCredential");
+        public Criteria andUserCheckCredentialEqualTo(Integer value) {
+            addCriterion("user_check_credential =", value, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialNotEqualTo(Integer value) {
-            addCriterion("member_check_credential <>", value, "memberCheckCredential");
+        public Criteria andUserCheckCredentialNotEqualTo(Integer value) {
+            addCriterion("user_check_credential <>", value, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialGreaterThan(Integer value) {
-            addCriterion("member_check_credential >", value, "memberCheckCredential");
+        public Criteria andUserCheckCredentialGreaterThan(Integer value) {
+            addCriterion("user_check_credential >", value, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialGreaterThanOrEqualTo(Integer value) {
-            addCriterion("member_check_credential >=", value, "memberCheckCredential");
+        public Criteria andUserCheckCredentialGreaterThanOrEqualTo(Integer value) {
+            addCriterion("user_check_credential >=", value, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialLessThan(Integer value) {
-            addCriterion("member_check_credential <", value, "memberCheckCredential");
+        public Criteria andUserCheckCredentialLessThan(Integer value) {
+            addCriterion("user_check_credential <", value, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialLessThanOrEqualTo(Integer value) {
-            addCriterion("member_check_credential <=", value, "memberCheckCredential");
+        public Criteria andUserCheckCredentialLessThanOrEqualTo(Integer value) {
+            addCriterion("user_check_credential <=", value, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialIn(List<Integer> values) {
-            addCriterion("member_check_credential in", values, "memberCheckCredential");
+        public Criteria andUserCheckCredentialIn(List<Integer> values) {
+            addCriterion("user_check_credential in", values, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialNotIn(List<Integer> values) {
-            addCriterion("member_check_credential not in", values, "memberCheckCredential");
+        public Criteria andUserCheckCredentialNotIn(List<Integer> values) {
+            addCriterion("user_check_credential not in", values, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialBetween(Integer value1, Integer value2) {
-            addCriterion("member_check_credential between", value1, value2, "memberCheckCredential");
+        public Criteria andUserCheckCredentialBetween(Integer value1, Integer value2) {
+            addCriterion("user_check_credential between", value1, value2, "userCheckCredential");
             return (Criteria) this;
         }
 
-        public Criteria andMemberCheckCredentialNotBetween(Integer value1, Integer value2) {
-            addCriterion("member_check_credential not between", value1, value2, "memberCheckCredential");
+        public Criteria andUserCheckCredentialNotBetween(Integer value1, Integer value2) {
+            addCriterion("user_check_credential not between", value1, value2, "userCheckCredential");
             return (Criteria) this;
         }
     }

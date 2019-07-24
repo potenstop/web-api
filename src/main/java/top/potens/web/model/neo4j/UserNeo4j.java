@@ -1,6 +1,5 @@
 package top.potens.web.model.neo4j;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
@@ -9,26 +8,25 @@ import org.neo4j.ogm.annotation.Relationship;
 import org.neo4j.ogm.annotation.typeconversion.DateString;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
  * 功能描述:
  *
  * @author yanshaowen
- * @className MemberNeo4j
+ * @className UserNeo4j
  * @projectName web-api
  * @date 2019/7/5 9:54
  */
-@NodeEntity("Member")
+@NodeEntity("User")
 @Data
-public class MemberNeo4j {
+public class UserNeo4j {
     @Id
     @GeneratedValue
     private Long id;
 
-    private Integer memberId;
+    private Integer userId;
 
-    private String memberName;
+    private String userName;
 
     @DateString("yyyy-MM-dd HH:mm:ss.SSS")
     private Date createTime;
@@ -37,5 +35,5 @@ public class MemberNeo4j {
     private AreaNeo4j cityAreaNeo4j;
 
     @Relationship(type = "RECOMMEND", direction = "OUTGOING")
-    private MemberNeo4j fromMember;
+    private UserNeo4j fromUser;
 }

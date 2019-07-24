@@ -7,9 +7,9 @@ import io.swagger.annotations.ApiModelProperty;
  * Created by wenshao on 2019/7/21.
  */
 @ApiModel("外部用户")
-public class MemberOutRequest {
-    @ApiModelProperty(value = "名称", name = "memberName", dataType = "123")
-    private String memberName;
+public class UserOutRequest {
+    @ApiModelProperty(value = "名称", name = "userName", dataType = "123")
+    private String userName;
 
     @ApiModelProperty(value = "头像地址", name = "avatar", dataType = "http://1111")
     private String avatar;
@@ -20,15 +20,15 @@ public class MemberOutRequest {
     @ApiModelProperty(value = "来源场景 comment:评论", name = "sourceEntrance", dataType = "comment")
     private String sourceEntrance;
 
-    @ApiModelProperty(value = "来源的id", name = "sourceMemberId", dataType = "1")
-    private String sourceMemberId;
+    @ApiModelProperty(value = "来源的id", name = "sourceUserId", dataType = "1")
+    private String sourceUserId;
 
-    public String getMemberName() {
-        return this.memberName;
+    public String getUserName() {
+        return this.userName;
     }
 
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getAvatar() {
@@ -55,11 +55,11 @@ public class MemberOutRequest {
         this.sourceEntrance = sourceEntrance;
     }
 
-    public String getSourceMemberId() {
-        return this.sourceMemberId;
+    public String getSourceUserId() {
+        return this.sourceUserId;
     }
 
-    public void setSourceMemberId(String sourceMemberId) {
-        this.sourceMemberId = sourceMemberId;
+    public void setSourceUserId(String sourceUserId) {
+        this.sourceUserId = sourceUserId;
     }
 }

@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 /**
  * Created by wenshao on 2019/6/23.
  */
-public class MemberRegisterRequest {
+public class UserRegisterRequest {
     @ApiModelProperty(value = "用户昵称", example = "potens")
     private String nickname;
 

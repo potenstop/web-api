@@ -3,12 +3,14 @@
 <mapper namespace="top.potens.web.dao.db.auto.AreaMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.Area">
     <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="county_id" jdbcType="INTEGER" property="countyId" />
+    <result column="county_name" jdbcType="VARCHAR" property="countyName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
-    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
-    <result column="rank" jdbcType="TINYINT" property="rank" />
-    <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    area_id, create_time, update_time, area_code, area_name, `rank`, parent_code
+    area_id, province_id, province_name, city_id, city_name, county_id, county_name, 
+    create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.AreaExample" resultMap="BaseResultMap">
     select
@@ -95,12 +98,12 @@
     <selectKey keyProperty="areaId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `area` (create_time, update_time, area_code, 
-      area_name, `rank`, parent_code
-      )
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{areaCode,jdbcType=VARCHAR}, 
-      #{areaName,jdbcType=VARCHAR}, #{rank,jdbcType=TINYINT}, #{parentCode,jdbcType=VARCHAR}
-      )
+    insert into `area` (province_id, province_name, city_id, 
+      city_name, county_id, county_name, 
+      create_time, update_time)
+    values (#{provinceId,jdbcType=INTEGER}, #{provinceName,jdbcType=VARCHAR}, #{cityId,jdbcType=INTEGER}, 
+      #{cityName,jdbcType=VARCHAR}, #{countyId,jdbcType=INTEGER}, #{countyName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.Area">
     <selectKey keyProperty="areaId" order="AFTER" resultType="java.lang.Integer">
@@ -108,43 +111,55 @@
     </selectKey>
     insert into `area`
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="provinceName != null">
+        province_name,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="cityName != null">
+        city_name,
+      </if>
+      <if test="countyId != null">
+        county_id,
+      </if>
+      <if test="countyName != null">
+        county_name,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="areaCode != null">
-        area_code,
-      </if>
-      <if test="areaName != null">
-        area_name,
-      </if>
-      <if test="rank != null">
-        `rank`,
-      </if>
-      <if test="parentCode != null">
-        parent_code,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null">
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null">
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=INTEGER},
+      </if>
+      <if test="countyName != null">
+        #{countyName,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="areaCode != null">
-        #{areaCode,jdbcType=VARCHAR},
-      </if>
-      <if test="areaName != null">
-        #{areaName,jdbcType=VARCHAR},
-      </if>
-      <if test="rank != null">
-        #{rank,jdbcType=TINYINT},
-      </if>
-      <if test="parentCode != null">
-        #{parentCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -160,23 +175,29 @@
       <if test="record.areaId != null">
         area_id = #{record.areaId,jdbcType=INTEGER},
       </if>
+      <if test="record.provinceId != null">
+        province_id = #{record.provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.provinceName != null">
+        province_name = #{record.provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityId != null">
+        city_id = #{record.cityId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityName != null">
+        city_name = #{record.cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countyId != null">
+        county_id = #{record.countyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.countyName != null">
+        county_name = #{record.countyName,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.areaCode != null">
-        area_code = #{record.areaCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.areaName != null">
-        area_name = #{record.areaName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.rank != null">
-        `rank` = #{record.rank,jdbcType=TINYINT},
-      </if>
-      <if test="record.parentCode != null">
-        parent_code = #{record.parentCode,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -186,12 +207,14 @@
   <update id="updateByExample" parameterType="map">
     update `area`
     set area_id = #{record.areaId,jdbcType=INTEGER},
+      province_id = #{record.provinceId,jdbcType=INTEGER},
+      province_name = #{record.provinceName,jdbcType=VARCHAR},
+      city_id = #{record.cityId,jdbcType=INTEGER},
+      city_name = #{record.cityName,jdbcType=VARCHAR},
+      county_id = #{record.countyId,jdbcType=INTEGER},
+      county_name = #{record.countyName,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      area_code = #{record.areaCode,jdbcType=VARCHAR},
-      area_name = #{record.areaName,jdbcType=VARCHAR},
-      `rank` = #{record.rank,jdbcType=TINYINT},
-      parent_code = #{record.parentCode,jdbcType=VARCHAR}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

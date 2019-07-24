@@ -7,8 +7,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="channel_name" jdbcType="VARCHAR" property="channelName" />
     <result column="channel_code" jdbcType="VARCHAR" property="channelCode" />
-    <result column="member_can_login" jdbcType="TINYINT" property="memberCanLogin" />
-    <result column="member_check_credential" jdbcType="TINYINT" property="memberCheckCredential" />
+    <result column="user_can_login" jdbcType="TINYINT" property="userCanLogin" />
+    <result column="user_check_credential" jdbcType="TINYINT" property="userCheckCredential" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,8 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    channel_id, create_time, update_time, channel_name, channel_code, member_can_login, 
-    member_check_credential
+    channel_id, create_time, update_time, channel_name, channel_code, user_can_login, 
+    user_check_credential
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.ChannelExample" resultMap="BaseResultMap">
     select
@@ -97,10 +97,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `channel` (create_time, update_time, channel_name, 
-      channel_code, member_can_login, member_check_credential
+      channel_code, user_can_login, user_check_credential
       )
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{channelName,jdbcType=VARCHAR}, 
-      #{channelCode,jdbcType=VARCHAR}, #{memberCanLogin,jdbcType=TINYINT}, #{memberCheckCredential,jdbcType=TINYINT}
+      #{channelCode,jdbcType=VARCHAR}, #{userCanLogin,jdbcType=TINYINT}, #{userCheckCredential,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.Channel">
@@ -121,11 +121,11 @@
       <if test="channelCode != null">
         channel_code,
       </if>
-      <if test="memberCanLogin != null">
-        member_can_login,
+      <if test="userCanLogin != null">
+        user_can_login,
       </if>
-      <if test="memberCheckCredential != null">
-        member_check_credential,
+      <if test="userCheckCredential != null">
+        user_check_credential,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -141,11 +141,11 @@
       <if test="channelCode != null">
         #{channelCode,jdbcType=VARCHAR},
       </if>
-      <if test="memberCanLogin != null">
-        #{memberCanLogin,jdbcType=TINYINT},
+      <if test="userCanLogin != null">
+        #{userCanLogin,jdbcType=TINYINT},
       </if>
-      <if test="memberCheckCredential != null">
-        #{memberCheckCredential,jdbcType=TINYINT},
+      <if test="userCheckCredential != null">
+        #{userCheckCredential,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -173,11 +173,11 @@
       <if test="record.channelCode != null">
         channel_code = #{record.channelCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.memberCanLogin != null">
-        member_can_login = #{record.memberCanLogin,jdbcType=TINYINT},
+      <if test="record.userCanLogin != null">
+        user_can_login = #{record.userCanLogin,jdbcType=TINYINT},
       </if>
-      <if test="record.memberCheckCredential != null">
-        member_check_credential = #{record.memberCheckCredential,jdbcType=TINYINT},
+      <if test="record.userCheckCredential != null">
+        user_check_credential = #{record.userCheckCredential,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -191,8 +191,8 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       channel_name = #{record.channelName,jdbcType=VARCHAR},
       channel_code = #{record.channelCode,jdbcType=VARCHAR},
-      member_can_login = #{record.memberCanLogin,jdbcType=TINYINT},
-      member_check_credential = #{record.memberCheckCredential,jdbcType=TINYINT}
+      user_can_login = #{record.userCanLogin,jdbcType=TINYINT},
+      user_check_credential = #{record.userCheckCredential,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

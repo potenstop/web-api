@@ -1,5 +1,6 @@
 package top.potens.web.service;
 
+import top.potens.web.bmo.AreaCodeNameBo;
 import top.potens.web.model.Area;
 
 import java.util.List;
@@ -13,5 +14,5 @@ import java.util.List;
  * @date 2019/7/5 13:43
  */
 public interface AreaService {
-    List<Area> selectCities();
+    List<AreaCodeNameBo> selectCities();
 }

@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,9 +11,9 @@ import java.util.List;
  */
 @ApiModel(description = "用户对象")
 @Data
-public class MemberAuthBaseResponse {
+public class UserAuthBaseResponse {
     @ApiModelProperty(value = "用户id", example = "1")
-    private Integer memberId;
+    private Integer userId;
 
     @ApiModelProperty(value = "用户昵称", example = "123")
     private String nickname;
@@ -23,17 +22,17 @@ public class MemberAuthBaseResponse {
     private String avatar;
 
     @ApiModelProperty(value = "auth list", example = "[]")
-    private List<MemberAuthResponse> memberAuthList;
+    private List<UserAuthResponse> userAuthList;
 
-    public MemberAuthResponse createMemberAuthResponse() {
-        return new MemberAuthResponse();
+    public UserAuthResponse createUserAuthResponse() {
+        return new UserAuthResponse();
     }
 
     @ApiModel(description = "用户auth信息")
     @Data
-    public class MemberAuthResponse {
+    public class UserAuthResponse {
         @ApiModelProperty(value = "auth id", example = "1")
-        private Integer memberAuthId;
+        private Integer userAuthId;
 
         @ApiModelProperty(value = "auth type", example = "1")
         private Integer identityType;
