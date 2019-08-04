@@ -2,6 +2,7 @@ package top.potens.web.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.redisson.config.Config;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +17,13 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RedissonConfiguration {
-    private String url = "redis://potens.top:7379";
+    @Value("${fx.config.redisson.url}")
+    private String url;
 
+    @Value("${fx.config.redisson.password}")
     private String password = "potens";
+
+    @Value("${fx.config.redisson.database}")
     private Integer database = 2;
 
     @Bean

@@ -3,6 +3,7 @@ package top.potens.web.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -28,9 +29,16 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-    private String masterUrl = "potens.top";
+    @Value("${web.connect.cache.url}")
+    private String masterUrl;
+
+    @Value("${web.connect.cache.port}")
     private Integer port = 7379;
+
+    @Value("${web.connect.cache.database}")
     private Integer database = 1;
+
+    @Value("${web.connect.cache.password}")
     private String password = "potens";
 
     @Bean("cacheRedis")

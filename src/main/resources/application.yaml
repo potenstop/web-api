@@ -5,5 +5,9 @@ logging:
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss.S
+apollo:
+  bootstrap:
+    enabled: true
+    namespaces: application,fx.config,web.connection
 
 

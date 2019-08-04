@@ -30,12 +30,14 @@ public class ToolDataConfig {
 
     static final String PACKAGE = "top.potens.web.dao.db";
 
-    //@Value("${data.master.url}")
-    private String masterUrl = "jdbc:mysql://potens.top:7306/web?useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf8";
-    //@Value("${data.master.username}")
-    private String masterUserName = "web";
-    //@Value("${data.master.password}")
-    private String masterPassword = "dsqdq2333#$%";
+    @Value("${web.connection.mysql.master.url}")
+    private String masterUrl;
+
+    @Value("${web.connection.mysql.master.username}")
+    private String masterUserName;
+
+    @Value("${web.connection.mysql.master.password}")
+    private String masterPassword;
 
     @Bean(name = "masterDataSource")
     @Primary
