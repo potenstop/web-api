@@ -11,14 +11,14 @@ import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppUtil;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.serialization.JSON;
-import top.potens.web.bmo.UserAuthInfoBO;
+import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.model.Channel;
 import top.potens.web.model.UserAuth;
 import top.potens.web.request.UserRegisterRequest;
 import top.potens.web.response.UserAuthBaseResponse;
-import top.potens.web.service.Userervice;
+import top.potens.web.service.UserService;
 import top.potens.web.service.logic.ContentCacheService;
 
 import javax.validation.Valid;
@@ -35,14 +35,14 @@ import java.util.ArrayList;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
 
-    private final Userervice userervice;
+    private final UserService userService;
     private final ContentCacheService contentCacheService;
 
-    private UserAuthBaseResponse convertUserInfo(UserAuthInfoBO userAuthInfoBO) {
+    private UserAuthBaseResponse convertUserInfo(UserMoreAuthBo userMoreAuthBo) {
         UserAuthBaseResponse userAuthBaseResponse = new UserAuthBaseResponse();
-        BeanUtils.copyProperties(userAuthInfoBO, userAuthBaseResponse);
+        BeanUtils.copyProperties(userMoreAuthBo, userAuthBaseResponse);
         ArrayList<UserAuthBaseResponse.UserAuthResponse> userAuthRespons = new ArrayList<>();
-        userAuthInfoBO.getUserAuthList().forEach(userAuth -> {
+        userMoreAuthBo.getUserAuthList().forEach(userAuth -> {
             UserAuthBaseResponse.UserAuthResponse userAuthResponse = userAuthBaseResponse.createUserAuthResponse();
             BeanUtils.copyProperties(userAuth, userAuthResponse);
             userAuthRespons.add(userAuthResponse);
@@ -57,9 +57,9 @@ public class UserController {
             @ApiParam(value = "userId", example = "1") @RequestParam(required = true) @NotNull Integer userId
     ) {
         AppUtil.info("按id获取user信息 userId:[{}]", userId);
-        UserAuthInfoBO userAuthInfoBO = userervice.queryById(userId);
+        UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
-        UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userAuthInfoBO);
+        UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
         AppUtil.info("按id获取user信息 userId:[{}] [apiResult:{}]", userId, JSON.toJSONString(apiResult));
         return apiResult;
@@ -71,20 +71,20 @@ public class UserController {
         AppUtil.info("注册用户接口 request:[{}]", JSON.toJSONString(request));
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         // 1参数校验
-        userervice.validateRegisterParams(request);
+        userService.validateRegisterParams(request);
         Integer userId = null;
         // 2 插入数据
         if (ChannelConstant.ChannelCode.SELF_TEL.equals(request.getChannelCode())) {
-            userId = userervice.insertByMobile(request);
+            userId = userService.insertByMobile(request);
         } else if (ChannelConstant.ChannelCode.SELF_MAIL.equals(request.getChannelCode())) {
-            userId = userervice.insertByMail(request);
+            userId = userService.insertByMail(request);
         } else {
             AppUtil.error("注册用户接口 未知的注册类型 channelCode:[{}]", request.getChannelCode());
             throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
         }
         // 3 查询用户数据
-        UserAuthInfoBO userAuthInfoBO = userervice.queryById(userId);
-        UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userAuthInfoBO);
+        UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
+        UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
         AppUtil.info("注册用户接口 正常返回 request:[{}] apiResult:[{}]", JSON.toJSONString(request), JSON.toJSONString(apiResult));
         return apiResult;
@@ -97,16 +97,16 @@ public class UserController {
         AppUtil.info("游客注册登录接口 uuid:[{}]", uuid);
         Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
-        UserAuth userAuth = userervice.existAuth(channel.getChannelId(), uuid, null);
+        UserAuth userAuth = userService.existAuth(channel.getChannelId(), uuid, null);
         Integer userId = null;
         if (userAuth == null) {
             // 根据uuid注册游客用户
-            userId = userervice.insertByUuid(uuid);
+            userId = userService.insertByUuid(uuid);
         } else {
             userId = userAuth.getUserId();
         }
-        UserAuthInfoBO userAuthInfoBO = userervice.queryById(userId);
-        UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userAuthInfoBO);
+        UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
+        UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
         AppUtil.info("游客注册登录接口 正常返回 uuid:[{}] apiResult:[{}]", uuid, JSON.toJSONString(apiResult));
         return apiResult;

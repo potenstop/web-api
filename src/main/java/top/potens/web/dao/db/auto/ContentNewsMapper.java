@@ -14,9 +14,13 @@ public interface ContentNewsMapper {
 
     int insertSelective(ContentNews record);
 
+    List<ContentNews> selectByExampleWithBLOBs(ContentNewsExample example);
+
     List<ContentNews> selectByExample(ContentNewsExample example);
 
     int updateByExampleSelective(@Param("record") ContentNews record, @Param("example") ContentNewsExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") ContentNews record, @Param("example") ContentNewsExample example);
 
     int updateByExample(@Param("record") ContentNews record, @Param("example") ContentNewsExample example);
 }

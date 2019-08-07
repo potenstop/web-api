@@ -13,6 +13,9 @@
     <result column="content_zone_id" jdbcType="TINYINT" property="contentZoneId" />
     <result column="token" jdbcType="VARCHAR" property="token" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="top.potens.web.model.ContentNews">
+    <result column="article" jdbcType="LONGVARCHAR" property="article" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -75,6 +78,25 @@
     content_news_id, create_time, update_time, content_id, article_source, title, editor, 
     publish_time, content_zone_id, token
   </sql>
+  <sql id="Blob_Column_List">
+    article
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="top.potens.web.model.ContentNewsExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from `content_news`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="top.potens.web.model.ContentNewsExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -101,12 +123,12 @@
     </selectKey>
     insert into `content_news` (create_time, update_time, content_id, 
       article_source, title, editor, 
-      publish_time, content_zone_id, token
-      )
+      publish_time, content_zone_id, token, 
+      article)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{contentId,jdbcType=INTEGER}, 
       #{articleSource,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{editor,jdbcType=VARCHAR}, 
-      #{publishTime,jdbcType=TIMESTAMP}, #{contentZoneId,jdbcType=TINYINT}, #{token,jdbcType=VARCHAR}
-      )
+      #{publishTime,jdbcType=TIMESTAMP}, #{contentZoneId,jdbcType=TINYINT}, #{token,jdbcType=VARCHAR}, 
+      #{article,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.ContentNews">
     <selectKey keyProperty="contentNewsId" order="AFTER" resultType="java.lang.Integer">
@@ -141,6 +163,9 @@
       <if test="token != null">
         token,
       </if>
+      <if test="article != null">
+        article,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
@@ -169,6 +194,9 @@
       </if>
       <if test="token != null">
         #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="article != null">
+        #{article,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -211,7 +239,27 @@
       <if test="record.token != null">
         token = #{record.token,jdbcType=VARCHAR},
       </if>
+      <if test="record.article != null">
+        article = #{record.article,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update `content_news`
+    set content_news_id = #{record.contentNewsId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      content_id = #{record.contentId,jdbcType=INTEGER},
+      article_source = #{record.articleSource,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      editor = #{record.editor,jdbcType=VARCHAR},
+      publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
+      content_zone_id = #{record.contentZoneId,jdbcType=TINYINT},
+      token = #{record.token,jdbcType=VARCHAR},
+      article = #{record.article,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

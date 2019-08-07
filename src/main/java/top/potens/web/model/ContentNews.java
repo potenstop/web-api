@@ -24,6 +24,8 @@ public class ContentNews implements Serializable {
 
     private String token;
 
+    private String article;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getContentNewsId() {
@@ -104,5 +106,13 @@ public class ContentNews implements Serializable {
 
     public void setToken(String token) {
         this.token = token == null ? null : token.trim();
+    }
+
+    public String getArticle() {
+        return article;
+    }
+
+    public void setArticle(String article) {
+        this.article = article == null ? null : article.trim();
     }
 }

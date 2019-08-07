@@ -4,6 +4,7 @@ package top.potens.web.config;
 import com.zaxxer.hikari.HikariDataSource;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,16 +25,17 @@ import javax.sql.DataSource;
 @EnableNeo4jRepositories(basePackages = "top.potens.web.dao.neo4j", repositoryBaseClass = MyRepositoryImpl.class)
 @EnableTransactionManagement
 public class Neo4jConfig {
-    //@Value("${data.master.url}")
-    private String masterUrl = "bolt://potens.top:7687/";
-    //@Value("${data.master.username}")
-    private String masterUserName = "neo4j";
-    //@Value("${data.master.password}")
-    private String masterPassword = "Wendi_1209";
+    @Value("${web.connection.neo4j.url}")
+    private String masterUrl;
+
+    @Value("${web.connection.neo4j.username}")
+    private String masterUserName;
+
+    @Value("${web.connection.neo4j.password}")
+    private String masterPassword;
 
     @Bean
     public SessionFactory sessionFactory() {
-        // with domain entity base package(s)
         return new SessionFactory(configuration(), "top.potens.web.model.neo4j");
     }
 

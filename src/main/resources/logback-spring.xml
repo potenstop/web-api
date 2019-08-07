@@ -71,6 +71,8 @@
     </logger>
     <logger name="top.potens" level="DEBUG" additivity="false"><appender-ref ref="STDOUT" /></logger>
     <logger name="top.potens.web.dao.db" level="ERROR" additivity="false"><appender-ref ref="STDOUT" /></logger>
+    <logger name="com.ctrip.framework.apollo.internals.RemoteConfigLongPollService" level="ERROR" additivity="false"><appender-ref ref="STDOUT" /></logger>
+    <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager" level="DEBUG" additivity="false"><appender-ref ref="STDOUT" /></logger>
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>

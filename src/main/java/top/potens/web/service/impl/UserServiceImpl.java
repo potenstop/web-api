@@ -4,20 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppUtil;
 import top.potens.framework.serialization.JSON;
-import top.potens.web.bmo.UserAuthInfoBO;
+import top.potens.web.bmo.UserMoreAuthBo;
+import top.potens.web.bmo.UserSignAuthBo;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.common.util.ValidateUtil;
 import top.potens.web.dao.db.auto.UserAuthMapper;
 import top.potens.web.dao.db.auto.UserMapper;
 import top.potens.web.model.*;
+import top.potens.web.request.UserOutRequest;
 import top.potens.web.request.UserRegisterRequest;
-import top.potens.web.service.Userervice;
+import top.potens.web.service.UserService;
 import top.potens.web.service.logic.ContentCacheService;
+import top.potens.web.service.logic.UserServiceLogic;
 import top.potens.web.service.noe4j.Neo4jService;
 
 import javax.validation.constraints.NotBlank;
@@ -29,30 +31,17 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UsererviceImpl implements Userervice {
+public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserAuthMapper userAuthMapper;
     private final Neo4jService neo4JService;
     private final ContentCacheService contentCacheService;
-
-    @Transactional(rollbackFor = Exception.class)
-    public void createUser(User user, UserAuth userAuth) {
-        Date now = new Date();
-        user.setCreateTime(now);
-        user.setUpdateTime(now);
-        userMapper.insertSelective(user);
-
-        userAuth.setCreateTime(now);
-        userAuth.setUpdateTime(now);
-        userAuth.setUserId(user.getUserId());
-        userAuthMapper.insertSelective(userAuth);
-    }
-
+    private final UserServiceLogic userServiceLogic;
 
     @Override
-    public UserAuthInfoBO queryById(@NotNull Integer userId) {
+    public UserMoreAuthBo queryById(@NotNull Integer userId) {
         AppUtil.info("按id查询user信息 userId:[{}]", String.valueOf(userId));
-        UserAuthInfoBO userAuthInfoBO = new UserAuthInfoBO();
+        UserMoreAuthBo userMoreAuthBo = new UserMoreAuthBo();
         // 查询user信息
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserIdEqualTo(userId);
@@ -60,14 +49,14 @@ public class UsererviceImpl implements Userervice {
         if (users.size() != 1) {
            throw new ApiException(CodeEnums.USER_NOT_FOUND.getCode(), CodeEnums.USER_NOT_FOUND.getMsg());
         }
-        BeanUtils.copyProperties(users.get(0), userAuthInfoBO);
+        BeanUtils.copyProperties(users.get(0), userMoreAuthBo);
         // 查询auth信息
         UserAuthExample userAuthExample = new UserAuthExample();
-        userAuthExample.createCriteria().andUserIdEqualTo(userAuthInfoBO.getUserId());
+        userAuthExample.createCriteria().andUserIdEqualTo(userMoreAuthBo.getUserId());
         List<UserAuth> userAuthList = userAuthMapper.selectByExample(userAuthExample);
-        userAuthInfoBO.setUserAuthList(userAuthList);
-        AppUtil.info("按id查询user信息 成功返回 userId:[{}] result:[{}]", String.valueOf(userId), JSON.toJSONString(userAuthInfoBO));
-        return userAuthInfoBO;
+        userMoreAuthBo.setUserAuthList(userAuthList);
+        AppUtil.info("按id查询user信息 成功返回 userId:[{}] result:[{}]", String.valueOf(userId), JSON.toJSONString(userMoreAuthBo));
+        return userMoreAuthBo;
     }
 
     @Override
@@ -135,7 +124,7 @@ public class UsererviceImpl implements Userervice {
         userAuth.setChannelId(channel.getChannelId());
         userAuth.setIdentifier(request.getIdentifier());
         userAuth.setCredential(request.getCredential());
-        this.createUser(user, userAuth);
+        userServiceLogic.create(user, userAuth);
         return user.getUserId();
     }
     @Override
@@ -155,7 +144,7 @@ public class UsererviceImpl implements Userervice {
         userAuth.setChannelId(channel.getChannelId());
         userAuth.setIdentifier(request.getIdentifier());
         userAuth.setCredential(request.getCredential());
-        this.createUser(user, userAuth);
+        userServiceLogic.create(user, userAuth);
         return user.getUserId();
     }
 
@@ -169,8 +158,23 @@ public class UsererviceImpl implements Userervice {
         userAuth.setChannelId(channel.getChannelId());
         userAuth.setIdentifier(uuid);
         userAuth.setCredential("");
-        createUser(user, userAuth);
+        userServiceLogic.create(user, userAuth);
         return user.getUserId();
     }
-
+    @Override
+    public List<UserSignAuthBo> insertByOutList(List<UserOutRequest> requests, Integer channelId) {
+        List<UserSignAuthBo> userSignAuthBos = new ArrayList<>();
+        requests.forEach(request -> {
+            UserSignAuthBo userSignAuthBo = new UserSignAuthBo();
+            userSignAuthBo.setNickname(request.getUserName());
+            userSignAuthBo.setAvatar(request.getAvatar());
+            UserAuth userAuth = new UserAuth();
+            userAuth.setIdentifier(request.getSourceUserId());
+            userAuth.setChannelId(channelId);
+            userSignAuthBo.setUserAuth(userAuth);
+            userSignAuthBos.add(userSignAuthBo);
+        });
+        userServiceLogic.bulkCreateOrUpdate(userSignAuthBos);
+        return userSignAuthBos;
+    }
 }

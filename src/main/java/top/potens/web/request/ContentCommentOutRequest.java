@@ -1,15 +1,21 @@
 package top.potens.web.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
+
+import java.util.Date;
 
 /**
  * Created by wenshao on 2019/7/21.
  */
-@ApiModel("外部")
+@ApiModel("外部评论")
 public class ContentCommentOutRequest {
+    private String id;
+
     private String content;
 
-    private String time;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date time;
 
     private Integer against;
 
@@ -19,6 +25,14 @@ public class ContentCommentOutRequest {
 
     private UserOutRequest user;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getContent() {
         return this.content;
     }
@@ -27,11 +41,11 @@ public class ContentCommentOutRequest {
         this.content = content;
     }
 
-    public String getTime() {
-        return this.time;
+    public Date getTime() {
+        return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

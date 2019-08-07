@@ -29,17 +29,17 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-    @Value("${web.connect.cache.url}")
+    @Value("${web.connection.cache.url}")
     private String masterUrl;
 
-    @Value("${web.connect.cache.port}")
-    private Integer port = 7379;
+    @Value("${web.connection.cache.port}")
+    private Integer port;
 
-    @Value("${web.connect.cache.database}")
-    private Integer database = 1;
+    @Value("${web.connection.cache.database}")
+    private Integer database;
 
-    @Value("${web.connect.cache.password}")
-    private String password = "potens";
+    @Value("${web.connection.cache.password}")
+    private String password;
 
     @Bean("cacheRedis")
     public LettuceConnectionFactory redisConnectionFactory() {
