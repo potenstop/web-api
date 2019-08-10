@@ -18,8 +18,8 @@ import java.io.PrintWriter;
  * @projectName web-api
  * @date: 2019/6/24 16:10
  */
-@Configuration
-@WebFilter(urlPatterns = "/*", filterName = "validate")
+//@Configuration
+//@WebFilter(urlPatterns = "/*", filterName = "validate")
 public class MyCorsFilter implements Filter {
     @Override
     public void init(FilterConfig arg0) throws ServletException {
