@@ -5,8 +5,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.potens.framework.exception.ApiException;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.serialization.JSON;
 import top.potens.web.dao.db.auto.ContentCommentMapper;
 import top.potens.web.dao.db.auto.ContentMapper;
@@ -33,7 +32,7 @@ public class ContentServiceLogic {
      */
     @Transactional(rollbackFor = Exception.class)
     public Integer insertContentNews(Content content, ContentNews contentNews, List<ContentComment> contentCommentList) {
-        AppUtil.info("开始插入新闻数据 content:[{}] contentNews:[{}]", JSON.toJSONString(content), JSON.toJSONString(contentNews));
+        AppLogger.info("开始插入新闻数据 content:[{}] contentNews:[{}]", JSON.toJSONString(content), JSON.toJSONString(contentNews));
         Date now = new Date();
         content.setCreateTime(now);
         content.setUpdateTime(now);
@@ -44,13 +43,13 @@ public class ContentServiceLogic {
         List<Content> contents = contentMapper.selectByExample(contentExample);
         Integer contentId;
         if (contents.size() > 0) {
-            AppUtil.info("对应的内容存在", JSON.toJSONString(contents));
+            AppLogger.info("对应的内容存在", JSON.toJSONString(contents));
             contentId = contents.get(0).getContentId();
         } else {
             contentMapper.insertSelective(content);
             contentNews.setContentId(content.getContentId());
             contentNewsMapper.insertSelective(contentNews);
-            AppUtil.info("插入成功 contentId", content.getContentId());
+            AppLogger.info("插入成功 contentId", content.getContentId());
             contentId = content.getContentId();
         }
         // 增加评论 存在则不操作

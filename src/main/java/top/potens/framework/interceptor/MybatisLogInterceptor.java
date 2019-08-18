@@ -10,7 +10,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 
 
 import java.text.DateFormat;
@@ -47,9 +47,9 @@ public class MybatisLogInterceptor implements Interceptor {
             Configuration configuration = mappedStatement.getConfiguration();
             // 获取到最终的sql语句
             String sql = getSql(configuration, boundSql, sqlId);
-            AppUtil.debug("sqlId:[{}] sqlResult:[{}]", sqlId, sql);
+            AppLogger.debug("sqlId:[{}] sqlResult:[{}]", sqlId, sql);
         } catch (Exception e) {
-            AppUtil.error("intercept error[" + e.getMessage() + "]", e);
+            AppLogger.error("intercept error[" + e.getMessage() + "]", e);
         }
 
         // 执行完上面的任务后，不改变原有的sql执行过程

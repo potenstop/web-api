@@ -4,12 +4,11 @@ import org.jruby.embed.ScriptingContainer;
 //import org.python.util.PythonInterpreter;
 import org.springframework.stereotype.Service;
 import top.potens.framework.exception.ApiException;
-import top.potens.framework.log.AppUtil;
-import top.potens.web.common.enums.CodeEnums;
+import top.potens.framework.log.AppLogger;
+import top.potens.web.code.CommonCode;
 import top.potens.web.common.util.CustomStringJavaCompiler;
 import top.potens.web.service.CodeService;
 
-import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -46,8 +45,8 @@ public class CodeServiceImpl implements CodeService {
             //调用注册函数
             return "11";
         } catch (ScriptException | UnsupportedEncodingException e) {
-            AppUtil.error("运行失败", e);
-            throw new ApiException(CodeEnums.CODE_COMPILER_ERROR.getCode(), e.getMessage());
+            AppLogger.error("运行失败", e);
+            throw new ApiException(CommonCode.CODE_COMPILER_ERROR);
         } finally {
             //还原默认打印的对象
              System.setOut(out);
@@ -59,18 +58,18 @@ public class CodeServiceImpl implements CodeService {
         CustomStringJavaCompiler compiler = new CustomStringJavaCompiler(code);
         boolean res = compiler.compiler();
         if (res) {
-            AppUtil.info("编译成功");
-            AppUtil.info("compilerTakeTime：" + compiler.getCompilerTakeTime());
+            AppLogger.info("编译成功");
+            AppLogger.info("compilerTakeTime：" + compiler.getCompilerTakeTime());
             try {
                 compiler.runMainMethod();
-                AppUtil.info("runTakeTime：" + compiler.getRunTakeTime());
+                AppLogger.info("runTakeTime：" + compiler.getRunTakeTime());
                 return compiler.getRunResult();
             } catch (Exception e) {
-                AppUtil.error("运行失败", e);
-                throw new ApiException(CodeEnums.CODE_COMPILER_ERROR.getCode(), e.getMessage());
+                AppLogger.error("运行失败", e);
+                throw new ApiException(CommonCode.CODE_COMPILER_ERROR, e.getMessage());
             }
         } else {
-            throw new ApiException(CodeEnums.CODE_COMPILER_ERROR.getCode(), compiler.getCompilerMessage());
+            throw new ApiException(CommonCode.CODE_COMPILER_ERROR, compiler.getCompilerMessage());
         }
     }
 

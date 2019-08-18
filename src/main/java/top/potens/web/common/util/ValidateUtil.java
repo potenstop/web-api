@@ -1,6 +1,6 @@
 package top.potens.web.common.util;
 
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.web.common.constant.RegexpConstant;
 
 import java.util.regex.Matcher;
@@ -22,7 +22,7 @@ public class ValidateUtil {
             Matcher matcher = regex.matcher(mobile);
             flag = matcher.matches();
         } catch (Exception e) {
-            AppUtil.error("check error", e);
+            AppLogger.error("check error", e);
         }
         return flag;
     }
@@ -38,7 +38,7 @@ public class ValidateUtil {
             Matcher matcher = regex.matcher(mail);
             flag = matcher.matches();
         } catch (Exception e) {
-            AppUtil.error("check error", e);
+            AppLogger.error("check error", e);
         }
         return flag;
     }

@@ -8,12 +8,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.potens.framework.exception.ApiException;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.serialization.JSON;
 import top.potens.web.bmo.UserMoreAuthBo;
+import top.potens.web.code.CommonCode;
 import top.potens.web.common.constant.ChannelConstant;
-import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.model.Channel;
 import top.potens.web.model.UserAuth;
 import top.potens.web.request.UserRegisterRequest;
@@ -56,19 +56,19 @@ public class UserController {
     public ApiResult<UserAuthBaseResponse> userById(
             @ApiParam(value = "userId", example = "1") @RequestParam(required = true) @NotNull Integer userId
     ) {
-        AppUtil.info("按id获取user信息 userId:[{}]", userId);
+        AppLogger.info("按id获取user信息 userId:[{}]", userId);
         UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
-        AppUtil.info("按id获取user信息 userId:[{}] [apiResult:{}]", userId, JSON.toJSONString(apiResult));
+        AppLogger.info("按id获取user信息 userId:[{}] [apiResult:{}]", userId, JSON.toJSONString(apiResult));
         return apiResult;
     }
 
     @PostMapping("/register")
     @ApiOperation(value = "注册接口")
     public ApiResult<UserAuthBaseResponse> userRegister(@RequestBody @Valid UserRegisterRequest request) {
-        AppUtil.info("注册用户接口 request:[{}]", JSON.toJSONString(request));
+        AppLogger.info("注册用户接口 request:[{}]", JSON.toJSONString(request));
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         // 1参数校验
         userService.validateRegisterParams(request);
@@ -79,14 +79,14 @@ public class UserController {
         } else if (ChannelConstant.ChannelCode.SELF_MAIL.equals(request.getChannelCode())) {
             userId = userService.insertByMail(request);
         } else {
-            AppUtil.error("注册用户接口 未知的注册类型 channelCode:[{}]", request.getChannelCode());
-            throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
+            AppLogger.error("注册用户接口 未知的注册类型 channelCode:[{}]", request.getChannelCode());
+            throw new ApiException(CommonCode.PARAM_ERROR);
         }
         // 3 查询用户数据
         UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
-        AppUtil.info("注册用户接口 正常返回 request:[{}] apiResult:[{}]", JSON.toJSONString(request), JSON.toJSONString(apiResult));
+        AppLogger.info("注册用户接口 正常返回 request:[{}] apiResult:[{}]", JSON.toJSONString(request), JSON.toJSONString(apiResult));
         return apiResult;
     }
     @GetMapping("/visitor/login")
@@ -94,7 +94,7 @@ public class UserController {
     public ApiResult<UserAuthBaseResponse> userVisitorLogin(
             @ApiParam(value = "uuid", example = "1") @RequestParam(required = true) @NotNull String uuid
     ) {
-        AppUtil.info("游客注册登录接口 uuid:[{}]", uuid);
+        AppLogger.info("游客注册登录接口 uuid:[{}]", uuid);
         Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         UserAuth userAuth = userService.existAuth(channel.getChannelId(), uuid, null);
@@ -108,7 +108,7 @@ public class UserController {
         UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
-        AppUtil.info("游客注册登录接口 正常返回 uuid:[{}] apiResult:[{}]", uuid, JSON.toJSONString(apiResult));
+        AppLogger.info("游客注册登录接口 正常返回 uuid:[{}] apiResult:[{}]", uuid, JSON.toJSONString(apiResult));
         return apiResult;
     }
 

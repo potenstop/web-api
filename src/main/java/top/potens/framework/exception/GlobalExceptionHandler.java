@@ -1,7 +1,6 @@
 package top.potens.framework.exception;
 
 import com.github.pagehelper.StringUtil;
-import com.sun.net.httpserver.HttpContext;
 import org.springframework.beans.BeansException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -11,8 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.potens.framework.constant.ResConstant;
-import top.potens.framework.log.App;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
 
 import javax.servlet.ServletException;
@@ -76,7 +74,7 @@ public class GlobalExceptionHandler {
                     .append("; method: ").append(stacks[1].getMethodName())
                     .append("; line_number: ").append(stacks[1].getLineNumber());
         }
-        AppUtil.error(sb.toString(), ex);
+        AppLogger.error(sb.toString(), ex);
         return getResult(ResConstant.INTERNAL_SERVER_EXCEPTION, ex.getMessage());
     }
 

@@ -5,7 +5,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.UserSignAuthBo;
@@ -49,10 +49,10 @@ public class ContentNewsImpl implements ContentNewsService {
         try {
             res = lock.tryLock(100, 120, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            AppUtil.error("加锁失败", e);
+            AppLogger.error("加锁失败", e);
         }
         if (res) {
-            AppUtil.info("获得锁 开始执行");
+            AppLogger.info("获得锁 开始执行");
             try {
                 Channel channel = contentCacheService.getChannelByCode(request.getWebSource());
                 ContentZone contentZone = contentCacheService.getContentZoneByCode(request.getZone());
@@ -91,7 +91,7 @@ public class ContentNewsImpl implements ContentNewsService {
                     contentComments.add(contentComment);
                 });
                 Integer contentId = contentServiceLogic.insertContentNews(content, contentNews, contentComments);
-                AppUtil.info("数据插入完成 contentId:[{}]", contentId);
+                AppLogger.info("数据插入完成 contentId:[{}]", contentId);
                 // 更新标签
                 if (request.getLabels() != null) {
                     request.getLabels().forEach(labelName -> {
@@ -106,7 +106,7 @@ public class ContentNewsImpl implements ContentNewsService {
                 lock.unlock();
             }
         } else {
-            AppUtil.info("没有获得锁");
+            AppLogger.info("没有获得锁");
         }
     }
 }

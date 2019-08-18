@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.util.DateUtil;
+import top.potens.web.code.CommonCode;
+import top.potens.web.code.UserCode;
 import top.potens.web.common.constant.AreaConstant;
-import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.dao.neo4j.AreaNeo4jRepository;
 import top.potens.web.dao.neo4j.UserNeo4jRepository;
 import top.potens.web.dao.neo4j.OrderNeo4jRepository;
@@ -42,7 +43,7 @@ public class Neo4jService {
     public UserNeo4j insertUser(UserNeo4j userNeo4JParams, String partCityCode) {
         AreaNeo4j areaNeo4j = areaNeo4jRepository.findByAreaCode(partCityCode);
         if (areaNeo4j == null || !AreaConstant.Rank.CITY.equals(areaNeo4j.getRank())) {
-            throw new ApiException(CodeEnums.CITY_NOT_FOUND.getCode(), CodeEnums.CITY_NOT_FOUND.getMsg());
+            throw new ApiException(CommonCode.CITY_NOT_FOUND);
         }
         userNeo4JParams.setCityAreaNeo4j(areaNeo4j);
         userNeo4JRepository.createOrUpdate(userNeo4JParams.getUserId(), userNeo4JParams.getUserName(), DateUtil.getLocalDateStr(userNeo4JParams.getCreateTime()));
@@ -57,7 +58,7 @@ public class Neo4jService {
     public OrderNeo4j insertOrder(OrderNeo4j orderNeo4jParams, Integer userId, Integer directUser, Integer indirectUser) {
         UserNeo4j userNeo4J = userNeo4JRepository.findByUserId(userId);
         if (userNeo4J == null) {
-            throw new ApiException(CodeEnums.USER_NOT_FOUND.getCode(), CodeEnums.USER_NOT_FOUND.getMsg());
+            throw new ApiException(UserCode.USER_NOT_FOUND);
         }
         if (directUser != null) {
             UserNeo4j userNeo4JD = userNeo4JRepository.findByUserId(directUser);

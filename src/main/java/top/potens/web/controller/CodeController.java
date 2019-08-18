@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.potens.framework.exception.ApiException;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.serialization.JSON;
+import top.potens.web.code.CommonCode;
 import top.potens.web.common.constant.CodeConstant;
-import top.potens.web.common.enums.CodeEnums;
 import top.potens.web.request.CodeRunRequest;
 import top.potens.web.service.CodeService;
 
@@ -34,7 +34,7 @@ public class CodeController {
     @PostMapping("/run")
     @ApiOperation(value = "运行代码")
     public ApiResult<String> codeRun(@RequestBody @Valid CodeRunRequest request) {
-        AppUtil.info("start request:[{}]", JSON.toJSONString(request));
+        AppLogger.info("start request:[{}]", JSON.toJSONString(request));
         ApiResult<String> apiResult = new ApiResult<>();
         if (CodeConstant.CodeType.JAVA_SCRIPT.equals(request.getLanguage())) {
             apiResult.setData(codeService.runNodeJs(request.getCode()));
@@ -45,9 +45,9 @@ public class CodeController {
         } else if (CodeConstant.CodeType.RUBY.equals(request.getLanguage())) {
             apiResult.setData(codeService.runRuby(request.getCode()));
         } else {
-            throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
+            throw new ApiException(CommonCode.PARAM_ERROR);
         }
-        AppUtil.info("end result[{}]", JSON.toJSONString(apiResult));
+        AppLogger.info("end result[{}]", JSON.toJSONString(apiResult));
         return apiResult;
     }
 

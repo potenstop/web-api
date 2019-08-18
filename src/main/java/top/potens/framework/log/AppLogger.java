@@ -13,7 +13,7 @@ import java.text.MessageFormat;
 /**
  * Created by wenshao on 2019/6/15.
  */
-public class AppUtil {
+public class AppLogger {
     private static final Logger appLog = new LogWrapper("AppLoggerFile");
     private static final Logger console = new LogWrapper("AppLoggerConsole");
 

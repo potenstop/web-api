@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.potens.framework.exception.ApiException;
-import top.potens.framework.log.AppUtil;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.serialization.JSON;
-import top.potens.web.common.enums.CodeEnums;
+import top.potens.web.code.CommonCode;
 import top.potens.web.model.neo4j.UserNeo4j;
 import top.potens.web.model.neo4j.OrderNeo4j;
 import top.potens.web.model.neo4j.OrderProductNeo4j;
@@ -45,12 +45,12 @@ public class Neo4jController {
     @PostMapping("/init/area")
     @ApiOperation(value = "初始化area")
     public ApiResult<Boolean> initArea() {
-        throw new ApiException(CodeEnums.PARAM_ERROR.getCode(), CodeEnums.PARAM_ERROR.getMsg());
+        throw new ApiException(CommonCode.PARAM_ERROR);
     }
     @PostMapping("/user/add")
     @ApiOperation(value = "添加用户")
     public ApiResult<Boolean> userAdd(@RequestBody @Valid UserNeo4jRequest request) {
-        AppUtil.info("start-controller-userAdd");
+        AppLogger.info("start-controller-userAdd");
         ApiResult<Boolean> result = new ApiResult<>();
         UserNeo4j userNeo4J = new UserNeo4j();
         userNeo4J.setUserId(request.getUserId());
@@ -58,13 +58,13 @@ public class Neo4jController {
         userNeo4J.setCreateTime(request.getCreateTime());
         neo4JService.insertUser(userNeo4J, request.getPartCityCode());
         result.setData(true);
-        AppUtil.info("end-controller-userAdd result:[{}]", JSON.toJSONString(result));
+        AppLogger.info("end-controller-userAdd result:[{}]", JSON.toJSONString(result));
         return result;
     }
     @PostMapping("/order/add")
     @ApiOperation(value = "添加订单")
     public ApiResult<Boolean> orderAdd(@RequestBody @Valid OrderNeo4jRequest request) {
-        AppUtil.info("start-controller-orderAdd");
+        AppLogger.info("start-controller-orderAdd");
         ApiResult<Boolean> result = new ApiResult<>();
         OrderNeo4j orderNeo4j = new OrderNeo4j();
         orderNeo4j.setOrderId(request.getOrderId());
@@ -84,7 +84,7 @@ public class Neo4jController {
         orderNeo4j.setProducts(orderProductNeo4js1);
         neo4JService.insertOrder(orderNeo4j, request.getUserId(), request.getDirectUser(), request.getIndirectUser());
         result.setData(true);
-        AppUtil.info("end-controller-orderAdd result:[{}]", JSON.toJSONString(result));
+        AppLogger.info("end-controller-orderAdd result:[{}]", JSON.toJSONString(result));
         return result;
     }
 }

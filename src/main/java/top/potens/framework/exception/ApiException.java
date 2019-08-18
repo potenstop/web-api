@@ -1,5 +1,7 @@
 package top.potens.framework.exception;
 
+import top.potens.framework.response.ResultCodeInit;
+
 /**
  * Created by wenshao on 2019/6/16.
  */
@@ -7,19 +9,10 @@ public class ApiException extends RuntimeException {
     private String code;
     private String message;
 
-    public ApiException() {
-        super();
-    }
-    public ApiException(String code, String message) {
-        super(message);
+    public ApiException(String code, Object... args) {
+        super(ResultCodeInit.getResultMsg(code, args));
         this.code = code;
-        this.message = message;
-    }
-
-    public ApiException(String code) {
-        super();
-        this.code = code;
-        this.message = "";
+        this.message = super.getMessage();
     }
 
     public String getCode() {
