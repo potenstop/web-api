@@ -1,4 +1,4 @@
-package top.potens.framework.response;
+package top.potens.framework.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

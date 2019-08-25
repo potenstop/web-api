@@ -1,6 +1,6 @@
 package top.potens.web.code;
 
-import top.potens.framework.response.ResultMessage;
+import top.potens.framework.annotation.ResultMessage;
 
 /**
  * 功能描述: 用户code码 20000-29999
@@ -22,4 +22,7 @@ public class UserCode {
 
     @ResultMessage("邮箱输入错误")
     public static final String USER_MAIL_INPUT_ERROR = "20004";
+
+    @ResultMessage("用户名或密码错误")
+    public static final String USERNAME_OR_PASSWORD_ERROR = "20005";
 }

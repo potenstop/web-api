@@ -3,7 +3,6 @@ package top.potens.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +31,12 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/user")
 @Api(description = "用户管理操作")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+// @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
-
-    private final UserService userService;
-    private final ContentCacheService contentCacheService;
+    @Autowired
+    private  UserService userService;
+    @Autowired
+    private  ContentCacheService contentCacheService;
 
     private UserAuthBaseResponse convertUserInfo(UserMoreAuthBo userMoreAuthBo) {
         UserAuthBaseResponse userAuthBaseResponse = new UserAuthBaseResponse();
@@ -57,7 +57,7 @@ public class UserController {
             @ApiParam(value = "userId", example = "1") @RequestParam(required = true) @NotNull Integer userId
     ) {
         AppLogger.info("按id获取user信息 userId:[{}]", userId);
-        UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
+        UserMoreAuthBo userMoreAuthBo = userService.queryDetailById(userId);
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
@@ -83,7 +83,7 @@ public class UserController {
             throw new ApiException(CommonCode.PARAM_ERROR);
         }
         // 3 查询用户数据
-        UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
+        UserMoreAuthBo userMoreAuthBo = userService.queryDetailById(userId);
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
         AppLogger.info("注册用户接口 正常返回 request:[{}] apiResult:[{}]", JSON.toJSONString(request), JSON.toJSONString(apiResult));
@@ -105,11 +105,22 @@ public class UserController {
         } else {
             userId = userAuth.getUserId();
         }
-        UserMoreAuthBo userMoreAuthBo = userService.queryById(userId);
+        UserMoreAuthBo userMoreAuthBo = userService.queryDetailById(userId);
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
         AppLogger.info("游客注册登录接口 正常返回 uuid:[{}] apiResult:[{}]", uuid, JSON.toJSONString(apiResult));
         return apiResult;
+    }
+    @GetMapping("/ldap/login")
+    @ApiOperation(value = "ldap用户登录")
+    public ApiResult<Boolean> ldapLogin(
+            @ApiParam(value = "username", example = "1") @RequestParam(required = true) @NotNull String username,
+            @ApiParam(value = "password", example = "1") @RequestParam(required = true) @NotNull String password
+    ) {
+        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_LDAP);
+        ApiResult<Boolean> result = new ApiResult<>();
+        result.setData(userService.ldapLogin(channel, username, password));
+        return result;
     }
 
 }

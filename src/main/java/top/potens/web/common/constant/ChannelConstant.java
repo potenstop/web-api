@@ -20,6 +20,10 @@ public class ChannelConstant {
         /**
          * 网易用户_爬虫
          */
-        public static final String NET_SPIDER = "NET_SPIDER";
+        public static final String NET_SPIDER = "net_spider";
+        /**
+         * 网易用户_爬虫
+         */
+        public static final String SELF_LDAP = "self_ldap";
     }
 }

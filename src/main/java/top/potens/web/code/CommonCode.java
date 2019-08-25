@@ -1,6 +1,6 @@
 package top.potens.web.code;
 
-import top.potens.framework.response.ResultMessage;
+import top.potens.framework.annotation.ResultMessage;
 
 /**
  * 功能描述: 通用code码  10000-19999

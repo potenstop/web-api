@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import top.potens.framework.exception.ApiException;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/8/18 13:35
  */
 @Aspect
+@Component
 public class ControllerVisitAspect {
 
     @Pointcut("@within(org.springframework.stereotype.Controller) || @within(org.springframework.web.bind.annotation.RestController)")

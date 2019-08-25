@@ -17,10 +17,4 @@ public class WebApiApplication {
         ResultCodeInit.addResultCodeDefinitionClassByPackage("top.potens.web.code");
         SpringApplication.run(WebApiApplication.class, args);
     }
-
-    @Bean
-    public ControllerVisitAspect controllerVisitAspect(){
-        return new ControllerVisitAspect();
-    }
-
 }

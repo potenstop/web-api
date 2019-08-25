@@ -2,6 +2,7 @@ package top.potens.framework.response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.helpers.MessageFormatter;
+import top.potens.framework.annotation.ResultMessage;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.plugin.PackageClassesLoader;
 

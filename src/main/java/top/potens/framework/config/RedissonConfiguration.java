@@ -1,4 +1,4 @@
-package top.potens.web.config;
+package top.potens.framework.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -21,16 +21,22 @@ public class RedissonConfiguration {
     private String url;
 
     @Value("${fx.config.redisson.password}")
-    private String password = "potens";
+    private String password;
 
     @Value("${fx.config.redisson.database}")
-    private Integer database = 2;
+    private Integer database;
 
     @Bean
-    public RedissonClient getRedisson(){
+    public RedissonClient getRedisson() {
 
         Config config = new Config();
-        config.useSingleServer().setAddress(url).setPassword(password).setDatabase(database);
+        config.useSingleServer()
+                .setAddress(url)
+                .setPassword(password).setDatabase(database)
+                .setConnectionPoolSize(10)
+                .setConnectionMinimumIdleSize(4)
+                .setSubscriptionConnectionPoolSize(5)
+                .setSubscriptionConnectionMinimumIdleSize(2);
         //添加主从配置
         // config.useMasterSlaveServers().setMasterAddress("").setPassword("").addSlaveAddress(new String[]{"",""});
 
