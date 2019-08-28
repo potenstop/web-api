@@ -6,11 +6,11 @@ import java.util.Date;
 public class Label implements Serializable {
     private Integer labelId;
 
-    private String labelName;
-
     private Date createTime;
 
     private Date updateTime;
+
+    private String labelName;
 
     private static final long serialVersionUID = 1L;
 
@@ -20,14 +20,6 @@ public class Label implements Serializable {
 
     public void setLabelId(Integer labelId) {
         this.labelId = labelId;
-    }
-
-    public String getLabelName() {
-        return labelName;
-    }
-
-    public void setLabelName(String labelName) {
-        this.labelName = labelName == null ? null : labelName.trim();
     }
 
     public Date getCreateTime() {
@@ -44,5 +36,13 @@ public class Label implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName == null ? null : labelName.trim();
     }
 }

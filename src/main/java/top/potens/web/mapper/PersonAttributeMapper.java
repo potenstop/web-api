@@ -19,16 +19,20 @@ public class PersonAttributeMapper implements AttributesMapper<Person> {
         Person person = new Person();
         person.setSn((String)attr.get("sn").get());
         person.setCn((String)attr.get("cn").get());
-        person.setUid((String)attr.get("uid").get());
-
-        if (attr.get("userPassword") != null) {
-            person.setUserPassword((String)attr.get("userPassword").get());
+        if (attr.get("uid") != null) {
+            person.setUid((String)attr.get("uid").get());
+        }
+        if (attr.get("uidNumber") != null) {
+            person.setUidNumber((String)attr.get("uidNumber").get());
         }
         if (attr.get("telephoneNumber") != null) {
             person.setTelephoneNumber((String)attr.get("telephoneNumber").get());
         }
         if (attr.get("seeAlso") != null) {
             person.setSeeAlso((String)attr.get("seeAlso").get());
+        }
+        if (attr.get("description") != null) {
+            person.setDescription((String)attr.get("description").get());
         }
         if (attr.get("description") != null) {
             person.setDescription((String)attr.get("description").get());

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.auto.ContentZoneMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.ContentZone">
-    <result column="content_zone_id" jdbcType="INTEGER" property="contentZoneId" />
+    <id column="content_zone_id" jdbcType="INTEGER" property="contentZoneId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="zone_name" jdbcType="VARCHAR" property="zoneName" />
@@ -83,6 +83,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `content_zone`
+    where content_zone_id = #{contentZoneId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `content_zone`
+    where content_zone_id = #{contentZoneId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="top.potens.web.model.ContentZoneExample">
     delete from `content_zone`
     <if test="_parameter != null">
@@ -171,5 +181,31 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.ContentZone">
+    update `content_zone`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zoneName != null">
+        zone_name = #{zoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneCode != null">
+        zone_code = #{zoneCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where content_zone_id = #{contentZoneId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.ContentZone">
+    update `content_zone`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      zone_name = #{zoneName,jdbcType=VARCHAR},
+      zone_code = #{zoneCode,jdbcType=VARCHAR}
+    where content_zone_id = #{contentZoneId,jdbcType=INTEGER}
   </update>
 </mapper>

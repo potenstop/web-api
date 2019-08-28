@@ -12,7 +12,7 @@ public class LockConstant {
     /**
      * 外部新闻id
      */
-    public static final String CONTENT_NEWS_OUT_KEY = "content:news:out:%s:%s";
+    public static final String CONTENT_NEWS_OUT_KEY = "content:news:out:";
 
     /**
      * 外部新闻id

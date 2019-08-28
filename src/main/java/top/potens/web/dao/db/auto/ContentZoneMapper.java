@@ -10,13 +10,21 @@ public interface ContentZoneMapper {
 
     int deleteByExample(ContentZoneExample example);
 
+    int deleteByPrimaryKey(Integer contentZoneId);
+
     int insert(ContentZone record);
 
     int insertSelective(ContentZone record);
 
     List<ContentZone> selectByExample(ContentZoneExample example);
 
+    ContentZone selectByPrimaryKey(Integer contentZoneId);
+
     int updateByExampleSelective(@Param("record") ContentZone record, @Param("example") ContentZoneExample example);
 
     int updateByExample(@Param("record") ContentZone record, @Param("example") ContentZoneExample example);
+
+    int updateByPrimaryKeySelective(ContentZone record);
+
+    int updateByPrimaryKey(ContentZone record);
 }

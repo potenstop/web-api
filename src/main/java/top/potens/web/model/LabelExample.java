@@ -165,76 +165,6 @@ public class LabelExample {
             return (Criteria) this;
         }
 
-        public Criteria andLabelNameIsNull() {
-            addCriterion("label_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameIsNotNull() {
-            addCriterion("label_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameEqualTo(String value) {
-            addCriterion("label_name =", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameNotEqualTo(String value) {
-            addCriterion("label_name <>", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameGreaterThan(String value) {
-            addCriterion("label_name >", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameGreaterThanOrEqualTo(String value) {
-            addCriterion("label_name >=", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameLessThan(String value) {
-            addCriterion("label_name <", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameLessThanOrEqualTo(String value) {
-            addCriterion("label_name <=", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameLike(String value) {
-            addCriterion("label_name like", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameNotLike(String value) {
-            addCriterion("label_name not like", value, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameIn(List<String> values) {
-            addCriterion("label_name in", values, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameNotIn(List<String> values) {
-            addCriterion("label_name not in", values, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameBetween(String value1, String value2) {
-            addCriterion("label_name between", value1, value2, "labelName");
-            return (Criteria) this;
-        }
-
-        public Criteria andLabelNameNotBetween(String value1, String value2) {
-            addCriterion("label_name not between", value1, value2, "labelName");
-            return (Criteria) this;
-        }
-
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -352,6 +282,76 @@ public class LabelExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameIsNull() {
+            addCriterion("label_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameIsNotNull() {
+            addCriterion("label_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameEqualTo(String value) {
+            addCriterion("label_name =", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameNotEqualTo(String value) {
+            addCriterion("label_name <>", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameGreaterThan(String value) {
+            addCriterion("label_name >", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameGreaterThanOrEqualTo(String value) {
+            addCriterion("label_name >=", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameLessThan(String value) {
+            addCriterion("label_name <", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameLessThanOrEqualTo(String value) {
+            addCriterion("label_name <=", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameLike(String value) {
+            addCriterion("label_name like", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameNotLike(String value) {
+            addCriterion("label_name not like", value, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameIn(List<String> values) {
+            addCriterion("label_name in", values, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameNotIn(List<String> values) {
+            addCriterion("label_name not in", values, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameBetween(String value1, String value2) {
+            addCriterion("label_name between", value1, value2, "labelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabelNameNotBetween(String value1, String value2) {
+            addCriterion("label_name not between", value1, value2, "labelName");
             return (Criteria) this;
         }
     }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.auto.ContentLabelMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.ContentLabel">
-    <result column="content_label_id" jdbcType="INTEGER" property="contentLabelId" />
+    <id column="content_label_id" jdbcType="INTEGER" property="contentLabelId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="content_id" jdbcType="INTEGER" property="contentId" />
@@ -83,6 +83,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `content_label`
+    where content_label_id = #{contentLabelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `content_label`
+    where content_label_id = #{contentLabelId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="top.potens.web.model.ContentLabelExample">
     delete from `content_label`
     <if test="_parameter != null">
@@ -171,5 +181,31 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.ContentLabel">
+    update `content_label`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contentId != null">
+        content_id = #{contentId,jdbcType=INTEGER},
+      </if>
+      <if test="labelId != null">
+        label_id = #{labelId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where content_label_id = #{contentLabelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.ContentLabel">
+    update `content_label`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      content_id = #{contentId,jdbcType=INTEGER},
+      label_id = #{labelId,jdbcType=INTEGER}
+    where content_label_id = #{contentLabelId,jdbcType=INTEGER}
   </update>
 </mapper>

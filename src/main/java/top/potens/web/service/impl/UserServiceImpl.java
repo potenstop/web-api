@@ -10,6 +10,7 @@ import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.potens.framework.annotation.Lock;
+import top.potens.framework.enums.LockModel;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.serialization.JSON;
@@ -19,10 +20,12 @@ import top.potens.web.code.CommonCode;
 import top.potens.web.code.UserCode;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.constant.CommonConstant;
+import top.potens.web.common.constant.LockConstant;
 import top.potens.web.common.util.ValidateUtil;
 import top.potens.web.config.ApolloConfiguration;
 import top.potens.web.dao.db.auto.UserAuthMapper;
 import top.potens.web.dao.db.auto.UserMapper;
+import top.potens.web.mapper.DnMapper;
 import top.potens.web.mapper.PersonAttributeMapper;
 import top.potens.web.model.*;
 import top.potens.web.model.ldap.Person;
@@ -33,13 +36,12 @@ import top.potens.web.service.logic.ContentCacheService;
 import top.potens.web.service.logic.UserServiceLogic;
 import top.potens.web.service.noe4j.Neo4jService;
 
+import javax.naming.Context;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static top.potens.framework.enums.LockModel.FAIR;
-import static top.potens.web.common.constant.LockConstant.LDAP_LOGIN;
 
 /**
  * Created by wenshao on 2019/6/16.
@@ -246,18 +248,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Lock(lockModel = FAIR, keys = "#{username}", attemptTimeout = 10, lockWatchTimeout = 100)
+    @Lock(lockModel = LockModel.FAIR, keys = LockConstant.LDAP_LOGIN + "#{#username}", attemptTimeout = 10, lockWatchTimeout = 100)
     public boolean ldapLogin(Channel channel, String username, String password) {
         AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter(apolloConfiguration.getLdapIdentifier(), username));
-        filter.and(new EqualsFilter("userPassword", password));
-        List<Person> search = ldapTemplate.search("", filter.encode(), new PersonAttributeMapper());
-        if (CollectionUtils.isNotEmpty(search) && search.size() == 1) {
-            UserAuth userAuth = existAuth(channel.getChannelId(), username, null);
-            Person person = search.get(0);
+        boolean authenticate = ldapTemplate.authenticate("", filter.encode(), password);
+        if (authenticate) {
+            List<Person> personList = ldapTemplate.search("", filter.encode(), new PersonAttributeMapper());
+            if (CollectionUtils.isEmpty(personList) || personList.size() != 1) {
+                AppLogger.warn("ldap登录 用户不存在或存在多个 username:[{}] password:[{}] personList:[{}]", username, password, JSON.toJSONString(personList));
+                throw new ApiException(UserCode.USERNAME_OR_PASSWORD_ERROR);
+            }
+            Person person = personList.get(0);
+            UserAuth userAuth = existAuth(channel.getChannelId(), person.getUidNumber(), null);
+
             if (userAuth == null) {
                 // 创建用户
-                insertByLdap(person.getUid(), person.getCn());
+                insertByLdap(person.getUidNumber(), username);
             }
             return true;
         } else {

@@ -12,12 +12,12 @@ import lombok.Data;
  */
 @Data
 public class Person {
-    private String sn; //必填属性
-    private String cn; //必填属性
-    private String uid; //必填属性
+    private String sn;
+    private String cn;
+    private String uid;
+    private String uidNumber;
 
-    private String userPassword; //可选属性
-    private String telephoneNumber; //可选属性
-    private String seeAlso; //可选属性
-    private String description;  //可选属性
+    private String telephoneNumber;
+    private String seeAlso;
+    private String description;
 }

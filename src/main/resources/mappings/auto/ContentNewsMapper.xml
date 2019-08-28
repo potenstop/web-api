@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.auto.ContentNewsMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.ContentNews">
-    <result column="content_news_id" jdbcType="INTEGER" property="contentNewsId" />
+    <id column="content_news_id" jdbcType="INTEGER" property="contentNewsId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="content_id" jdbcType="INTEGER" property="contentId" />
@@ -111,6 +111,18 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from `content_news`
+    where content_news_id = #{contentNewsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `content_news`
+    where content_news_id = #{contentNewsId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="top.potens.web.model.ContentNewsExample">
     delete from `content_news`
     <if test="_parameter != null">
@@ -279,5 +291,68 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.ContentNews">
+    update `content_news`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contentId != null">
+        content_id = #{contentId,jdbcType=INTEGER},
+      </if>
+      <if test="articleSource != null">
+        article_source = #{articleSource,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="editor != null">
+        editor = #{editor,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null">
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contentZoneId != null">
+        content_zone_id = #{contentZoneId,jdbcType=TINYINT},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="article != null">
+        article = #{article,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where content_news_id = #{contentNewsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="top.potens.web.model.ContentNews">
+    update `content_news`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      content_id = #{contentId,jdbcType=INTEGER},
+      article_source = #{articleSource,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      editor = #{editor,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      content_zone_id = #{contentZoneId,jdbcType=TINYINT},
+      token = #{token,jdbcType=VARCHAR},
+      article = #{article,jdbcType=LONGVARCHAR}
+    where content_news_id = #{contentNewsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.ContentNews">
+    update `content_news`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      content_id = #{contentId,jdbcType=INTEGER},
+      article_source = #{articleSource,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      editor = #{editor,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      content_zone_id = #{contentZoneId,jdbcType=TINYINT},
+      token = #{token,jdbcType=VARCHAR}
+    where content_news_id = #{contentNewsId,jdbcType=INTEGER}
   </update>
 </mapper>

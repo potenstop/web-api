@@ -10,13 +10,21 @@ public interface ContentCommentMapper {
 
     int deleteByExample(ContentCommentExample example);
 
+    int deleteByPrimaryKey(Integer contentCommentId);
+
     int insert(ContentComment record);
 
     int insertSelective(ContentComment record);
 
     List<ContentComment> selectByExample(ContentCommentExample example);
 
+    ContentComment selectByPrimaryKey(Integer contentCommentId);
+
     int updateByExampleSelective(@Param("record") ContentComment record, @Param("example") ContentCommentExample example);
 
     int updateByExample(@Param("record") ContentComment record, @Param("example") ContentCommentExample example);
+
+    int updateByPrimaryKeySelective(ContentComment record);
+
+    int updateByPrimaryKey(ContentComment record);
 }

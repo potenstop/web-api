@@ -6,6 +6,10 @@ import java.util.Date;
 public class Area implements Serializable {
     private Integer areaId;
 
+    private Date createTime;
+
+    private Date updateTime;
+
     private Integer provinceId;
 
     private String provinceName;
@@ -18,10 +22,6 @@ public class Area implements Serializable {
 
     private String countyName;
 
-    private Date createTime;
-
-    private Date updateTime;
-
     private static final long serialVersionUID = 1L;
 
     public Integer getAreaId() {
@@ -30,6 +30,22 @@ public class Area implements Serializable {
 
     public void setAreaId(Integer areaId) {
         this.areaId = areaId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Integer getProvinceId() {
@@ -78,21 +94,5 @@ public class Area implements Serializable {
 
     public void setCountyName(String countyName) {
         this.countyName = countyName == null ? null : countyName.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

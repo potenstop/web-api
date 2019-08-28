@@ -6,15 +6,15 @@ import java.util.Date;
 public class User implements Serializable {
     private Integer userId;
 
-    private String nickname;
-
-    private String avatar;
-
     private Date createTime;
 
     private Date updateTime;
 
     private Integer isDelete;
+
+    private String nickname;
+
+    private String avatar;
 
     private static final long serialVersionUID = 1L;
 
@@ -24,22 +24,6 @@ public class User implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar == null ? null : avatar.trim();
     }
 
     public Date getCreateTime() {
@@ -64,5 +48,21 @@ public class User implements Serializable {
 
     public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname == null ? null : nickname.trim();
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar == null ? null : avatar.trim();
     }
 }

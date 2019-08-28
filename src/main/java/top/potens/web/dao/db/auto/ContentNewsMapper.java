@@ -10,6 +10,8 @@ public interface ContentNewsMapper {
 
     int deleteByExample(ContentNewsExample example);
 
+    int deleteByPrimaryKey(Integer contentNewsId);
+
     int insert(ContentNews record);
 
     int insertSelective(ContentNews record);
@@ -18,9 +20,17 @@ public interface ContentNewsMapper {
 
     List<ContentNews> selectByExample(ContentNewsExample example);
 
+    ContentNews selectByPrimaryKey(Integer contentNewsId);
+
     int updateByExampleSelective(@Param("record") ContentNews record, @Param("example") ContentNewsExample example);
 
     int updateByExampleWithBLOBs(@Param("record") ContentNews record, @Param("example") ContentNewsExample example);
 
     int updateByExample(@Param("record") ContentNews record, @Param("example") ContentNewsExample example);
+
+    int updateByPrimaryKeySelective(ContentNews record);
+
+    int updateByPrimaryKeyWithBLOBs(ContentNews record);
+
+    int updateByPrimaryKey(ContentNews record);
 }

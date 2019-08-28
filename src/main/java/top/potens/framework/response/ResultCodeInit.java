@@ -51,7 +51,7 @@ public class ResultCodeInit {
             return;
         }
         try {
-            PackageClassesLoader packageClassesLoader = new PackageClassesLoader(packageName, null);
+            PackageClassesLoader packageClassesLoader = new PackageClassesLoader(packageName);
             Set<Class<?>> set = packageClassesLoader.getClassSet();
             for (Class c : set) {
                 addResultCodeDefinitionClass(c);

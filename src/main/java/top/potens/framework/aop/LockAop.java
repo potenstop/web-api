@@ -1,8 +1,8 @@
 package top.potens.framework.aop;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.expression.ParserContext;
+import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.stereotype.Component;
 import top.potens.framework.annotation.Lock;
 import org.aspectj.lang.annotation.Aspect;
@@ -49,7 +49,7 @@ public class LockAop {
     private Integer watchTimeout;
 
     @Autowired
-    private RedissonClient redissonClient;
+    private RedissonClient redisson;
 
     @Pointcut("@annotation(lock)")
     public void controllerAspect(Lock lock) {
@@ -63,26 +63,7 @@ public class LockAop {
      * @param values         形参值
      * @return
      */
-    private String getVauleBySpel(String key, String[] parameterNames, Object[] values) {
-
-        ExpressionParser parser1 = new SpelExpressionParser();
-        ParserContext parserContext1 = new ParserContext() {
-            @Override
-            public boolean isTemplate() {
-                return true;
-            }
-            @Override
-            public String getExpressionPrefix() {
-                return "#{";
-            }
-            @Override
-            public String getExpressionSuffix() {
-                return "}";
-            }
-        };
-        String template = "#{'hello '}#{'freebuf!'}#{username}";
-        Expression expression1 = parser1.parseExpression(template, parserContext1);
-
+    private String getValueBySpel(String key, String[] parameterNames, Object[] values) {
         if (!key.contains("#")) {
             return key;
         }
@@ -93,38 +74,36 @@ public class LockAop {
         for (int i = 0; i < parameterNames.length; i++) {
             context.setVariable(parameterNames[i], values[i]);
         }
-        System.out.println(expression1.getValue(context));
-        Expression expression = null;
-        ParserContext parserContext = new ParserContext() {
-            @Override
-            public boolean isTemplate() {
-                return true;
-            }
-            @Override
-            public String getExpressionPrefix() {
-                return "#{";
-            }
-            @Override
-            public String getExpressionSuffix() {
-                return "}";
-            }
-        };
+        String value = null;
         try {
-            expression = parser.parseExpression(key, parserContext);
+            Expression expression = parser.parseExpression(key, new TemplateParserContext());
+            value = expression.getValue(context, String.class);
         } catch (Exception e) {
-            throw new RuntimeException("解析失败");
+            throw new LockException("解析失败");
         }
-        Object value = expression.getValue(context);
-        String s = value.toString();
-        logger.info("spel表达式key={},value={}", key, s);
-        return s;
+        if (StringUtils.isBlank(value)) {
+            throw new LockException("lock value is blank");
+        }
+        logger.info("spel表达式key={},value={}", key, value);
+        return value;
+    }
+    public static void main(String[] args) {
+        String greetingExp = "Hello#{#user}";
+        ExpressionParser parser = new SpelExpressionParser();
+        EvaluationContext context = new StandardEvaluationContext();
+        context.setVariable("user", "Gangyou");
+
+        Expression expression = parser.parseExpression(greetingExp,
+                new TemplateParserContext());
+        System.out.println(expression.getValue(context, String.class));
+
     }
 
     @Around(value = "controllerAspect(lock)", argNames = "proceedingJoinPoint,lock")
     public Object aroundAdvice(ProceedingJoinPoint proceedingJoinPoint, Lock lock) throws Throwable {
         String[] keys = lock.keys();
         if (keys.length == 0) {
-            throw new RuntimeException("keys不能为空");
+            throw new LockException("keys不能为空");
         }
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(((MethodSignature) proceedingJoinPoint.getSignature()).getMethod());
         Object[] args = proceedingJoinPoint.getArgs();
@@ -146,45 +125,36 @@ public class LockAop {
             }
         }
         if (!lockModel.equals(LockModel.MULTIPLE) && !lockModel.equals(LockModel.REDLOCK) && keys.length > 1) {
-            throw new RuntimeException("参数有多个,锁模式为->" + lockModel.name() + ".无法锁定");
+            throw new LockException("参数有多个,锁模式为->" + lockModel.name() + ".无法锁定");
         }
         logger.info("model:[{}] attemptTimeout:[{}] lockWatchTimeout:[{}] timeUnit:[{}]", lockModel.name(), attemptTimeout, lockWatchTimeout, lock.timeUnit());
         boolean res = false;
         RLock rLock = null;
-        //一直等待加锁.
-        switch (lockModel) {
-            case FAIR:
-                rLock = redissonClient.getFairLock(getVauleBySpel(keys[0], parameterNames, args));
-                break;
-            case REDLOCK:
-                RLock[] locks = new RLock[keys.length];
-                int index = 0;
-                for (String key : keys) {
-                    locks[index++] = redissonClient.getLock(getVauleBySpel(key, parameterNames, args));
-                }
-                rLock = new RedissonRedLock(locks);
-                break;
-            case MULTIPLE:
-                RLock[] locks1 = new RLock[keys.length];
-                int index1 = 0;
-                for (String key : keys) {
-                    locks1[index1++] = redissonClient.getLock(getVauleBySpel(key, parameterNames, args));
-                }
-                rLock = new RedissonMultiLock(locks1);
-                break;
-            case REENTRANT:
-                rLock = redissonClient.getLock(getVauleBySpel(keys[0], parameterNames, args));
-                break;
-            case READ:
-                RReadWriteLock rReadWriteLock = redissonClient.getReadWriteLock(getVauleBySpel(keys[0], parameterNames, args));
-                rLock = rReadWriteLock.readLock();
-                break;
-            case WRITE:
-                RReadWriteLock rReadWriteLock1 = redissonClient.getReadWriteLock(getVauleBySpel(keys[0], parameterNames, args));
-                rLock = rReadWriteLock1.writeLock();
-                break;
+        if (LockModel.FAIR.equals(lockModel)) {
+            rLock = redisson.getFairLock(getValueBySpel(keys[0], parameterNames, args));
+        } else if (LockModel.REDLOCK.equals(lockModel)) {
+            RLock[] locks = new RLock[keys.length];
+            int index = 0;
+            for (String key : keys) {
+                locks[index++] = redisson.getLock(getValueBySpel(key, parameterNames, args));
+            }
+            rLock = new RedissonRedLock(locks);
+        } else if (LockModel.MULTIPLE.equals(lockModel)) {
+            RLock[] locks = new RLock[keys.length];
+            int index = 0;
+            for (String key : keys) {
+                locks[index++] = redisson.getLock(getValueBySpel(key, parameterNames, args));
+            }
+            rLock = new RedissonMultiLock(locks);
+        } else if (LockModel.REENTRANT.equals(lockModel)) {
+            rLock = redisson.getLock(getValueBySpel(keys[0], parameterNames, args));
+        } else if (LockModel.READ.equals(lockModel)) {
+            RReadWriteLock rReadWriteLock = redisson.getReadWriteLock(getValueBySpel(keys[0], parameterNames, args));
+            rLock = rReadWriteLock.readLock();
+        } else if (LockModel.WRITE.equals(lockModel)) {
+            RReadWriteLock rReadWriteLock = redisson.getReadWriteLock(getValueBySpel(keys[0], parameterNames, args));
+            rLock = rReadWriteLock.writeLock();
         }
-
         //执行aop
         if (rLock != null) {
             try {

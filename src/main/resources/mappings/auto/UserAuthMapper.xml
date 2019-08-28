@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.auto.UserAuthMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.UserAuth">
-    <result column="user_auth_id" jdbcType="INTEGER" property="userAuthId" />
+    <id column="user_auth_id" jdbcType="INTEGER" property="userAuthId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
@@ -85,6 +85,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `user_auth`
+    where user_auth_id = #{userAuthId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `user_auth`
+    where user_auth_id = #{userAuthId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="top.potens.web.model.UserAuthExample">
     delete from `user_auth`
     <if test="_parameter != null">
@@ -195,5 +205,39 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.UserAuth">
+    update `user_auth`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=TINYINT},
+      </if>
+      <if test="identifier != null">
+        identifier = #{identifier,jdbcType=VARCHAR},
+      </if>
+      <if test="credential != null">
+        credential = #{credential,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_auth_id = #{userAuthId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.UserAuth">
+    update `user_auth`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      user_id = #{userId,jdbcType=INTEGER},
+      channel_id = #{channelId,jdbcType=TINYINT},
+      identifier = #{identifier,jdbcType=VARCHAR},
+      credential = #{credential,jdbcType=VARCHAR}
+    where user_auth_id = #{userAuthId,jdbcType=INTEGER}
   </update>
 </mapper>

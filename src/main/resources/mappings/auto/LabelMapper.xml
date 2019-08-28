@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.auto.LabelMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.Label">
-    <result column="label_id" jdbcType="INTEGER" property="labelId" />
-    <result column="label_name" jdbcType="VARCHAR" property="labelName" />
+    <id column="label_id" jdbcType="INTEGER" property="labelId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="label_name" jdbcType="VARCHAR" property="labelName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    label_id, label_name, create_time, update_time
+    label_id, create_time, update_time, label_name
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.LabelExample" resultMap="BaseResultMap">
     select
@@ -82,6 +82,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `label`
+    where label_id = #{labelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `label`
+    where label_id = #{labelId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="top.potens.web.model.LabelExample">
     delete from `label`
     <if test="_parameter != null">
@@ -92,9 +102,9 @@
     <selectKey keyProperty="labelId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `label` (label_name, create_time, update_time
+    insert into `label` (create_time, update_time, label_name
       )
-    values (#{labelName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{labelName,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.Label">
@@ -103,25 +113,25 @@
     </selectKey>
     insert into `label`
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="labelName != null">
-        label_name,
-      </if>
       <if test="createTime != null">
         create_time,
       </if>
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="labelName != null">
+        label_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="labelName != null">
-        #{labelName,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="labelName != null">
+        #{labelName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -137,14 +147,14 @@
       <if test="record.labelId != null">
         label_id = #{record.labelId,jdbcType=INTEGER},
       </if>
-      <if test="record.labelName != null">
-        label_name = #{record.labelName,jdbcType=VARCHAR},
-      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.labelName != null">
+        label_name = #{record.labelName,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -154,11 +164,33 @@
   <update id="updateByExample" parameterType="map">
     update `label`
     set label_id = #{record.labelId,jdbcType=INTEGER},
-      label_name = #{record.labelName,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      label_name = #{record.labelName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.Label">
+    update `label`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="labelName != null">
+        label_name = #{labelName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where label_id = #{labelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.Label">
+    update `label`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      label_name = #{labelName,jdbcType=VARCHAR}
+    where label_id = #{labelId,jdbcType=INTEGER}
   </update>
 </mapper>

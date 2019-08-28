@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.auto.ChannelMapper">
   <resultMap id="BaseResultMap" type="top.potens.web.model.Channel">
-    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
+    <id column="channel_id" jdbcType="INTEGER" property="channelId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="channel_name" jdbcType="VARCHAR" property="channelName" />
@@ -86,6 +86,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `channel`
+    where channel_id = #{channelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `channel`
+    where channel_id = #{channelId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="top.potens.web.model.ChannelExample">
     delete from `channel`
     <if test="_parameter != null">
@@ -196,5 +206,39 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.Channel">
+    update `channel`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelName != null">
+        channel_name = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null">
+        channel_code = #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userCanLogin != null">
+        user_can_login = #{userCanLogin,jdbcType=TINYINT},
+      </if>
+      <if test="userCheckCredential != null">
+        user_check_credential = #{userCheckCredential,jdbcType=TINYINT},
+      </if>
+    </set>
+    where channel_id = #{channelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.Channel">
+    update `channel`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      channel_code = #{channelCode,jdbcType=VARCHAR},
+      user_can_login = #{userCanLogin,jdbcType=TINYINT},
+      user_check_credential = #{userCheckCredential,jdbcType=TINYINT}
+    where channel_id = #{channelId,jdbcType=INTEGER}
   </update>
 </mapper>

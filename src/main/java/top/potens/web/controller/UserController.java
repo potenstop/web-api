@@ -3,6 +3,7 @@ package top.potens.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,17 +27,20 @@ import java.util.ArrayList;
 
 
 /**
- * Created by wenshao on 2019/6/15.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className UserController
+ * @projectName web-api
+ * @date 2019/7/5 13:36
  */
 @RestController
 @RequestMapping("/user")
 @Api(description = "用户管理操作")
-// @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
-    @Autowired
-    private  UserService userService;
-    @Autowired
-    private  ContentCacheService contentCacheService;
+    private final UserService userService;
+    private final ContentCacheService contentCacheService;
 
     private UserAuthBaseResponse convertUserInfo(UserMoreAuthBo userMoreAuthBo) {
         UserAuthBaseResponse userAuthBaseResponse = new UserAuthBaseResponse();

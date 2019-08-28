@@ -24,6 +24,9 @@
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://potens.top:7306/web?useSSL=false"
                         userId="web" password="dsqdq2333#$%">
+            <!--设置为 true 可以获取 tables 信息, 解决生成文件缺少 xxxByPrimaryKey 的问题 -->
+            <property name="useInformationSchema" value="true"/>
+
         </jdbcConnection>
         <!-- 类型转换 -->
         <javaTypeResolver type="top.potens.framework.plugin.MyFullyQualifiesJavaTypePlugin">
@@ -51,7 +54,7 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="user" delimitIdentifiers="true">
+        <table tableName="user" delimitIdentifiers="true" enableUpdateByPrimaryKey="true" enableDeleteByPrimaryKey="true" enableSelectByPrimaryKey="true" >
             <generatedKey column="user_id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="user_auth" delimitIdentifiers="true">
