@@ -9,7 +9,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import top.potens.framework.constant.ResConstant;
+import top.potens.framework.constant.RestConstant;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
 
@@ -42,18 +42,18 @@ public class GlobalExceptionHandler {
     // 处理beans异常
     @ExceptionHandler(value = BeansException.class)
     public Object beansException(BeansException exception) throws Exception {
-        return getResult(ResConstant.BEANS_EXCEPTION, exception.getMessage());
+        return getResult(RestConstant.BEANS_EXCEPTION, exception.getMessage());
     }
     // 处理序列化异常
     @ExceptionHandler(value = SerializationException.class)
     public Object serializationExceptionException(BeansException exception) throws Exception {
-        return getResult(ResConstant.SERIALIZATION_EXCEPTION, exception.getMessage());
+        return getResult(RestConstant.SERIALIZATION_EXCEPTION, exception.getMessage());
     }
 
     // 处理Servlet异常
     @ExceptionHandler(value = ServletException.class)
     public Object servletException(ServletException exception) throws Exception {
-        return getResult(ResConstant.SERVLET_EXCEPTION, exception.getMessage());
+        return getResult(RestConstant.SERVLET_EXCEPTION, exception.getMessage());
     }
 
     // 参数未传递异常
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
         MissingServletRequestParameterException c = (MissingServletRequestParameterException) exception;
         StringBuilder message = new StringBuilder();
         message.append(c.getParameterName()).append(" is not present");
-        return getResult(ResConstant.MISSING_EXCEPTION, message.toString());
+        return getResult(RestConstant.MISSING_EXCEPTION, message.toString());
     }
     @ExceptionHandler
     public Object exceptionHandler(HttpServletRequest request, Exception ex) {
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
                     .append("; line_number: ").append(stacks[1].getLineNumber());
         }
         AppLogger.error(sb.toString(), ex);
-        return getResult(ResConstant.INTERNAL_SERVER_EXCEPTION, ex.getMessage());
+        return getResult(RestConstant.INTERNAL_SERVER_EXCEPTION, ex.getMessage());
     }
 
     // 数据验证失败异常 spring boot valid
@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
             message.append(((FieldError) error).getField() + ":" + ((FieldError) error).getDefaultMessage() + ";");
             break;
         }
-        return getResult(ResConstant.MISSING_EXCEPTION, message.toString());
+        return getResult(RestConstant.MISSING_EXCEPTION, message.toString());
     }
 
     // 数据验证失败异常  spring Validated
@@ -105,7 +105,7 @@ public class GlobalExceptionHandler {
             strBuilder.append(violation.getPropertyPath().toString() + ":" + violation.getMessage() + "\n");
             break;
         }
-        return getResult(ResConstant.MISSING_EXCEPTION, strBuilder.toString());
+        return getResult(RestConstant.MISSING_EXCEPTION, strBuilder.toString());
     }
 
 

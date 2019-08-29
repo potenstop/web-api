@@ -31,9 +31,13 @@ public class Swagger2Configuration {
         plateformParameterBuilder.name("platform").parameterType("header")
                 .defaultValue("10").description("平台").modelRef(new ModelRef("string"))
                 .required(false).build();
-
+        ParameterBuilder tokenParameterBuilder = new ParameterBuilder();
+        tokenParameterBuilder.name("token").parameterType("header")
+                .defaultValue("token").description("token").modelRef(new ModelRef("string"))
+                .required(false).build();
         List<Parameter> aParameters = new ArrayList<Parameter>();
         aParameters.add(plateformParameterBuilder.build());
+        aParameters.add(tokenParameterBuilder.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(buildApiInf()).

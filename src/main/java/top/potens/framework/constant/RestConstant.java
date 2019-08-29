@@ -3,7 +3,7 @@ package top.potens.framework.constant;
 /**
  * Created by wenshao on 2019/6/16.
  */
-public class ResConstant {
+public class RestConstant {
     public final static String BEANS_EXCEPTION = "510";
     public final static String SERIALIZATION_EXCEPTION = "511";
     public final static String SERVLET_EXCEPTION = "512";

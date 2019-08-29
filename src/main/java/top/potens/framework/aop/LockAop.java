@@ -87,17 +87,6 @@ public class LockAop {
         logger.info("spel表达式key={},value={}", key, value);
         return value;
     }
-    public static void main(String[] args) {
-        String greetingExp = "Hello#{#user}";
-        ExpressionParser parser = new SpelExpressionParser();
-        EvaluationContext context = new StandardEvaluationContext();
-        context.setVariable("user", "Gangyou");
-
-        Expression expression = parser.parseExpression(greetingExp,
-                new TemplateParserContext());
-        System.out.println(expression.getValue(context, String.class));
-
-    }
 
     @Around(value = "controllerAspect(lock)", argNames = "proceedingJoinPoint,lock")
     public Object aroundAdvice(ProceedingJoinPoint proceedingJoinPoint, Lock lock) throws Throwable {

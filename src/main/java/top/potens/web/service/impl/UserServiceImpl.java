@@ -13,7 +13,9 @@ import top.potens.framework.annotation.Lock;
 import top.potens.framework.enums.LockModel;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
+import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
+import top.potens.framework.util.TokenUtil;
 import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.bmo.UserSignAuthBo;
 import top.potens.web.code.CommonCode;
@@ -261,11 +263,16 @@ public class UserServiceImpl implements UserService {
             }
             Person person = personList.get(0);
             UserAuth userAuth = existAuth(channel.getChannelId(), person.getUidNumber(), null);
-
+            TokenUser tokenUser = new TokenUser();
+            tokenUser.setUsername(username);
             if (userAuth == null) {
                 // 创建用户
-                insertByLdap(person.getUidNumber(), username);
+                Integer userId = insertByLdap(person.getUidNumber(), username);
+                tokenUser.setUserId(userId);
+            } else {
+                tokenUser.setUserId(userAuth.getUserId());
             }
+            TokenUtil.updateToken(tokenUser);
             return true;
         } else {
             AppLogger.warn("ldap登录 用户名或密码错误 username:[{}] password:[{}]", username, password);

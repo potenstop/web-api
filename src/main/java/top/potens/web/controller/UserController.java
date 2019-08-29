@@ -7,10 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.potens.framework.annotation.UserAuthToken;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
+import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
+import top.potens.framework.util.TokenUtil;
 import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.code.CommonCode;
 import top.potens.web.common.constant.ChannelConstant;
@@ -21,6 +24,7 @@ import top.potens.web.response.UserAuthBaseResponse;
 import top.potens.web.service.UserService;
 import top.potens.web.service.logic.ContentCacheService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -125,6 +129,13 @@ public class UserController {
         ApiResult<Boolean> result = new ApiResult<>();
         result.setData(userService.ldapLogin(channel, username, password));
         return result;
+    }
+    @GetMapping("/ldap/test")
+    @ApiOperation(value = "test")
+    @UserAuthToken
+    public ApiResult<Boolean> ldapLogin(TokenUser tokenUser) {
+        AppLogger.info("a:{}", JSON.toJSONString(tokenUser));
+        return new ApiResult<>();
     }
 
 }
