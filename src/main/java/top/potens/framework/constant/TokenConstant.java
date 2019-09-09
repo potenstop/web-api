@@ -27,4 +27,8 @@ public class TokenConstant {
      * token key
      */
     public static final String TOKEN_REDISSION_NAME = "token:user:";
+    /**
+     * token key
+     */
+    public static final String USER_TOKEN = "user:token:";
 }

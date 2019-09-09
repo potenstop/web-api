@@ -33,15 +33,27 @@ public class TokenUtil {
     * @return
     * @throws
     */
-    public static void updateToken(TokenUser tokenUser) {
+    public static String updateToken(TokenUser tokenUser) {
         String uuid = StringUtil.getUuid();
         RedissonClient bean = SpringUtil.getBean(RedissonClient.class);
+        // 查找有没有对应uid 的旧token
+        RBucket<String> userTokenBucket = bean.getBucket(TokenConstant.USER_TOKEN + tokenUser.getUserId());
+        String oldTokenKey = userTokenBucket.getAndDelete();
+        // 存在旧的token就删除
+        if (oldTokenKey != null) {
+            RBucket<Object> bucket = bean.getBucket(TokenConstant.TOKEN_REDISSION_NAME + oldTokenKey);
+            bucket.delete();
+        }
+        // 设置新的uid和token的对应关系
+        userTokenBucket.set(uuid, TokenConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
         RBucket<Object> bucket = bean.getBucket(TokenConstant.TOKEN_REDISSION_NAME + uuid);
         bucket.set(tokenUser, TokenConstant.TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
+
         Cookie cookie = new Cookie(TokenConstant.TOKEN_NAME, uuid);
         cookie.setPath("/");
         cookie.setMaxAge(TokenConstant.TOKEN_EXPIRE_TIME);
         HttpServletResponse response = HttpContext.getResponse();
         response.addCookie(cookie);
+        return uuid;
     }
 }

@@ -251,7 +251,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Lock(lockModel = LockModel.FAIR, keys = LockConstant.LDAP_LOGIN + "#{#username}", attemptTimeout = 10, lockWatchTimeout = 100)
-    public boolean ldapLogin(Channel channel, String username, String password) {
+    public String ldapLogin(Channel channel, String username, String password) {
         AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter(apolloConfiguration.getLdapIdentifier(), username));
         boolean authenticate = ldapTemplate.authenticate("", filter.encode(), password);
@@ -272,8 +272,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 tokenUser.setUserId(userAuth.getUserId());
             }
-            TokenUtil.updateToken(tokenUser);
-            return true;
+            return TokenUtil.updateToken(tokenUser);
         } else {
             AppLogger.warn("ldap登录 用户名或密码错误 username:[{}] password:[{}]", username, password);
             throw new ApiException(UserCode.USERNAME_OR_PASSWORD_ERROR);

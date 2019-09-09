@@ -59,17 +59,16 @@ public class UserController {
         return userAuthBaseResponse;
     }
 
-    @GetMapping("/by-id")
+    @GetMapping("/info")
     @ApiOperation(value = "按id获取一条记录")
-    public ApiResult<UserAuthBaseResponse> userById(
-            @ApiParam(value = "userId", example = "1") @RequestParam(required = true) @NotNull Integer userId
-    ) {
-        AppLogger.info("按id获取user信息 userId:[{}]", userId);
-        UserMoreAuthBo userMoreAuthBo = userService.queryDetailById(userId);
+    @UserAuthToken
+    public ApiResult<UserAuthBaseResponse> userInfo(TokenUser tokenUser) {
+        AppLogger.info("获取用户信息 userId:[{}]", tokenUser.getUserId());
+        UserMoreAuthBo userMoreAuthBo = userService.queryDetailById(tokenUser.getUserId());
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         UserAuthBaseResponse userAuthBaseResponse = convertUserInfo(userMoreAuthBo);
         apiResult.setData(userAuthBaseResponse);
-        AppLogger.info("按id获取user信息 userId:[{}] [apiResult:{}]", userId, JSON.toJSONString(apiResult));
+        AppLogger.info("获取用户信息 userId:[{}] [apiResult:{}]", tokenUser.getUserId(), JSON.toJSONString(apiResult));
         return apiResult;
     }
 
@@ -121,12 +120,12 @@ public class UserController {
     }
     @GetMapping("/ldap/login")
     @ApiOperation(value = "ldap用户登录")
-    public ApiResult<Boolean> ldapLogin(
+    public ApiResult<String> ldapLogin(
             @ApiParam(value = "username", example = "1") @RequestParam(required = true) @NotNull String username,
             @ApiParam(value = "password", example = "1") @RequestParam(required = true) @NotNull String password
     ) {
         Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_LDAP);
-        ApiResult<Boolean> result = new ApiResult<>();
+        ApiResult<String> result = new ApiResult<>();
         result.setData(userService.ldapLogin(channel, username, password));
         return result;
     }

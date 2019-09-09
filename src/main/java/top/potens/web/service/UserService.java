@@ -94,5 +94,5 @@ public interface UserService {
      * @return
      * @throws
      */
-    boolean ldapLogin(Channel channel, String username, String password);
+    String ldapLogin(Channel channel, String username, String password);
 }
