@@ -18,6 +18,8 @@ public class UserAuth implements Serializable {
 
     private String credential;
 
+    private Integer isFirstRegister;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getUserAuthId() {
@@ -74,5 +76,13 @@ public class UserAuth implements Serializable {
 
     public void setCredential(String credential) {
         this.credential = credential == null ? null : credential.trim();
+    }
+
+    public Integer getIsFirstRegister() {
+        return isFirstRegister;
+    }
+
+    public void setIsFirstRegister(Integer isFirstRegister) {
+        this.isFirstRegister = isFirstRegister;
     }
 }

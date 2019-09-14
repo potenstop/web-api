@@ -1,8 +1,7 @@
 package top.potens.framework.log;
 
-import com.github.pagehelper.StringUtil;
+import jodd.util.StringUtil;
 import org.springframework.boot.logging.LogLevel;
-import top.potens.framework.constant.CommonConstant;
 import top.potens.framework.context.HttpContext;
 import top.potens.framework.util.CurrentLineUtil;
 import top.potens.framework.util.DateUtil;

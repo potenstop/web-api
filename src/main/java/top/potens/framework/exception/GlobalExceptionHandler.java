@@ -1,6 +1,6 @@
 package top.potens.framework.exception;
 
-import com.github.pagehelper.StringUtil;
+import jodd.util.StringUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;

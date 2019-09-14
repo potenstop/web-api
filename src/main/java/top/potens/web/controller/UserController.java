@@ -11,6 +11,7 @@ import top.potens.framework.annotation.UserAuthToken;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
+import top.potens.framework.model.PageResponse;
 import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
 import top.potens.framework.util.TokenUtil;
@@ -19,8 +20,10 @@ import top.potens.web.code.CommonCode;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.model.Channel;
 import top.potens.web.model.UserAuth;
+import top.potens.web.request.UserListRequest;
 import top.potens.web.request.UserRegisterRequest;
 import top.potens.web.response.UserAuthBaseResponse;
+import top.potens.web.response.UserListItemResponse;
 import top.potens.web.service.UserService;
 import top.potens.web.service.logic.ContentCacheService;
 
@@ -129,12 +132,13 @@ public class UserController {
         result.setData(userService.ldapLogin(channel, username, password));
         return result;
     }
-    @GetMapping("/ldap/test")
-    @ApiOperation(value = "test")
+    @PostMapping("/list")
+    @ApiOperation(value = "用户列表")
     @UserAuthToken
-    public ApiResult<Boolean> ldapLogin(TokenUser tokenUser) {
-        AppLogger.info("a:{}", JSON.toJSONString(tokenUser));
-        return new ApiResult<>();
+    public ApiResult<PageResponse<UserListItemResponse>> list(TokenUser tokenUser, @RequestBody @Valid UserListRequest request) {
+        ApiResult<PageResponse<UserListItemResponse>> result = new ApiResult<>();
+        result.setData(userService.userList(request));
+        return result;
     }
 
 }

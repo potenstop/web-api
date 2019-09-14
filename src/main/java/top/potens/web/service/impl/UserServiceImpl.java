@@ -1,5 +1,7 @@
 package top.potens.web.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageSerializable;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -13,8 +15,11 @@ import top.potens.framework.annotation.Lock;
 import top.potens.framework.enums.LockModel;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
+import top.potens.framework.model.PageResponse;
 import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
+import top.potens.framework.util.BeanCopierUtil;
+import top.potens.framework.util.StringUtil;
 import top.potens.framework.util.TokenUtil;
 import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.bmo.UserSignAuthBo;
@@ -31,8 +36,10 @@ import top.potens.web.mapper.DnMapper;
 import top.potens.web.mapper.PersonAttributeMapper;
 import top.potens.web.model.*;
 import top.potens.web.model.ldap.Person;
+import top.potens.web.request.UserListRequest;
 import top.potens.web.request.UserOutRequest;
 import top.potens.web.request.UserRegisterRequest;
+import top.potens.web.response.UserListItemResponse;
 import top.potens.web.service.UserService;
 import top.potens.web.service.logic.ContentCacheService;
 import top.potens.web.service.logic.UserServiceLogic;
@@ -277,5 +284,27 @@ public class UserServiceImpl implements UserService {
             AppLogger.warn("ldap登录 用户名或密码错误 username:[{}] password:[{}]", username, password);
             throw new ApiException(UserCode.USERNAME_OR_PASSWORD_ERROR);
         }
+    }
+
+    @Override
+    public PageResponse<UserListItemResponse> userList(UserListRequest request) {
+        PageResponse<UserListItemResponse> response = new PageResponse<>();
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        if (request.getUserId() != null) {
+            criteria.andUserIdEqualTo(request.getUserId());
+        }
+        if (StringUtil.isNotBlank(request.getOrderBy())) {
+            userExample.setOrderByClause(request.getOrderBy());
+        } else {
+            userExample.setOrderByClause("user_id desc");
+        }
+        List<User> users = userMapper.selectByExample(userExample);
+        PageSerializable<User> userPageSerializable = PageSerializable.of(users);
+        response.setTotal(userPageSerializable.getTotal());
+        List<User> list = userPageSerializable.getList();
+        BeanCopierUtil.convert(list, response.getList(), UserListItemResponse.class);
+        return response;
     }
 }

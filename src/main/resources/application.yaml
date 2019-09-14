@@ -5,6 +5,11 @@ logging:
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss.S
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 apollo:
   bootstrap:
     enabled: true

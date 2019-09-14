@@ -1,12 +1,15 @@
 package top.potens.web.service;
 
+import top.potens.framework.model.PageResponse;
 import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.bmo.UserSignAuthBo;
 import top.potens.web.model.Channel;
 import top.potens.web.model.User;
 import top.potens.web.model.UserAuth;
+import top.potens.web.request.UserListRequest;
 import top.potens.web.request.UserOutRequest;
 import top.potens.web.request.UserRegisterRequest;
+import top.potens.web.response.UserListItemResponse;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -95,4 +98,16 @@ public interface UserService {
      * @throws
      */
     String ldapLogin(Channel channel, String username, String password);
+
+    /**
+     *
+     * 方法功能描述: 查询用户列表
+     *
+     * @author yanshaowen
+     * @date 2019/8/6 18:41
+     * @param request   request
+     * @return
+     * @throws
+     */
+    PageResponse<UserListItemResponse> userList(UserListRequest request);
 }

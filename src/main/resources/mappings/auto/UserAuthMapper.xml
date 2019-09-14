@@ -9,6 +9,7 @@
     <result column="channel_id" jdbcType="TINYINT" property="channelId" />
     <result column="identifier" jdbcType="VARCHAR" property="identifier" />
     <result column="credential" jdbcType="VARCHAR" property="credential" />
+    <result column="is_first_register" jdbcType="TINYINT" property="isFirstRegister" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    user_auth_id, create_time, update_time, user_id, channel_id, identifier, credential
+    user_auth_id, create_time, update_time, user_id, channel_id, identifier, credential, 
+    is_first_register
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.UserAuthExample" resultMap="BaseResultMap">
     select
@@ -106,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `user_auth` (create_time, update_time, user_id, 
-      channel_id, identifier, credential
-      )
+      channel_id, identifier, credential, 
+      is_first_register)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 
-      #{channelId,jdbcType=TINYINT}, #{identifier,jdbcType=VARCHAR}, #{credential,jdbcType=VARCHAR}
-      )
+      #{channelId,jdbcType=TINYINT}, #{identifier,jdbcType=VARCHAR}, #{credential,jdbcType=VARCHAR}, 
+      #{isFirstRegister,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.UserAuth">
     <selectKey keyProperty="userAuthId" order="AFTER" resultType="java.lang.Integer">
@@ -136,6 +138,9 @@
       <if test="credential != null">
         credential,
       </if>
+      <if test="isFirstRegister != null">
+        is_first_register,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
@@ -155,6 +160,9 @@
       </if>
       <if test="credential != null">
         #{credential,jdbcType=VARCHAR},
+      </if>
+      <if test="isFirstRegister != null">
+        #{isFirstRegister,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="record.credential != null">
         credential = #{record.credential,jdbcType=VARCHAR},
       </if>
+      <if test="record.isFirstRegister != null">
+        is_first_register = #{record.isFirstRegister,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +212,8 @@
       user_id = #{record.userId,jdbcType=INTEGER},
       channel_id = #{record.channelId,jdbcType=TINYINT},
       identifier = #{record.identifier,jdbcType=VARCHAR},
-      credential = #{record.credential,jdbcType=VARCHAR}
+      credential = #{record.credential,jdbcType=VARCHAR},
+      is_first_register = #{record.isFirstRegister,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +239,9 @@
       <if test="credential != null">
         credential = #{credential,jdbcType=VARCHAR},
       </if>
+      <if test="isFirstRegister != null">
+        is_first_register = #{isFirstRegister,jdbcType=TINYINT},
+      </if>
     </set>
     where user_auth_id = #{userAuthId,jdbcType=INTEGER}
   </update>
@@ -237,7 +252,8 @@
       user_id = #{userId,jdbcType=INTEGER},
       channel_id = #{channelId,jdbcType=TINYINT},
       identifier = #{identifier,jdbcType=VARCHAR},
-      credential = #{credential,jdbcType=VARCHAR}
+      credential = #{credential,jdbcType=VARCHAR},
+      is_first_register = #{isFirstRegister,jdbcType=TINYINT}
     where user_auth_id = #{userAuthId,jdbcType=INTEGER}
   </update>
 </mapper>

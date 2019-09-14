@@ -544,6 +544,66 @@ public class UserAuthExample {
             addCriterion("credential not between", value1, value2, "credential");
             return (Criteria) this;
         }
+
+        public Criteria andIsFirstRegisterIsNull() {
+            addCriterion("is_first_register is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterIsNotNull() {
+            addCriterion("is_first_register is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterEqualTo(Integer value) {
+            addCriterion("is_first_register =", value, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterNotEqualTo(Integer value) {
+            addCriterion("is_first_register <>", value, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterGreaterThan(Integer value) {
+            addCriterion("is_first_register >", value, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_first_register >=", value, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterLessThan(Integer value) {
+            addCriterion("is_first_register <", value, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterLessThanOrEqualTo(Integer value) {
+            addCriterion("is_first_register <=", value, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterIn(List<Integer> values) {
+            addCriterion("is_first_register in", values, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterNotIn(List<Integer> values) {
+            addCriterion("is_first_register not in", values, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterBetween(Integer value1, Integer value2) {
+            addCriterion("is_first_register between", value1, value2, "isFirstRegister");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFirstRegisterNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_first_register not between", value1, value2, "isFirstRegister");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

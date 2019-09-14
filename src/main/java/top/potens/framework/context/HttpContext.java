@@ -1,6 +1,6 @@
 package top.potens.framework.context;
 
-import com.github.pagehelper.StringUtil;
+import jodd.util.StringUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
