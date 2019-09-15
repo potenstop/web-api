@@ -1,6 +1,9 @@
 package top.potens.framework.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 功能描述:
@@ -12,13 +15,14 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class PageRequest {
     @ApiModelProperty(value = "页码", example = "1")
-    private Integer pageNum;
+    // @JsonProperty(defaultValue = "1")
+    private Integer pageNum = 1;
 
     @ApiModelProperty(value = "每页条数", example = "20")
-    private Integer pageSize;
+    private Integer pageSize = 20;
 
     @ApiModelProperty(value = "分页字段", example = "")
-    private String orderBy;
+    private String orderBy = "";
 
     public Integer getPageNum() {
         return pageNum;

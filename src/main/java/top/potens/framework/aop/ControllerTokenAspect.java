@@ -1,5 +1,6 @@
 package top.potens.framework.aop;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -22,6 +23,7 @@ import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -53,7 +55,8 @@ public class ControllerTokenAspect {
         String[] parameterNames = methodSignature.getParameterNames();
         Class[] parameterTypes = methodSignature.getParameterTypes();
         for (int i = 0, len = parameterNames.length; i < len; i++) {
-            if (TokenUser.class.getName().equals(parameterTypes[i].getName())) {
+            String className = parameterNames[i];
+            if (TokenUser.class.getName().equals(className)) {
                 TokenUser tokenUser = (TokenUser) request.getSession().getAttribute(TokenConstant.REQUEST_CURRENT_KEY);
                 if (tokenUser == null) {
                     throw new ApiException(RestConstant.INTERNAL_SERVER_EXCEPTION, "controller define tokenUser, but session not found tokenUser");
