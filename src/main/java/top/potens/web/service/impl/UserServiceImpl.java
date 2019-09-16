@@ -314,6 +314,9 @@ public class UserServiceImpl implements UserService {
                 criteria.andUpdateTimeLessThan(DateUtil.getDateByLocalDate(DateUtil.parseLocalDate(split[1]).plusDays(1)));
             }
         }
+        if (StringUtil.isNotBlank(request.getNickname())) {
+            criteria.andNicknameLike("%" + request.getNickname() + "%");
+        }
         if (StringUtil.isNotBlank(request.getOrderBy())) {
             userExample.setOrderByClause(request.getOrderBy());
         } else {

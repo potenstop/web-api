@@ -28,4 +28,7 @@ public class UserListRequest extends PageRequest {
 
     @ApiModelProperty(value = "更新时间范围搜索", example = "2019-09-01,2019-09-10")
     private String updateTime;
+
+    @ApiModelProperty(value = "用户昵称", example = "test")
+    private String nickname;
 }
