@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    @ApiOperation(value = "按id获取一条记录")
+    @ApiOperation(value = "获取用户的信息")
     @UserAuthToken
     public ApiResult<UserAuthBaseResponse> userInfo(TokenUser tokenUser) {
         AppLogger.info("获取用户信息 userId:[{}]", tokenUser.getUserId());

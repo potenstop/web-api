@@ -55,8 +55,8 @@ public class ControllerTokenAspect {
         String[] parameterNames = methodSignature.getParameterNames();
         Class[] parameterTypes = methodSignature.getParameterTypes();
         for (int i = 0, len = parameterNames.length; i < len; i++) {
-            String className = parameterNames[i];
-            if (TokenUser.class.getName().equals(className)) {
+            Class parameterType = parameterTypes[i];
+            if (TokenUser.class.equals(parameterType)) {
                 TokenUser tokenUser = (TokenUser) request.getSession().getAttribute(TokenConstant.REQUEST_CURRENT_KEY);
                 if (tokenUser == null) {
                     throw new ApiException(RestConstant.INTERNAL_SERVER_EXCEPTION, "controller define tokenUser, but session not found tokenUser");
