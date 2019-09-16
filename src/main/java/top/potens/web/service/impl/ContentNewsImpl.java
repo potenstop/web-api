@@ -1,8 +1,6 @@
 package top.potens.web.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.potens.framework.annotation.Lock;
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +53,7 @@ public class ContentNewsImpl implements ContentNewsService {
         contentNews.setArticleSource(request.getArticleSource());
         contentNews.setTitle(request.getTitle());
         contentNews.setEditor(request.getEditor());
-        contentNews.setPublishTime(DateUtil.getLocalDate(request.getTime()));
+        contentNews.setPublishTime(DateUtil.getLocalDateTime(request.getTime()));
         contentNews.setContentZoneId(contentZone.getContentZoneId());
         contentNews.setToken(StringUtil.getUuid());
         contentNews.setArticle(request.getHtml());

@@ -22,4 +22,10 @@ import javax.validation.constraints.NotNull;
 public class UserListRequest extends PageRequest {
     @ApiModelProperty(value = "用户id", example = "1")
     private Integer userId;
+
+    @ApiModelProperty(value = "创建时间范围搜索", example = "2019-09-01,2019-09-10")
+    private String createTime;
+
+    @ApiModelProperty(value = "更新时间范围搜索", example = "2019-09-01,2019-09-10")
+    private String updateTime;
 }

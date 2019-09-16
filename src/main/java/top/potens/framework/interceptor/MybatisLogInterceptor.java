@@ -1,5 +1,6 @@
 package top.potens.framework.interceptor;
 
+import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -11,6 +12,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import top.potens.framework.log.AppLogger;
+import top.potens.framework.util.DateUtil;
 
 
 import java.text.DateFormat;
@@ -26,23 +28,37 @@ import java.util.regex.Matcher;
                 MappedStatement.class, Object.class}),
         @Signature(type = Executor.class, method = "query", args = {
                 MappedStatement.class, Object.class, RowBounds.class,
-                ResultHandler.class})})
+                ResultHandler.class}),
+        @Signature(type = Executor.class, method = "query", args = {
+                MappedStatement.class, Object.class, RowBounds.class,
+                ResultHandler.class, CacheKey.class, BoundSql.class})})
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class MybatisLogInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
+        Object[] args = invocation.getArgs();
+        MappedStatement ms = (MappedStatement) args[0];
+        Object parameter = args[1];
+        RowBounds rowBounds = (RowBounds) args[2];
+        ResultHandler resultHandler = (ResultHandler) args[3];
+        Executor executor = (Executor) invocation.getTarget();
+        CacheKey cacheKey;
+        BoundSql boundSql;
+        //由于逻辑关系，只会进入一次
+        if(args.length == 4){
+            //4 个参数时
+            boundSql = ms.getBoundSql(parameter);
+            cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
+        } else {
+            //6 个参数时
+            cacheKey = (CacheKey) args[4];
+            boundSql = (BoundSql) args[5];
+        }
         try {
             // 获取xml中的一个select/update/insertContentNews/delete节点，主要描述的是一条SQL语句
             MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-            Object parameter = null;
-            // 获取参数，if语句成立，表示sql语句有参数，参数格式是map形式
-            if (invocation.getArgs().length > 1) {
-                parameter = invocation.getArgs()[1];
-            }
             // 获取到节点的id,即sql语句的id
             String sqlId = mappedStatement.getId();
-            // BoundSql就是封装myBatis最终产生的sql类
-            BoundSql boundSql = mappedStatement.getBoundSql(parameter);
             // 获取节点的配置
             Configuration configuration = mappedStatement.getConfiguration();
             // 获取到最终的sql语句
@@ -51,9 +67,8 @@ public class MybatisLogInterceptor implements Interceptor {
         } catch (Exception e) {
             AppLogger.error("intercept error[" + e.getMessage() + "]", e);
         }
-
-        // 执行完上面的任务后，不改变原有的sql执行过程
-        return invocation.proceed();
+        //注：下面的方法可以根据自己的逻辑调用多次，在分页插件中，count 和 page 各调用了一次
+        return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
     }
 
     /**
@@ -79,8 +94,8 @@ public class MybatisLogInterceptor implements Interceptor {
         if (obj instanceof String) {
             value = "'" + obj.toString() + "'";
         } else if (obj instanceof Date) {
-            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
-            value = "'" + formatter.format(new Date()) + "'";
+            DateUtil.getLocalDateStr((Date)obj);
+            value = "'" + DateUtil.getLocalDateStr((Date)obj) + "'";
         } else {
             if (obj != null) {
                 value = obj.toString();
@@ -108,7 +123,7 @@ public class MybatisLogInterceptor implements Interceptor {
         String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
         if (!parameterMappings.isEmpty() && parameterObject != null) {
             // 获取类型处理器注册器，类型处理器的功能是进行java类型和数据库类型的转换<br>　
-            // 如果根据parameterObject.getClass(）可以找到对应的类型，则替换
+            // 如果根据parameterObject.getClass()可以找到对应的类型，则替换
             TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
             if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
                 sql = sql.replaceFirst("\\?", Matcher.quoteReplacement(getParameterValue(parameterObject)));

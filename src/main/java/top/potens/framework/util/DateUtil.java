@@ -15,6 +15,10 @@ public class DateUtil {
      * yyyy-MM-dd HH:mm:ss.SSS
      */
     public static final DateTimeFormatter FORMATTER_DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    /**
+     * yyyy-MM-dd HH:mm:ss.SSS
+     */
+    public static final DateTimeFormatter FORMATTER_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * 获取当前日期
@@ -185,13 +189,23 @@ public class DateUtil {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
         return dateTimeFormatter.format(localDateTime);
     }
-    public static Date getLocalDate(String date, DateTimeFormatter dateTimeFormatter) {
+    public static Date getLocalDateTime(String date, DateTimeFormatter dateTimeFormatter) {
         ZoneId zoneId = ZoneId.systemDefault();
         LocalDateTime parse = LocalDateTime.parse(date, dateTimeFormatter);
         ZonedDateTime zdt = parse.atZone(zoneId);
         return Date.from(zdt.toInstant());
     }
+    public static Date getLocalDateTime(String date) {
+        return getLocalDateTime(date, FORMATTER_DATETIME);
+    }
+
+    public static Date getLocalDate(String date, DateTimeFormatter dateTimeFormatter) {
+        LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
+        return Date.from(instant);
+    }
     public static Date getLocalDate(String date) {
-        return getLocalDate(date, FORMATTER_DATETIME);
+        return getLocalDate(date, FORMATTER_DATE);
     }
 }

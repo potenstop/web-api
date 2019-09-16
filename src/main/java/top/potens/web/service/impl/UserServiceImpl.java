@@ -19,6 +19,7 @@ import top.potens.framework.model.PageResponse;
 import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
 import top.potens.framework.util.BeanCopierUtil;
+import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.framework.util.TokenUtil;
 import top.potens.web.bmo.UserMoreAuthBo;
@@ -294,6 +295,24 @@ public class UserServiceImpl implements UserService {
         UserExample.Criteria criteria = userExample.createCriteria();
         if (request.getUserId() != null) {
             criteria.andUserIdEqualTo(request.getUserId());
+        }
+        if (StringUtil.isNotBlank(request.getCreateTime())) {
+            String[] split = request.getCreateTime().split(",");
+            if (split.length == 1) {
+                criteria.andCreateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
+            } else if (split.length == 2) {
+                criteria.andCreateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
+                criteria.andCreateTimeLessThanOrEqualTo(DateUtil.getLocalDate(split[1]));
+            }
+        }
+        if (StringUtil.isNotBlank(request.getUpdateTime())) {
+            String[] split = request.getUpdateTime().split(",");
+            if (split.length == 1) {
+                criteria.andUpdateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
+            } else if (split.length == 2) {
+                criteria.andCreateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
+                criteria.andUpdateTimeLessThanOrEqualTo(DateUtil.getLocalDate(split[1]));
+            }
         }
         if (StringUtil.isNotBlank(request.getOrderBy())) {
             userExample.setOrderByClause(request.getOrderBy());
