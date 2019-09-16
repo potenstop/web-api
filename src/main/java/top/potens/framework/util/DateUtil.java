@@ -198,12 +198,15 @@ public class DateUtil {
     public static Date getLocalDateTime(String date) {
         return getLocalDateTime(date, FORMATTER_DATETIME);
     }
-
-    public static Date getLocalDate(String date, DateTimeFormatter dateTimeFormatter) {
-        LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
+    public static Date getDateByLocalDate(LocalDate localDate) {
         ZoneId zone = ZoneId.systemDefault();
         Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
         return Date.from(instant);
+    }
+
+    public static Date getLocalDate(String date, DateTimeFormatter dateTimeFormatter) {
+        LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
+        return getDateByLocalDate(localDate);
     }
     public static Date getLocalDate(String date) {
         return getLocalDate(date, FORMATTER_DATE);

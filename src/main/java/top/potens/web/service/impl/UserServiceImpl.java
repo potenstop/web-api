@@ -302,7 +302,7 @@ public class UserServiceImpl implements UserService {
                 criteria.andCreateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
             } else if (split.length == 2) {
                 criteria.andCreateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
-                criteria.andCreateTimeLessThanOrEqualTo(DateUtil.getLocalDate(split[1]));
+                criteria.andCreateTimeLessThan(DateUtil.getDateByLocalDate(DateUtil.parseLocalDate(split[1]).plusDays(1)));
             }
         }
         if (StringUtil.isNotBlank(request.getUpdateTime())) {
@@ -311,7 +311,7 @@ public class UserServiceImpl implements UserService {
                 criteria.andUpdateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
             } else if (split.length == 2) {
                 criteria.andCreateTimeGreaterThanOrEqualTo(DateUtil.getLocalDate(split[0]));
-                criteria.andUpdateTimeLessThanOrEqualTo(DateUtil.getLocalDate(split[1]));
+                criteria.andUpdateTimeLessThan(DateUtil.getDateByLocalDate(DateUtil.parseLocalDate(split[1]).plusDays(1)));
             }
         }
         if (StringUtil.isNotBlank(request.getOrderBy())) {
