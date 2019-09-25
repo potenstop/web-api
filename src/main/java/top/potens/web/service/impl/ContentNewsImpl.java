@@ -30,6 +30,7 @@ import top.potens.web.request.UserOutRequest;
 import top.potens.web.response.ContentNewItemResponse;
 import top.potens.web.service.ChannelService;
 import top.potens.web.service.ContentNewsService;
+import top.potens.web.service.ContentZoneService;
 import top.potens.web.service.UserService;
 import top.potens.web.service.logic.ContentCacheService;
 import top.potens.web.service.logic.ContentServiceLogic;
@@ -51,6 +52,7 @@ public class ContentNewsImpl implements ContentNewsService {
     private final ContentNewsMapper contentNewsMapper;
     private final ContentMapper contentMapper;
     private final ChannelService channelService;
+    private final ContentZoneService contentZoneService;
 
     @Override
     @Lock(lockModel = LockModel.FAIR, keys = LockConstant.CONTENT_NEWS_OUT_KEY + "#{#request.webSource +':' + #request.id}", attemptTimeout = 10, lockWatchTimeout = 120)
@@ -130,6 +132,7 @@ public class ContentNewsImpl implements ContentNewsService {
         }
 
         Set<Integer> channelIdSet = new HashSet<>();
+        Set<Integer> contentZoneIdSet = new HashSet<>();
         // 查询content
         ContentExample contentExample = new ContentExample();
         contentExample.createCriteria().andContentIdIn(contentIdLIst);
@@ -141,11 +144,17 @@ public class ContentNewsImpl implements ContentNewsService {
         // 查询contentNew
         ContentNewsExample contentNewsExample = new ContentNewsExample();
         contentNewsExample.createCriteria().andContentIdIn(contentIdLIst);
-        Map<Integer, ContentNews> contentNewsMap = contentNewsMapper.selectByExampleWithBLOBs(contentNewsExample).stream().collect(Collectors.toMap(ContentNews::getContentId, a -> a, (k1, k2) -> k1));
+        Map<Integer, ContentNews> contentNewsMap = contentNewsMapper.selectByExampleWithBLOBs(contentNewsExample).stream().collect(Collectors.toMap(ContentNews::getContentId, contentNews -> {
+            contentZoneIdSet.add(contentNews.getContentZoneId());
+            return contentNews;
+        }, (k1, k2) -> k1));
 
         // 查询channel
         Map<Integer, Channel> channelMap = channelService.selectIdList(new ArrayList<>(channelIdSet));
-        // 查询渠道
+
+        // 查询zone
+        Map<Integer, ContentZone> contentZoneMap = contentZoneService.selectIdList(new ArrayList<>(contentZoneIdSet));
+
         contentIdLIst.forEach(contentId -> {
             if (contentMap.containsKey(contentId) && contentNewsMap.containsKey(contentId)) {
                 ContentNewItemResponse contentNewItemResponse = new ContentNewItemResponse();
@@ -155,6 +164,9 @@ public class ContentNewsImpl implements ContentNewsService {
                 BeanCopierUtil.convert(contentNews, contentNewItemResponse);
                 if (channelMap.containsKey(content.getChannelId())) {
                     contentNewItemResponse.setChannelName(channelMap.get(content.getChannelId()).getChannelName());
+                }
+                if (contentZoneMap.containsKey(contentNews.getContentZoneId())) {
+                    contentNewItemResponse.setContentZoneName(contentZoneMap.get(contentNews.getContentZoneId()).getZoneName());
                 }
                 contentNewItemResponses.add(contentNewItemResponse);
             }
