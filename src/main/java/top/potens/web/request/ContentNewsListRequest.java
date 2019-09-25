@@ -24,4 +24,13 @@ public class ContentNewsListRequest extends PageRequest {
 
     @ApiModelProperty(value = "更新时间范围搜索", example = "2019-09-01,2019-09-10")
     private String updateTime;
+
+    @ApiModelProperty(value = "新闻标题 模糊搜索", example = "111")
+    private String title;
+
+    @ApiModelProperty(value = "发布时间范围搜索", example = "2019-09-01,2019-09-10")
+    private String publishTime;
+
+    @ApiModelProperty(value = "状态 1:上线 2: 下线", example = "1")
+    private Integer state;
 }

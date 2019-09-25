@@ -21,6 +21,18 @@
       <if test="updateTimeEnd != null ">
         and content_news.update_time &lt;= #{updateTimeEnd,jdbcType=TIMESTAMP}
       </if>
+      <if test="publishTimeStart != null ">
+        and content_news.publish_time &gt;= #{publishTimeStart,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTimeEnd != null ">
+        and content_news.publish_time &lt;= #{publishTimeEnd,jdbcType=TIMESTAMP}
+      </if>
+      <if test="state != null ">
+        and content.state = #{state,jdbcType=INTEGER}
+      </if>
     </where>
+    <if test="orderBy != null">
+      order by ${orderBy}
+    </if>
   </select>
 </mapper>

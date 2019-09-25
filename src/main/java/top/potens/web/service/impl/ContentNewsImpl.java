@@ -112,6 +112,13 @@ public class ContentNewsImpl implements ContentNewsService {
         contentNewsSelectSimpleListBo.setContentId(request.getContentId());
         DateUtil.setScopeDate(request.getCreateTime(), contentNewsSelectSimpleListBo::setCreateTimeStart, contentNewsSelectSimpleListBo::setCreateTimeEnd);
         DateUtil.setScopeDate(request.getUpdateTime(), contentNewsSelectSimpleListBo::setUpdateTimeStart, contentNewsSelectSimpleListBo::setUpdateTimeEnd);
+        DateUtil.setScopeDate(request.getPublishTime(), contentNewsSelectSimpleListBo::setPublishTimeStart, contentNewsSelectSimpleListBo::setPublishTimeEnd);
+        if (StringUtil.isNotBlank(request.getOrderBy())) {
+            contentNewsSelectSimpleListBo.setOrderBy(request.getOrderBy());
+        } else {
+            contentNewsSelectSimpleListBo.setOrderBy("content_id desc");
+        }
+        contentNewsSelectSimpleListBo.setState(request.getState());
         List<Integer> contentIdLIst = contentNewsExMapper.selectSimpleList(contentNewsSelectSimpleListBo);
         PageSerializable<Integer> pageSerializable = PageSerializable.of(contentIdLIst);
         PageResponse<ContentNewItemResponse> contentNewItemResponsePageResponse = new PageResponse<>();

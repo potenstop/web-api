@@ -28,11 +28,14 @@ public class ContentNewItemResponse extends ContentResponse {
     @ApiModelProperty(value = "编辑", name = "editor", required = true, example = "")
     private String editor;
 
-    @ApiModelProperty(value = "发布时间", name = "publishTime", required = true, example = "CURRENT_TIMESTAMP")
+    @ApiModelProperty(value = "发布时间", name = "publishTime", required = true, example = "2019-09-09 01:01:11.009")
     private Date publishTime;
 
-    @ApiModelProperty(value = "频道 ", name = "contentZoneId", required = true, example = "1")
+    @ApiModelProperty(value = "频道id ", name = "contentZoneId", required = true, example = "1")
     private Integer contentZoneId;
+
+    @ApiModelProperty(value = "频道名称", name = "contentZoneName", required = true, example = "1")
+    private String contentZoneName;
 
     @ApiModelProperty(value = "对外的id", name = "token", required = true, example = "")
     private String token;

@@ -23,4 +23,12 @@ public class ContentNewsSelectSimpleListBo {
     private Date updateTimeStart;
 
     private Date updateTimeEnd;
+
+    private String orderBy;
+
+    private Date publishTimeStart;
+
+    private Date publishTimeEnd;
+
+    private Integer state;
 }
