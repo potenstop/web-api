@@ -124,6 +124,10 @@ public class ContentNewsImpl implements ContentNewsService {
         PageResponse<ContentNewItemResponse> contentNewItemResponsePageResponse = new PageResponse<>();
         contentNewItemResponsePageResponse.setTotal(pageSerializable.getTotal());
         List<ContentNewItemResponse> contentNewItemResponses = new ArrayList<>();
+        if (contentIdLIst.size() == 0) {
+            contentNewItemResponsePageResponse.setList(contentNewItemResponses);
+            return contentNewItemResponsePageResponse;
+        }
 
         Set<Integer> channelIdSet = new HashSet<>();
         // 查询content
