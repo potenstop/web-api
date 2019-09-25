@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class PageRequest {
     @ApiModelProperty(value = "页码", example = "1")
-    // @JsonProperty(defaultValue = "1")
     private Integer pageNum = 1;
 
     @ApiModelProperty(value = "每页条数", example = "20")

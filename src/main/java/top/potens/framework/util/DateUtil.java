@@ -1,4 +1,7 @@
 package top.potens.framework.util;
+import io.lettuce.core.output.KeyStreamingChannel;
+import jdk.nashorn.internal.objects.annotations.Function;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -210,5 +213,17 @@ public class DateUtil {
     }
     public static Date getLocalDate(String date) {
         return getLocalDate(date, FORMATTER_DATE);
+    }
+
+    public static void setScopeDate(String scopeDate, KeyStreamingChannel<Date> start, KeyStreamingChannel<Date> end) {
+        if (StringUtil.isNotBlank(scopeDate)) {
+            String[] split = scopeDate.split(",");
+            if (split.length == 1) {
+                start.onKey(DateUtil.getLocalDate(split[0]));
+            } else if (split.length == 2) {
+                start.onKey(DateUtil.getLocalDate(split[0]));
+                end.onKey(DateUtil.getLocalDate(split[1]));
+            }
+        }
     }
 }
