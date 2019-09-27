@@ -23,4 +23,13 @@ public class ApolloConfiguration {
 
     @Value("${web.connection.ldap.identifier:uid}")
     private String ldapIdentifier;
+
+    @Value("${qiniu.access.key}")
+    private String qiniuAccessKey;
+
+    @Value("${qiniu.secret.key}")
+    private String qiniuSecretKey;
+
+    @Value("${qiniu.bucket.local}")
+    private String qiniuBucketLocal;
 }
