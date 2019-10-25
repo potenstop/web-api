@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.potens.web.dao.db.auto.ContentMapper">
-  <resultMap id="BaseResultMap" type="top.potens.web.model.Content">
-    <id column="content_id" jdbcType="INTEGER" property="contentId" />
+<mapper namespace="top.potens.web.dao.db.auto.ContentSelectOptionMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.ContentSelectOption">
+    <id column="content_select_option_id" jdbcType="INTEGER" property="contentSelectOptionId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="state" jdbcType="INTEGER" property="state" />
-    <result column="out_id" jdbcType="VARCHAR" property="outId" />
-    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
-    <result column="out_url" jdbcType="VARCHAR" property="outUrl" />
-    <result column="content_type" jdbcType="TINYINT" property="contentType" />
+    <result column="content_select_id" jdbcType="INTEGER" property="contentSelectId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    content_id, create_time, update_time, `state`, out_id, channel_id, out_url, content_type
+    content_select_option_id, create_time, update_time, content_select_id
   </sql>
-  <select id="selectByExample" parameterType="top.potens.web.model.ContentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="top.potens.web.model.ContentSelectOptionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `content`
+    from `content_select_option`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,35 +85,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `content`
-    where content_id = #{contentId,jdbcType=INTEGER}
+    from `content_select_option`
+    where content_select_option_id = #{contentSelectOptionId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from `content`
-    where content_id = #{contentId,jdbcType=INTEGER}
+    delete from `content_select_option`
+    where content_select_option_id = #{contentSelectOptionId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="top.potens.web.model.ContentExample">
-    delete from `content`
+  <delete id="deleteByExample" parameterType="top.potens.web.model.ContentSelectOptionExample">
+    delete from `content_select_option`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="top.potens.web.model.Content">
-    <selectKey keyProperty="contentId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="top.potens.web.model.ContentSelectOption">
+    <selectKey keyProperty="contentSelectOptionId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `content` (create_time, update_time, `state`, 
-      out_id, channel_id, out_url, 
-      content_type)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
-      #{outId,jdbcType=VARCHAR}, #{channelId,jdbcType=INTEGER}, #{outUrl,jdbcType=VARCHAR}, 
-      #{contentType,jdbcType=TINYINT})
+    insert into `content_select_option` (create_time, update_time, content_select_id
+      )
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{contentSelectId,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="top.potens.web.model.Content">
-    <selectKey keyProperty="contentId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="top.potens.web.model.ContentSelectOption">
+    <selectKey keyProperty="contentSelectOptionId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `content`
+    insert into `content_select_option`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
         create_time,
@@ -125,20 +119,8 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="state != null">
-        `state`,
-      </if>
-      <if test="outId != null">
-        out_id,
-      </if>
-      <if test="channelId != null">
-        channel_id,
-      </if>
-      <if test="outUrl != null">
-        out_url,
-      </if>
-      <if test="contentType != null">
-        content_type,
+      <if test="contentSelectId != null">
+        content_select_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -148,34 +130,22 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=INTEGER},
-      </if>
-      <if test="outId != null">
-        #{outId,jdbcType=VARCHAR},
-      </if>
-      <if test="channelId != null">
-        #{channelId,jdbcType=INTEGER},
-      </if>
-      <if test="outUrl != null">
-        #{outUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="contentType != null">
-        #{contentType,jdbcType=TINYINT},
+      <if test="contentSelectId != null">
+        #{contentSelectId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="top.potens.web.model.ContentExample" resultType="java.lang.Long">
-    select count(*) from `content`
+  <select id="countByExample" parameterType="top.potens.web.model.ContentSelectOptionExample" resultType="java.lang.Long">
+    select count(*) from `content_select_option`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `content`
+    update `content_select_option`
     <set>
-      <if test="record.contentId != null">
-        content_id = #{record.contentId,jdbcType=INTEGER},
+      <if test="record.contentSelectOptionId != null">
+        content_select_option_id = #{record.contentSelectOptionId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -183,20 +153,8 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.state != null">
-        `state` = #{record.state,jdbcType=INTEGER},
-      </if>
-      <if test="record.outId != null">
-        out_id = #{record.outId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.channelId != null">
-        channel_id = #{record.channelId,jdbcType=INTEGER},
-      </if>
-      <if test="record.outUrl != null">
-        out_url = #{record.outUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="record.contentType != null">
-        content_type = #{record.contentType,jdbcType=TINYINT},
+      <if test="record.contentSelectId != null">
+        content_select_id = #{record.contentSelectId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -204,21 +162,17 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `content`
-    set content_id = #{record.contentId,jdbcType=INTEGER},
+    update `content_select_option`
+    set content_select_option_id = #{record.contentSelectOptionId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      `state` = #{record.state,jdbcType=INTEGER},
-      out_id = #{record.outId,jdbcType=VARCHAR},
-      channel_id = #{record.channelId,jdbcType=INTEGER},
-      out_url = #{record.outUrl,jdbcType=VARCHAR},
-      content_type = #{record.contentType,jdbcType=TINYINT}
+      content_select_id = #{record.contentSelectId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.Content">
-    update `content`
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.ContentSelectOption">
+    update `content_select_option`
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -226,33 +180,17 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        `state` = #{state,jdbcType=INTEGER},
-      </if>
-      <if test="outId != null">
-        out_id = #{outId,jdbcType=VARCHAR},
-      </if>
-      <if test="channelId != null">
-        channel_id = #{channelId,jdbcType=INTEGER},
-      </if>
-      <if test="outUrl != null">
-        out_url = #{outUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="contentType != null">
-        content_type = #{contentType,jdbcType=TINYINT},
+      <if test="contentSelectId != null">
+        content_select_id = #{contentSelectId,jdbcType=INTEGER},
       </if>
     </set>
-    where content_id = #{contentId,jdbcType=INTEGER}
+    where content_select_option_id = #{contentSelectOptionId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.Content">
-    update `content`
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.ContentSelectOption">
+    update `content_select_option`
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      `state` = #{state,jdbcType=INTEGER},
-      out_id = #{outId,jdbcType=VARCHAR},
-      channel_id = #{channelId,jdbcType=INTEGER},
-      out_url = #{outUrl,jdbcType=VARCHAR},
-      content_type = #{contentType,jdbcType=TINYINT}
-    where content_id = #{contentId,jdbcType=INTEGER}
+      content_select_id = #{contentSelectId,jdbcType=INTEGER}
+    where content_select_option_id = #{contentSelectOptionId,jdbcType=INTEGER}
   </update>
 </mapper>

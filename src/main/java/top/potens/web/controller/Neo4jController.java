@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ import java.util.List;
 @RequestMapping("/neo4j")
 @Api(description = "用户管理操作")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Validated
 public class Neo4jController {
     private final AreaService areaService;
     private final Neo4jService neo4JService;

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.potens.framework.annotation.UserAuthToken;
 import top.potens.framework.exception.ApiException;
@@ -14,7 +15,6 @@ import top.potens.framework.model.ApiResult;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
-import top.potens.framework.util.TokenUtil;
 import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.code.CommonCode;
 import top.potens.web.common.constant.ChannelConstant;
@@ -25,9 +25,8 @@ import top.potens.web.request.UserRegisterRequest;
 import top.potens.web.response.UserAuthBaseResponse;
 import top.potens.web.response.UserListItemResponse;
 import top.potens.web.service.UserService;
-import top.potens.web.service.logic.ContentCacheService;
+import top.potens.web.service.logic.CacheServiceLogic;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -45,9 +44,10 @@ import java.util.ArrayList;
 @RequestMapping("/user")
 @Api(description = "用户管理操作")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Validated
 public class UserController {
     private final UserService userService;
-    private final ContentCacheService contentCacheService;
+    private final CacheServiceLogic cacheServiceLogic;
 
     private UserAuthBaseResponse convertUserInfo(UserMoreAuthBo userMoreAuthBo) {
         UserAuthBaseResponse userAuthBaseResponse = new UserAuthBaseResponse();
@@ -105,7 +105,7 @@ public class UserController {
             @ApiParam(value = "uuid", example = "1") @RequestParam(required = true) @NotNull String uuid
     ) {
         AppLogger.info("游客注册登录接口 uuid:[{}]", uuid);
-        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
+        Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
         ApiResult<UserAuthBaseResponse> apiResult = new ApiResult<>();
         UserAuth userAuth = userService.existAuth(channel.getChannelId(), uuid, null);
         Integer userId = null;
@@ -127,7 +127,7 @@ public class UserController {
             @ApiParam(value = "username", example = "1") @RequestParam(required = true) @NotNull String username,
             @ApiParam(value = "password", example = "1") @RequestParam(required = true) @NotNull String password
     ) {
-        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_LDAP);
+        Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_LDAP);
         ApiResult<String> result = new ApiResult<>();
         result.setData(userService.ldapLogin(channel, username, password));
         return result;

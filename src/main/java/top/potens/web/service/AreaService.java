@@ -14,5 +14,14 @@ import java.util.List;
  * @date 2019/7/5 13:43
  */
 public interface AreaService {
+    /**
+    *
+    * 方法功能描述: 获取所有的城市地区列表
+    *
+    * @author yanshaowen
+    * @date 2019/10/22 10:03
+    * @return
+    * @throws
+    */
     List<AreaCodeNameBo> selectCities();
 }

@@ -1,6 +1,7 @@
 package top.potens.framework.util;
 import io.lettuce.core.output.KeyStreamingChannel;
 import jdk.nashorn.internal.objects.annotations.Function;
+import top.potens.framework.model.DateScope;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -225,5 +226,19 @@ public class DateUtil {
                 end.onKey(DateUtil.getLocalDate(split[1]));
             }
         }
+    }
+
+    public static DateScope getDateScope(String scopeDate) {
+        DateScope dateScope = new DateScope();
+        if (StringUtil.isNotBlank(scopeDate)) {
+            String[] split = scopeDate.split(",");
+            if (split.length == 1) {
+                dateScope.setStartDate(DateUtil.getLocalDate(split[0]));
+            } else if (split.length == 2) {
+                dateScope.setStartDate(DateUtil.getLocalDate(split[0]));
+                dateScope.setEndDate(DateUtil.getLocalDate(split[1]));
+            }
+        }
+        return dateScope;
     }
 }

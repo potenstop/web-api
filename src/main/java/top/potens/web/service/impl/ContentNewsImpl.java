@@ -2,8 +2,6 @@ package top.potens.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageSerializable;
-import io.lettuce.core.output.KeyStreamingChannel;
-import jnr.ffi.annotations.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,7 @@ import top.potens.web.service.ChannelService;
 import top.potens.web.service.ContentNewsService;
 import top.potens.web.service.ContentZoneService;
 import top.potens.web.service.UserService;
-import top.potens.web.service.logic.ContentCacheService;
+import top.potens.web.service.logic.CacheServiceLogic;
 import top.potens.web.service.logic.ContentServiceLogic;
 
 import java.util.*;
@@ -44,7 +42,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ContentNewsImpl implements ContentNewsService {
-    private final ContentCacheService contentCacheService;
+    private final CacheServiceLogic cacheServiceLogic;
     private final ContentServiceLogic contentServiceLogic;
     private final ContentLabelExMapper contentLabelExMapper;
     private final UserService userService;
@@ -57,8 +55,8 @@ public class ContentNewsImpl implements ContentNewsService {
     @Override
     @Lock(lockModel = LockModel.FAIR, keys = LockConstant.CONTENT_NEWS_OUT_KEY + "#{#request.webSource +':' + #request.id}", attemptTimeout = 10, lockWatchTimeout = 120)
     public void outPush(ContentNewsOutRequest request) {
-        Channel channel = contentCacheService.getChannelByCode(request.getWebSource());
-        ContentZone contentZone = contentCacheService.getContentZoneByCode(request.getZone());
+        Channel channel = cacheServiceLogic.getChannelByCode(request.getWebSource());
+        ContentZone contentZone = cacheServiceLogic.getContentZoneByCode(request.getZone());
         Content content = new Content();
         content.setOutId(request.getId());
         content.setChannelId(channel.getChannelId());
@@ -98,7 +96,7 @@ public class ContentNewsImpl implements ContentNewsService {
         // 更新标签
         if (request.getLabels() != null) {
             request.getLabels().forEach(labelName -> {
-                Label labelByName = contentCacheService.getLabelByName(labelName);
+                Label labelByName = cacheServiceLogic.getLabelByName(labelName);
                 ContentLabel contentLabel = new ContentLabel();
                 contentLabel.setContentId(contentId);
                 contentLabel.setLabelId(labelByName.getLabelId());

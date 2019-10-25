@@ -10,6 +10,7 @@ import top.potens.web.code.CommonCode;
 import top.potens.web.code.ContentCode;
 import top.potens.web.dao.db.auto.ChannelMapper;
 import top.potens.web.dao.db.auto.ContentZoneMapper;
+import top.potens.web.dao.db.auto.CourseTypeMapper;
 import top.potens.web.dao.db.auto.LabelMapper;
 import top.potens.web.model.*;
 
@@ -21,10 +22,11 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ContentCacheService {
+public class CacheServiceLogic {
     private final ChannelMapper channelMapper;
     private final ContentZoneMapper contentZoneMapper;
     private final LabelMapper labelMapper;
+    private final CourseTypeMapper courseTypeMapper;
 
     /***
      * 根据code返回channel
@@ -80,5 +82,11 @@ public class ContentCacheService {
             return label;
         }
         return labels.get(0);
+    }
+
+    @Cacheable(value = "courseType", keyGenerator = "simpleKeyGenerator")
+    public List<CourseType> getCourseTypeAll() {
+        CourseTypeExample courseTypeExample = new CourseTypeExample();
+        return courseTypeMapper.selectByExample(courseTypeExample);
     }
 }

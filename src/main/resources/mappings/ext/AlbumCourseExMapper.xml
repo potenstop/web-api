@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.potens.web.dao.db.ext.AlbumCourseExMapper">
+    <sql id="filterAlbumList">
+        FROM album_course_type_relation
+        INNER JOIN album ON album_course_type_relation.album_id = album.album_id
+        <where>
+            <if test="albumId != null">
+                and album.album_id = #{albumId,jdbcType=INTEGER}
+            </if>
+            <if test="albumName != null">
+                and album.album_name like %#{albumName,jdbcType=VARCHAR}%
+            </if>
+            <if test="createTimeStart != null">
+                and album.create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTimeEnd != null">
+                and album.create_time &lt;= #{createTimeEnd,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </sql>
+    <select id="selectAlbumCount" resultType="java.lang.Long">
+        SELECT COUNT(DISTINCT album.album_id)
+        <include refid="filterAlbumList"/>
+        order by album.album_id
+    </select>
+    <select id="selectAlbumIdList" resultType="java.lang.Integer">
+        SELECT album.album_id
+        <include refid="filterAlbumList"/>
+        group by album.album_id
+        order by album.album_id
+        limit #{limit,jdbcType=INTEGER} offset #{offset,jdbcType=INTEGER}
+        <if test="orderBy != null">
+            order by ${orderBy}
+        </if>
+    </select>
+</mapper>

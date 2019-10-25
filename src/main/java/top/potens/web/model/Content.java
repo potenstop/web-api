@@ -18,6 +18,8 @@ public class Content implements Serializable {
 
     private String outUrl;
 
+    private Integer contentType;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getContentId() {
@@ -74,5 +76,13 @@ public class Content implements Serializable {
 
     public void setOutUrl(String outUrl) {
         this.outUrl = outUrl == null ? null : outUrl.trim();
+    }
+
+    public Integer getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(Integer contentType) {
+        this.contentType = contentType;
     }
 }

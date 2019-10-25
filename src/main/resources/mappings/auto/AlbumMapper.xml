@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.potens.web.dao.db.auto.ContentMapper">
-  <resultMap id="BaseResultMap" type="top.potens.web.model.Content">
-    <id column="content_id" jdbcType="INTEGER" property="contentId" />
+<mapper namespace="top.potens.web.dao.db.auto.AlbumMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.Album">
+    <id column="album_id" jdbcType="INTEGER" property="albumId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="state" jdbcType="INTEGER" property="state" />
-    <result column="out_id" jdbcType="VARCHAR" property="outId" />
-    <result column="channel_id" jdbcType="INTEGER" property="channelId" />
-    <result column="out_url" jdbcType="VARCHAR" property="outUrl" />
-    <result column="content_type" jdbcType="TINYINT" property="contentType" />
+    <result column="album_name" jdbcType="VARCHAR" property="albumName" />
+    <result column="album_desc" jdbcType="VARCHAR" property="albumDesc" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    content_id, create_time, update_time, `state`, out_id, channel_id, out_url, content_type
+    album_id, create_time, update_time, album_name, album_desc
   </sql>
-  <select id="selectByExample" parameterType="top.potens.web.model.ContentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="top.potens.web.model.AlbumExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `content`
+    from `album`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,35 +86,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `content`
-    where content_id = #{contentId,jdbcType=INTEGER}
+    from `album`
+    where album_id = #{albumId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from `content`
-    where content_id = #{contentId,jdbcType=INTEGER}
+    delete from `album`
+    where album_id = #{albumId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="top.potens.web.model.ContentExample">
-    delete from `content`
+  <delete id="deleteByExample" parameterType="top.potens.web.model.AlbumExample">
+    delete from `album`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="top.potens.web.model.Content">
-    <selectKey keyProperty="contentId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="top.potens.web.model.Album">
+    <selectKey keyProperty="albumId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `content` (create_time, update_time, `state`, 
-      out_id, channel_id, out_url, 
-      content_type)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
-      #{outId,jdbcType=VARCHAR}, #{channelId,jdbcType=INTEGER}, #{outUrl,jdbcType=VARCHAR}, 
-      #{contentType,jdbcType=TINYINT})
+    insert into `album` (create_time, update_time, album_name, 
+      album_desc)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{albumName,jdbcType=VARCHAR}, 
+      #{albumDesc,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="top.potens.web.model.Content">
-    <selectKey keyProperty="contentId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="top.potens.web.model.Album">
+    <selectKey keyProperty="albumId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `content`
+    insert into `album`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
         create_time,
@@ -125,20 +120,11 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="state != null">
-        `state`,
+      <if test="albumName != null">
+        album_name,
       </if>
-      <if test="outId != null">
-        out_id,
-      </if>
-      <if test="channelId != null">
-        channel_id,
-      </if>
-      <if test="outUrl != null">
-        out_url,
-      </if>
-      <if test="contentType != null">
-        content_type,
+      <if test="albumDesc != null">
+        album_desc,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -148,34 +134,25 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=INTEGER},
+      <if test="albumName != null">
+        #{albumName,jdbcType=VARCHAR},
       </if>
-      <if test="outId != null">
-        #{outId,jdbcType=VARCHAR},
-      </if>
-      <if test="channelId != null">
-        #{channelId,jdbcType=INTEGER},
-      </if>
-      <if test="outUrl != null">
-        #{outUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="contentType != null">
-        #{contentType,jdbcType=TINYINT},
+      <if test="albumDesc != null">
+        #{albumDesc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="top.potens.web.model.ContentExample" resultType="java.lang.Long">
-    select count(*) from `content`
+  <select id="countByExample" parameterType="top.potens.web.model.AlbumExample" resultType="java.lang.Long">
+    select count(*) from `album`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `content`
+    update `album`
     <set>
-      <if test="record.contentId != null">
-        content_id = #{record.contentId,jdbcType=INTEGER},
+      <if test="record.albumId != null">
+        album_id = #{record.albumId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -183,20 +160,11 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.state != null">
-        `state` = #{record.state,jdbcType=INTEGER},
+      <if test="record.albumName != null">
+        album_name = #{record.albumName,jdbcType=VARCHAR},
       </if>
-      <if test="record.outId != null">
-        out_id = #{record.outId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.channelId != null">
-        channel_id = #{record.channelId,jdbcType=INTEGER},
-      </if>
-      <if test="record.outUrl != null">
-        out_url = #{record.outUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="record.contentType != null">
-        content_type = #{record.contentType,jdbcType=TINYINT},
+      <if test="record.albumDesc != null">
+        album_desc = #{record.albumDesc,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -204,21 +172,18 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `content`
-    set content_id = #{record.contentId,jdbcType=INTEGER},
+    update `album`
+    set album_id = #{record.albumId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      `state` = #{record.state,jdbcType=INTEGER},
-      out_id = #{record.outId,jdbcType=VARCHAR},
-      channel_id = #{record.channelId,jdbcType=INTEGER},
-      out_url = #{record.outUrl,jdbcType=VARCHAR},
-      content_type = #{record.contentType,jdbcType=TINYINT}
+      album_name = #{record.albumName,jdbcType=VARCHAR},
+      album_desc = #{record.albumDesc,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.Content">
-    update `content`
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.Album">
+    update `album`
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -226,33 +191,21 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        `state` = #{state,jdbcType=INTEGER},
+      <if test="albumName != null">
+        album_name = #{albumName,jdbcType=VARCHAR},
       </if>
-      <if test="outId != null">
-        out_id = #{outId,jdbcType=VARCHAR},
-      </if>
-      <if test="channelId != null">
-        channel_id = #{channelId,jdbcType=INTEGER},
-      </if>
-      <if test="outUrl != null">
-        out_url = #{outUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="contentType != null">
-        content_type = #{contentType,jdbcType=TINYINT},
+      <if test="albumDesc != null">
+        album_desc = #{albumDesc,jdbcType=VARCHAR},
       </if>
     </set>
-    where content_id = #{contentId,jdbcType=INTEGER}
+    where album_id = #{albumId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.Content">
-    update `content`
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.Album">
+    update `album`
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      `state` = #{state,jdbcType=INTEGER},
-      out_id = #{outId,jdbcType=VARCHAR},
-      channel_id = #{channelId,jdbcType=INTEGER},
-      out_url = #{outUrl,jdbcType=VARCHAR},
-      content_type = #{contentType,jdbcType=TINYINT}
-    where content_id = #{contentId,jdbcType=INTEGER}
+      album_name = #{albumName,jdbcType=VARCHAR},
+      album_desc = #{albumDesc,jdbcType=VARCHAR}
+    where album_id = #{albumId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.potens.web.dao.db.ext.AlbumContentRelationExMapper">
+  <select id="countContentRelationByAlbumId" resultType="top.potens.web.bmo.CommonIdCountBo">
+    select album_id as id,COUNT(*) count
+    from album_content_relation
+    WHERE album_id in
+    <foreach close=")" collection="albumIdList" item="listItem" open="(" separator=",">
+      #{listItem}
+    </foreach>
+    GROUP BY album_id
+  </select>
+</mapper>

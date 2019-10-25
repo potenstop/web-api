@@ -3,6 +3,7 @@ package top.potens.web.controller;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,8 @@ import top.potens.web.request.ContentNewsOutRequest;
 import top.potens.web.response.ContentNewItemResponse;
 import top.potens.web.service.ContentNewsService;
 
+import javax.validation.Valid;
+
 /**
  * Created by wenshao on 2019/7/20.
  */
@@ -24,12 +27,13 @@ import top.potens.web.service.ContentNewsService;
 @RequestMapping("/content-news")
 @Api(description = "新闻操作接口")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Validated
 public class ContentNewsController {
 
     private final ContentNewsService contentNewsService;
 
     @PostMapping("/push")
-    public ApiResult<Boolean> outPush(@RequestBody ContentNewsOutRequest request) {
+    public ApiResult<Boolean> outPush(@RequestBody @Valid ContentNewsOutRequest request) {
         AppLogger.info("controller-start-request request:[{}]", JSON.toJSONString(request));
         ApiResult<Boolean> result = new ApiResult<>();
         contentNewsService.outPush(request);
@@ -40,7 +44,7 @@ public class ContentNewsController {
 
     @PostMapping("/list")
     @UserAuthToken
-    public ApiResult<PageResponse<ContentNewItemResponse>> list(@RequestBody ContentNewsListRequest request) {
+    public ApiResult<PageResponse<ContentNewItemResponse>> list(@RequestBody @Valid ContentNewsListRequest request) {
         ApiResult<PageResponse<ContentNewItemResponse>> result = new ApiResult<>();
         result.setData(contentNewsService.list(request));
         return result;

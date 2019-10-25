@@ -6,7 +6,12 @@ import top.potens.web.model.ContentLabel;
 import java.util.List;
 
 /**
- * Created by wenshao on 2019/7/21.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className AreaExMapper
+ * @projectName web-api
+ * @date 2019/10/22 14:56
  */
 public interface AreaExMapper {
     public List<AreaCodeNameBo> selectCityList();

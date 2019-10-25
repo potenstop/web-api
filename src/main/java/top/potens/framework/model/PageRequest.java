@@ -21,7 +21,7 @@ public class PageRequest {
     private Integer pageSize = 20;
 
     @ApiModelProperty(value = "分页字段", example = "")
-    private String orderBy = "";
+    private String orderBy;
 
     public Integer getPageNum() {
         return pageNum;

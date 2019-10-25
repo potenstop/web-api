@@ -33,7 +33,6 @@ import top.potens.web.common.util.ValidateUtil;
 import top.potens.web.config.ApolloConfiguration;
 import top.potens.web.dao.db.auto.UserAuthMapper;
 import top.potens.web.dao.db.auto.UserMapper;
-import top.potens.web.mapper.DnMapper;
 import top.potens.web.mapper.PersonAttributeMapper;
 import top.potens.web.model.*;
 import top.potens.web.model.ldap.Person;
@@ -42,11 +41,10 @@ import top.potens.web.request.UserOutRequest;
 import top.potens.web.request.UserRegisterRequest;
 import top.potens.web.response.UserListItemResponse;
 import top.potens.web.service.UserService;
-import top.potens.web.service.logic.ContentCacheService;
+import top.potens.web.service.logic.CacheServiceLogic;
 import top.potens.web.service.logic.UserServiceLogic;
 import top.potens.web.service.noe4j.Neo4jService;
 
-import javax.naming.Context;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserAuthMapper userAuthMapper;
     private final Neo4jService neo4JService;
-    private final ContentCacheService contentCacheService;
+    private final CacheServiceLogic cacheServiceLogic;
     private final UserServiceLogic userServiceLogic;
     private final LdapTemplate ldapTemplate;
     private final RestTemplate restTemplate;
@@ -176,7 +174,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Integer insertByMobile(UserRegisterRequest request) {
-        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_TEL);
+        Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_TEL);
         // 1 检查用户是否存在
         UserAuth existUserAuth = this.existAuth(channel.getChannelId(), request.getIdentifier(), null);
         if (existUserAuth != null) {
@@ -195,7 +193,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Integer insertByMail(UserRegisterRequest request) {
-        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_MAIL);
+        Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_MAIL);
 
         // 1 检查用户是否存在
         UserAuth existUserAuth = this.existAuth(channel.getChannelId(), request.getIdentifier(), null);
@@ -216,7 +214,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer insertByUuid(String uuid) {
-        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
+        Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_VISITOR);
         User user = new User();
         user.setNickname("");
         user.setAvatar("");
@@ -229,7 +227,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Integer insertByLdap(String uid, String cn) {
-        Channel channel = contentCacheService.getChannelByCode(ChannelConstant.ChannelCode.SELF_LDAP);
+        Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_LDAP);
         User user = new User();
         user.setNickname(cn);
         user.setAvatar("");
