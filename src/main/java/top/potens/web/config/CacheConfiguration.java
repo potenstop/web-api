@@ -111,6 +111,8 @@ public class CacheConfiguration {
         redisCacheConfigurationMap.put("channel", this.getRedisCacheConfigurationWithTtl(3600));
         redisCacheConfigurationMap.put("contentZone", this.getRedisCacheConfigurationWithTtl(3600 * 12));
         redisCacheConfigurationMap.put("label", this.getRedisCacheConfigurationWithTtl(3600 * 24));
+        redisCacheConfigurationMap.put("courseType", this.getRedisCacheConfigurationWithTtl(3600 * 24));
+        redisCacheConfigurationMap.put("course", this.getRedisCacheConfigurationWithTtl(3600 * 24));
 
         return redisCacheConfigurationMap;
     }

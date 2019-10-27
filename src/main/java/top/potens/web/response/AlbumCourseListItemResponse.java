@@ -1,7 +1,10 @@
 package top.potens.web.response;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 /**
  * 功能描述:
@@ -14,7 +17,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class AlbumCourseListItemResponse extends AlbumResponse {
-    private String courseTypeNames;
+    @ApiModelProperty(value = "题目总数", name = "contentCount", required = true, example = "1")
     private Long contentCount;
 
+    @ApiModelProperty(value = "所属课程id", name = "courseId", required = true, example = "1")
+    private Integer courseId;
+
+    @ApiModelProperty(value = "所属课程名称", name = "courseName", required = true, example = "高等数学")
+    private String courseName;
+
+    @ApiModelProperty(value = "所属课程分类", name = "courseTypeRelationList", required = true)
+    private List<CourseTypeRelationResponse> courseTypeRelationList;
 }

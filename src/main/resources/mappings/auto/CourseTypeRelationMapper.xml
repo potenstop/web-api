@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.potens.web.dao.db.auto.AlbumCourseTypeRelationMapper">
-  <resultMap id="BaseResultMap" type="top.potens.web.model.AlbumCourseTypeRelation">
-    <id column="album_course_type_relation_id" jdbcType="INTEGER" property="albumCourseTypeRelationId" />
+<mapper namespace="top.potens.web.dao.db.auto.CourseTypeRelationMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.CourseTypeRelation">
+    <id column="course_type_relation_id" jdbcType="INTEGER" property="courseTypeRelationId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="album_id" jdbcType="INTEGER" property="albumId" />
-    <result column="course_type_id" jdbcType="INTEGER" property="courseTypeId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
     <result column="course_stair_id" jdbcType="INTEGER" property="courseStairId" />
     <result column="course_second_id" jdbcType="INTEGER" property="courseSecondId" />
     <result column="course_three_id" jdbcType="INTEGER" property="courseThreeId" />
@@ -70,16 +69,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    album_course_type_relation_id, create_time, update_time, album_id, course_type_id, 
-    course_stair_id, course_second_id, course_three_id
+    course_type_relation_id, create_time, update_time, course_id, course_stair_id, course_second_id, 
+    course_three_id
   </sql>
-  <select id="selectByExample" parameterType="top.potens.web.model.AlbumCourseTypeRelationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="top.potens.web.model.CourseTypeRelationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `album_course_type_relation`
+    from `course_type_relation`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,35 +89,35 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `album_course_type_relation`
-    where album_course_type_relation_id = #{albumCourseTypeRelationId,jdbcType=INTEGER}
+    from `course_type_relation`
+    where course_type_relation_id = #{courseTypeRelationId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from `album_course_type_relation`
-    where album_course_type_relation_id = #{albumCourseTypeRelationId,jdbcType=INTEGER}
+    delete from `course_type_relation`
+    where course_type_relation_id = #{courseTypeRelationId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="top.potens.web.model.AlbumCourseTypeRelationExample">
-    delete from `album_course_type_relation`
+  <delete id="deleteByExample" parameterType="top.potens.web.model.CourseTypeRelationExample">
+    delete from `course_type_relation`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="top.potens.web.model.AlbumCourseTypeRelation">
-    <selectKey keyProperty="albumCourseTypeRelationId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="top.potens.web.model.CourseTypeRelation">
+    <selectKey keyProperty="courseTypeRelationId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `album_course_type_relation` (create_time, update_time, album_id, 
-      course_type_id, course_stair_id, course_second_id, 
-      course_three_id)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{albumId,jdbcType=INTEGER}, 
-      #{courseTypeId,jdbcType=INTEGER}, #{courseStairId,jdbcType=INTEGER}, #{courseSecondId,jdbcType=INTEGER}, 
-      #{courseThreeId,jdbcType=INTEGER})
+    insert into `course_type_relation` (create_time, update_time, course_id, 
+      course_stair_id, course_second_id, course_three_id
+      )
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{courseId,jdbcType=INTEGER}, 
+      #{courseStairId,jdbcType=INTEGER}, #{courseSecondId,jdbcType=INTEGER}, #{courseThreeId,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="top.potens.web.model.AlbumCourseTypeRelation">
-    <selectKey keyProperty="albumCourseTypeRelationId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="top.potens.web.model.CourseTypeRelation">
+    <selectKey keyProperty="courseTypeRelationId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `album_course_type_relation`
+    insert into `course_type_relation`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
         create_time,
@@ -126,11 +125,8 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="albumId != null">
-        album_id,
-      </if>
-      <if test="courseTypeId != null">
-        course_type_id,
+      <if test="courseId != null">
+        course_id,
       </if>
       <if test="courseStairId != null">
         course_stair_id,
@@ -149,11 +145,8 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="albumId != null">
-        #{albumId,jdbcType=INTEGER},
-      </if>
-      <if test="courseTypeId != null">
-        #{courseTypeId,jdbcType=INTEGER},
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
       </if>
       <if test="courseStairId != null">
         #{courseStairId,jdbcType=INTEGER},
@@ -166,17 +159,17 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="top.potens.web.model.AlbumCourseTypeRelationExample" resultType="java.lang.Long">
-    select count(*) from `album_course_type_relation`
+  <select id="countByExample" parameterType="top.potens.web.model.CourseTypeRelationExample" resultType="java.lang.Long">
+    select count(*) from `course_type_relation`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `album_course_type_relation`
+    update `course_type_relation`
     <set>
-      <if test="record.albumCourseTypeRelationId != null">
-        album_course_type_relation_id = #{record.albumCourseTypeRelationId,jdbcType=INTEGER},
+      <if test="record.courseTypeRelationId != null">
+        course_type_relation_id = #{record.courseTypeRelationId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -184,11 +177,8 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.albumId != null">
-        album_id = #{record.albumId,jdbcType=INTEGER},
-      </if>
-      <if test="record.courseTypeId != null">
-        course_type_id = #{record.courseTypeId,jdbcType=INTEGER},
+      <if test="record.courseId != null">
+        course_id = #{record.courseId,jdbcType=INTEGER},
       </if>
       <if test="record.courseStairId != null">
         course_stair_id = #{record.courseStairId,jdbcType=INTEGER},
@@ -205,12 +195,11 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `album_course_type_relation`
-    set album_course_type_relation_id = #{record.albumCourseTypeRelationId,jdbcType=INTEGER},
+    update `course_type_relation`
+    set course_type_relation_id = #{record.courseTypeRelationId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      album_id = #{record.albumId,jdbcType=INTEGER},
-      course_type_id = #{record.courseTypeId,jdbcType=INTEGER},
+      course_id = #{record.courseId,jdbcType=INTEGER},
       course_stair_id = #{record.courseStairId,jdbcType=INTEGER},
       course_second_id = #{record.courseSecondId,jdbcType=INTEGER},
       course_three_id = #{record.courseThreeId,jdbcType=INTEGER}
@@ -218,8 +207,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.AlbumCourseTypeRelation">
-    update `album_course_type_relation`
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.CourseTypeRelation">
+    update `course_type_relation`
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -227,11 +216,8 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="albumId != null">
-        album_id = #{albumId,jdbcType=INTEGER},
-      </if>
-      <if test="courseTypeId != null">
-        course_type_id = #{courseTypeId,jdbcType=INTEGER},
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
       </if>
       <if test="courseStairId != null">
         course_stair_id = #{courseStairId,jdbcType=INTEGER},
@@ -243,17 +229,16 @@
         course_three_id = #{courseThreeId,jdbcType=INTEGER},
       </if>
     </set>
-    where album_course_type_relation_id = #{albumCourseTypeRelationId,jdbcType=INTEGER}
+    where course_type_relation_id = #{courseTypeRelationId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.AlbumCourseTypeRelation">
-    update `album_course_type_relation`
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.CourseTypeRelation">
+    update `course_type_relation`
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      album_id = #{albumId,jdbcType=INTEGER},
-      course_type_id = #{courseTypeId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
       course_stair_id = #{courseStairId,jdbcType=INTEGER},
       course_second_id = #{courseSecondId,jdbcType=INTEGER},
       course_three_id = #{courseThreeId,jdbcType=INTEGER}
-    where album_course_type_relation_id = #{albumCourseTypeRelationId,jdbcType=INTEGER}
+    where course_type_relation_id = #{courseTypeRelationId,jdbcType=INTEGER}
   </update>
 </mapper>

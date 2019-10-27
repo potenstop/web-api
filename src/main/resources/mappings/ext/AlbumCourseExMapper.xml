@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.potens.web.dao.db.ext.AlbumCourseExMapper">
     <sql id="filterAlbumList">
-        FROM album_course_type_relation
-        INNER JOIN album ON album_course_type_relation.album_id = album.album_id
+        FROM album_course
+        INNER JOIN album ON album_course.album_id = album.album_id
         <where>
             <if test="albumId != null">
                 and album.album_id = #{albumId,jdbcType=INTEGER}

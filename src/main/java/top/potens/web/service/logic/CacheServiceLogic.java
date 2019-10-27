@@ -8,10 +8,7 @@ import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
 import top.potens.web.code.CommonCode;
 import top.potens.web.code.ContentCode;
-import top.potens.web.dao.db.auto.ChannelMapper;
-import top.potens.web.dao.db.auto.ContentZoneMapper;
-import top.potens.web.dao.db.auto.CourseTypeMapper;
-import top.potens.web.dao.db.auto.LabelMapper;
+import top.potens.web.dao.db.auto.*;
 import top.potens.web.model.*;
 
 import java.util.Date;
@@ -27,6 +24,7 @@ public class CacheServiceLogic {
     private final ContentZoneMapper contentZoneMapper;
     private final LabelMapper labelMapper;
     private final CourseTypeMapper courseTypeMapper;
+    private final CourseMapper courseMapper;
 
     /***
      * 根据code返回channel
@@ -88,5 +86,11 @@ public class CacheServiceLogic {
     public List<CourseType> getCourseTypeAll() {
         CourseTypeExample courseTypeExample = new CourseTypeExample();
         return courseTypeMapper.selectByExample(courseTypeExample);
+    }
+
+    @Cacheable(value = "course", keyGenerator = "simpleKeyGenerator")
+    public List<Course> getCourseAll() {
+        CourseExample courseExample = new CourseExample();
+        return courseMapper.selectByExample(courseExample);
     }
 }

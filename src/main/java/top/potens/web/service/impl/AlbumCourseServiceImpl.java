@@ -9,8 +9,7 @@ import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.CommonIdCountBo;
-import top.potens.web.dao.db.auto.AlbumContentRelationMapper;
-import top.potens.web.dao.db.auto.AlbumCourseTypeRelationMapper;
+import top.potens.web.dao.db.auto.AlbumCourseMapper;
 import top.potens.web.dao.db.auto.AlbumMapper;
 import top.potens.web.dao.db.ext.AlbumContentRelationExMapper;
 import top.potens.web.dao.db.ext.AlbumCourseExMapper;
@@ -18,6 +17,7 @@ import top.potens.web.model.*;
 import top.potens.web.request.AlbumCourseListItemRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
 import top.potens.web.service.AlbumCourseService;
+import top.potens.web.service.CourseService;
 import top.potens.web.service.CourseTypeService;
 
 import java.math.BigDecimal;
@@ -40,9 +40,10 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
 
     private final AlbumCourseExMapper albumCourseExMapper;
     private final AlbumMapper albumMapper;
-    private final AlbumCourseTypeRelationMapper albumCourseTypeRelation;
+    private final AlbumCourseMapper albumCourseMapper;
     private final CourseTypeService courseTypeService;
     private final AlbumContentRelationExMapper albumContentRelationExMapper;
+    private final CourseService courseService;
 
     @Override
     public PageResponse<AlbumCourseListItemResponse> selectCourseList(AlbumCourseListItemRequest request) {
@@ -63,36 +64,30 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
             albumExample.createCriteria().andAlbumIdIn(idList);
             List<Album> albums = albumMapper.selectByExample(albumExample);
             albumCourseListItemResponseList = BeanCopierUtil.convert(albums, AlbumCourseListItemResponse.class);
-            // 获取课程专辑的类别
-            AlbumCourseTypeRelationExample albumCourseTypeRelationExample = new AlbumCourseTypeRelationExample();
-            albumCourseTypeRelationExample.createCriteria().andAlbumIdIn(idList);
-            List<AlbumCourseTypeRelation> albumCourseTypeRelations = albumCourseTypeRelation.selectByExample(albumCourseTypeRelationExample);
-            Map<Integer, List<AlbumCourseTypeRelation>> albumTypeMap = albumCourseTypeRelations
-                    .stream()
-                    .collect(Collectors.groupingBy(AlbumCourseTypeRelation::getAlbumId));
-            ArrayList<Integer> courseTypeIdList = new ArrayList<>();
-            albumCourseTypeRelations.forEach(item -> {
-                courseTypeIdList.add(item.getCourseTypeId());
-            });
-            // 获取分类的名称
-            Map<Integer, String> typeNameMap = courseTypeService.getNameMap(courseTypeIdList);
+            // 获取课程专辑的信息
+            AlbumCourseExample albumCourseExample = new AlbumCourseExample();
+            albumCourseExample.createCriteria().andAlbumIdIn(idList);
+            Map<Integer, AlbumCourse> albumCourseMap = albumCourseMapper.selectByExample(albumCourseExample).stream().collect(Collectors.toMap(AlbumCourse::getAlbumId, albumCourse -> albumCourse));
+
+            // 获取课程名称和id
+            Map<Integer, Course> courseMap = courseService.selectNameByIdList(idList);
 
             // 获取课程专辑的内容总数
             Map<Integer, Long> albumIdCount = albumContentRelationExMapper.countContentRelationByAlbumId(idList)
                     .stream()
                     .collect(Collectors.toMap(CommonIdCountBo::getId, CommonIdCountBo::getCount));
             albumCourseListItemResponseList.forEach(item -> {
-                if (albumTypeMap.containsKey(item.getAlbumId())) {
-                    List<AlbumCourseTypeRelation> albumCourseTypeRelationList = albumTypeMap.get(item.getAlbumId());
-                    List<String> typeNameList = new ArrayList<>();
-                    albumCourseTypeRelationList.forEach(relation -> {
-                        if (typeNameMap.containsKey(relation.getCourseTypeId())) {
-                            typeNameList.add(typeNameMap.get(relation.getCourseTypeId()));
-                        }
-                    });
-                    item.setCourseTypeNames(String.join(",", typeNameList));
+                Integer albumId = item.getAlbumId();
+                if (albumCourseMap.containsKey(albumId)) {
+                    AlbumCourse albumCourse = albumCourseMap.get(albumId);
+                    item.setCourseId(albumCourse.getCourseId());
                 }
-                item.setContentCount(albumIdCount.getOrDefault(item.getAlbumId(), 0L));
+                Integer courseId = item.getCourseId();
+                if (courseMap.containsKey(courseId)) {
+                    item.setCourseId(courseId);
+                    item.setCourseName(courseMap.get(courseId).getCourseName());
+                }
+                item.setContentCount(albumIdCount.getOrDefault(albumId, 0L));
             });
 
         }

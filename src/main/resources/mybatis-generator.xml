@@ -102,8 +102,14 @@
         <table tableName="course_type" delimitIdentifiers="true">
             <generatedKey column="course_type_id" sqlStatement="MySql" identity="true" />
         </table>
-        <table tableName="album_course_type_relation" delimitIdentifiers="true">
-            <generatedKey column="album_course_type_relation_id" sqlStatement="MySql" identity="true" />
+        <table tableName="album_course" delimitIdentifiers="true">
+            <generatedKey column="album_course_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="course" delimitIdentifiers="true">
+            <generatedKey column="course_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="course_type_relation" delimitIdentifiers="true">
+            <generatedKey column="course_type_relation_id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>

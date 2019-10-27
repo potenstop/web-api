@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AlbumCourseTypeRelationExample {
+public class AlbumCourseExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public AlbumCourseTypeRelationExample() {
+    public AlbumCourseExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,63 +105,63 @@ public class AlbumCourseTypeRelationExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andAlbumCourseTypeRelationIdIsNull() {
-            addCriterion("album_course_type_relation_id is null");
+        public Criteria andAlbumCourseIdIsNull() {
+            addCriterion("album_course_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdIsNotNull() {
-            addCriterion("album_course_type_relation_id is not null");
+        public Criteria andAlbumCourseIdIsNotNull() {
+            addCriterion("album_course_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdEqualTo(Integer value) {
-            addCriterion("album_course_type_relation_id =", value, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdEqualTo(Integer value) {
+            addCriterion("album_course_id =", value, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdNotEqualTo(Integer value) {
-            addCriterion("album_course_type_relation_id <>", value, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdNotEqualTo(Integer value) {
+            addCriterion("album_course_id <>", value, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdGreaterThan(Integer value) {
-            addCriterion("album_course_type_relation_id >", value, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdGreaterThan(Integer value) {
+            addCriterion("album_course_id >", value, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("album_course_type_relation_id >=", value, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("album_course_id >=", value, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdLessThan(Integer value) {
-            addCriterion("album_course_type_relation_id <", value, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdLessThan(Integer value) {
+            addCriterion("album_course_id <", value, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdLessThanOrEqualTo(Integer value) {
-            addCriterion("album_course_type_relation_id <=", value, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdLessThanOrEqualTo(Integer value) {
+            addCriterion("album_course_id <=", value, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdIn(List<Integer> values) {
-            addCriterion("album_course_type_relation_id in", values, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdIn(List<Integer> values) {
+            addCriterion("album_course_id in", values, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdNotIn(List<Integer> values) {
-            addCriterion("album_course_type_relation_id not in", values, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdNotIn(List<Integer> values) {
+            addCriterion("album_course_id not in", values, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdBetween(Integer value1, Integer value2) {
-            addCriterion("album_course_type_relation_id between", value1, value2, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdBetween(Integer value1, Integer value2) {
+            addCriterion("album_course_id between", value1, value2, "albumCourseId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumCourseTypeRelationIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("album_course_type_relation_id not between", value1, value2, "albumCourseTypeRelationId");
+        public Criteria andAlbumCourseIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("album_course_id not between", value1, value2, "albumCourseId");
             return (Criteria) this;
         }
 
@@ -345,66 +345,6 @@ public class AlbumCourseTypeRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andCourseTypeIdIsNull() {
-            addCriterion("course_type_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdIsNotNull() {
-            addCriterion("course_type_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdEqualTo(Integer value) {
-            addCriterion("course_type_id =", value, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdNotEqualTo(Integer value) {
-            addCriterion("course_type_id <>", value, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdGreaterThan(Integer value) {
-            addCriterion("course_type_id >", value, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("course_type_id >=", value, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdLessThan(Integer value) {
-            addCriterion("course_type_id <", value, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdLessThanOrEqualTo(Integer value) {
-            addCriterion("course_type_id <=", value, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdIn(List<Integer> values) {
-            addCriterion("course_type_id in", values, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdNotIn(List<Integer> values) {
-            addCriterion("course_type_id not in", values, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdBetween(Integer value1, Integer value2) {
-            addCriterion("course_type_id between", value1, value2, "courseTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCourseTypeIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("course_type_id not between", value1, value2, "courseTypeId");
-            return (Criteria) this;
-        }
-
         public Criteria andCourseStairIdIsNull() {
             addCriterion("course_stair_id is null");
             return (Criteria) this;
@@ -582,6 +522,66 @@ public class AlbumCourseTypeRelationExample {
 
         public Criteria andCourseThreeIdNotBetween(Integer value1, Integer value2) {
             addCriterion("course_three_id not between", value1, value2, "courseThreeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdIsNull() {
+            addCriterion("course_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdIsNotNull() {
+            addCriterion("course_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdEqualTo(Integer value) {
+            addCriterion("course_id =", value, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdNotEqualTo(Integer value) {
+            addCriterion("course_id <>", value, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdGreaterThan(Integer value) {
+            addCriterion("course_id >", value, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("course_id >=", value, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdLessThan(Integer value) {
+            addCriterion("course_id <", value, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdLessThanOrEqualTo(Integer value) {
+            addCriterion("course_id <=", value, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdIn(List<Integer> values) {
+            addCriterion("course_id in", values, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdNotIn(List<Integer> values) {
+            addCriterion("course_id not in", values, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdBetween(Integer value1, Integer value2) {
+            addCriterion("course_id between", value1, value2, "courseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("course_id not between", value1, value2, "courseId");
             return (Criteria) this;
         }
     }

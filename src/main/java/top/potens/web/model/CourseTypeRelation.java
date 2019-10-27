@@ -3,16 +3,14 @@ package top.potens.web.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class AlbumCourseTypeRelation implements Serializable {
-    private Integer albumCourseTypeRelationId;
+public class CourseTypeRelation implements Serializable {
+    private Integer courseTypeRelationId;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private Integer albumId;
-
-    private Integer courseTypeId;
+    private Integer courseId;
 
     private Integer courseStairId;
 
@@ -22,12 +20,12 @@ public class AlbumCourseTypeRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getAlbumCourseTypeRelationId() {
-        return albumCourseTypeRelationId;
+    public Integer getCourseTypeRelationId() {
+        return courseTypeRelationId;
     }
 
-    public void setAlbumCourseTypeRelationId(Integer albumCourseTypeRelationId) {
-        this.albumCourseTypeRelationId = albumCourseTypeRelationId;
+    public void setCourseTypeRelationId(Integer courseTypeRelationId) {
+        this.courseTypeRelationId = courseTypeRelationId;
     }
 
     public Date getCreateTime() {
@@ -46,20 +44,12 @@ public class AlbumCourseTypeRelation implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public Integer getAlbumId() {
-        return albumId;
+    public Integer getCourseId() {
+        return courseId;
     }
 
-    public void setAlbumId(Integer albumId) {
-        this.albumId = albumId;
-    }
-
-    public Integer getCourseTypeId() {
-        return courseTypeId;
-    }
-
-    public void setCourseTypeId(Integer courseTypeId) {
-        this.courseTypeId = courseTypeId;
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
     }
 
     public Integer getCourseStairId() {
