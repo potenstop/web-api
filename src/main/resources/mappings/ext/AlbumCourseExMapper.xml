@@ -9,8 +9,8 @@
                 and album.album_id = #{albumId,jdbcType=INTEGER}
             </if>
             <if test="albumName != null">
-                and album.album_name like %#{albumName,jdbcType=VARCHAR}%
-            </if>
+                and album.album_name like #{albumName,jdbcType=VARCHAR}
+        </if>
             <if test="createTimeStart != null">
                 and album.create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP}
             </if>

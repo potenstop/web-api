@@ -7,6 +7,7 @@ import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
+import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.CommonIdCountBo;
 import top.potens.web.dao.db.auto.AlbumContentRelationMapper;
 import top.potens.web.dao.db.auto.AlbumCourseTypeRelationMapper;
@@ -49,6 +50,9 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
         DateScope dateScope = DateUtil.getDateScope(request.getCreateTime());
         Long count = albumCourseExMapper.selectAlbumCount(request.getAlbumId(), request.getAlbumName(), dateScope.getStartDate(), dateScope.getEndDate());
         Long offset = BigDecimal.valueOf(request.getPageNum()).subtract(BigDecimal.ONE).multiply(BigDecimal.valueOf(request.getPageSize())).longValue();
+        if (StringUtil.isNotBlank(request.getAlbumName())) {
+            request.setAlbumName("%" + request.getAlbumName() + "%");
+        }
         List<Integer> idList = albumCourseExMapper.selectAlbumIdList(request.getPageSize(), offset, request.getOrderBy(),
                 request.getAlbumId(), request.getAlbumName(), dateScope.getStartDate(), dateScope.getEndDate());
 
