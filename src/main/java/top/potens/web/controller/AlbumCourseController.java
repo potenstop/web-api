@@ -42,4 +42,12 @@ public class AlbumCourseController {
         result.setData(response);
         return result;
     }
+    @PostMapping("/add")
+    @ApiOperation("添加课程专辑")
+    public ApiResult<PageResponse<AlbumCourseListItemResponse>> courseAdd(@RequestBody @Valid AlbumCourseListItemRequest request) {
+        ApiResult<PageResponse<AlbumCourseListItemResponse>> result = new ApiResult<>();
+        PageResponse<AlbumCourseListItemResponse> response = albumCourseService.selectCourseList(request);
+        result.setData(response);
+        return result;
+    }
 }
