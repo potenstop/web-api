@@ -12,6 +12,8 @@ public class Course implements Serializable {
 
     private String courseName;
 
+    private String courseCode;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getCourseId() {
@@ -44,5 +46,13 @@ public class Course implements Serializable {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName == null ? null : courseName.trim();
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode == null ? null : courseCode.trim();
     }
 }

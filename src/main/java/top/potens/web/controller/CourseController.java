@@ -40,6 +40,9 @@ public class CourseController {
             @ApiParam(value = "courseSecondId", example = "1") @RequestParam(required = false) Integer courseSecondId,
             @ApiParam(value = "courseThreeId", example = "1") @RequestParam(required = false) Integer courseThreeId
     ) {
-       return null;
+        ApiResult<List<CourseListItemResponse>> result = new ApiResult<>();
+        List<CourseListItemResponse> courseListItemResponses = courseService.selectListByFilterNotPage(courseId, courseName, courseStairId, courseSecondId, courseThreeId);
+        result.setData(courseListItemResponses);
+        return result;
     }
 }

@@ -354,6 +354,76 @@ public class CourseExample {
             addCriterion("course_name not between", value1, value2, "courseName");
             return (Criteria) this;
         }
+
+        public Criteria andCourseCodeIsNull() {
+            addCriterion("course_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeIsNotNull() {
+            addCriterion("course_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeEqualTo(String value) {
+            addCriterion("course_code =", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeNotEqualTo(String value) {
+            addCriterion("course_code <>", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeGreaterThan(String value) {
+            addCriterion("course_code >", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("course_code >=", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeLessThan(String value) {
+            addCriterion("course_code <", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeLessThanOrEqualTo(String value) {
+            addCriterion("course_code <=", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeLike(String value) {
+            addCriterion("course_code like", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeNotLike(String value) {
+            addCriterion("course_code not like", value, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeIn(List<String> values) {
+            addCriterion("course_code in", values, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeNotIn(List<String> values) {
+            addCriterion("course_code not in", values, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeBetween(String value1, String value2) {
+            addCriterion("course_code between", value1, value2, "courseCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCourseCodeNotBetween(String value1, String value2) {
+            addCriterion("course_code not between", value1, value2, "courseCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -1,5 +1,7 @@
 mybatis:
   mapperLocations: classpath*:mappings/*/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 logging:
   path: d:/tmp/
 spring:

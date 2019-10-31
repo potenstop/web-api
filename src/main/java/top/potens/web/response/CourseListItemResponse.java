@@ -2,6 +2,9 @@ package top.potens.web.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import java.util.List;
 
 /**
  * 功能描述:
@@ -12,6 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2019/10/28 6:49
  */
 @ApiModel(description = "课程对象")
+@Data
 public class CourseListItemResponse {
 
     @ApiModelProperty(value = "课程id", name = "courseId", required = true, example = "")
@@ -35,11 +39,8 @@ public class CourseListItemResponse {
     @ApiModelProperty(value = "二级分类名称", name = "courseSecondName", required = true, example = "二级")
     private String courseSecondName;
 
-    @ApiModelProperty(value = "三级分类id", name = "courseThreeId", required = true, example = "1")
-    private Integer courseThreeId;
-
-    @ApiModelProperty(value = "三级分类名称", name = "courseThreeName", required = true, example = "三级")
-    private String courseThreeName;
+    @ApiModelProperty(value = "三级分类对象", name = "courseThreeList", required = true)
+    private List<CourseTypeSimpleResponse> courseThreeList;
 
 
 }

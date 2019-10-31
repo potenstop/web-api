@@ -6,6 +6,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+    <result column="course_code" jdbcType="VARCHAR" property="courseCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    course_id, create_time, update_time, course_name
+    course_id, create_time, update_time, course_name, course_code
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.CourseExample" resultMap="BaseResultMap">
     select
@@ -102,10 +103,10 @@
     <selectKey keyProperty="courseId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `course` (create_time, update_time, course_name
-      )
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{courseName,jdbcType=VARCHAR}
-      )
+    insert into `course` (create_time, update_time, course_name, 
+      course_code)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{courseName,jdbcType=VARCHAR}, 
+      #{courseCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.Course">
     <selectKey keyProperty="courseId" order="AFTER" resultType="java.lang.Integer">
@@ -122,6 +123,9 @@
       <if test="courseName != null">
         course_name,
       </if>
+      <if test="courseCode != null">
+        course_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
@@ -132,6 +136,9 @@
       </if>
       <if test="courseName != null">
         #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCode != null">
+        #{courseCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +163,9 @@
       <if test="record.courseName != null">
         course_name = #{record.courseName,jdbcType=VARCHAR},
       </if>
+      <if test="record.courseCode != null">
+        course_code = #{record.courseCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +176,8 @@
     set course_id = #{record.courseId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      course_name = #{record.courseName,jdbcType=VARCHAR}
+      course_name = #{record.courseName,jdbcType=VARCHAR},
+      course_code = #{record.courseCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,6 +194,9 @@
       <if test="courseName != null">
         course_name = #{courseName,jdbcType=VARCHAR},
       </if>
+      <if test="courseCode != null">
+        course_code = #{courseCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where course_id = #{courseId,jdbcType=INTEGER}
   </update>
@@ -190,7 +204,8 @@
     update `course`
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      course_name = #{courseName,jdbcType=VARCHAR}
+      course_name = #{courseName,jdbcType=VARCHAR},
+      course_code = #{courseCode,jdbcType=VARCHAR}
     where course_id = #{courseId,jdbcType=INTEGER}
   </update>
 </mapper>
