@@ -39,20 +39,30 @@ public class MybatisLogInterceptor implements Interceptor {
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement) args[0];
         Object parameter = args[1];
-        RowBounds rowBounds = (RowBounds) args[2];
-        ResultHandler resultHandler = (ResultHandler) args[3];
+        ResultHandler resultHandler = null;
+        RowBounds rowBounds = null;
+        if (args.length >= 3) {
+            rowBounds = (RowBounds) args[2];
+        }
+
+        if (args.length >= 4) {
+            resultHandler = (ResultHandler) args[3];
+        }
+
         Executor executor = (Executor) invocation.getTarget();
-        CacheKey cacheKey;
-        BoundSql boundSql;
+        CacheKey cacheKey = null;
+        BoundSql boundSql = null;
         //由于逻辑关系，只会进入一次
         if(args.length == 4){
             //4 个参数时
             boundSql = ms.getBoundSql(parameter);
             cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
-        } else {
+        } else if (args.length == 6){
             //6 个参数时
             cacheKey = (CacheKey) args[4];
             boundSql = (BoundSql) args[5];
+        } else if (args.length == 2) {
+            boundSql = ms.getBoundSql(parameter);
         }
         try {
             // 获取xml中的一个select/update/insertContentNews/delete节点，主要描述的是一条SQL语句

@@ -1,12 +1,19 @@
 package top.potens.web.service.impl;
 
+import com.google.common.base.Function;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.potens.framework.log.AppLogger;
+import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.StringUtil;
+import top.potens.web.common.constant.CourseConstant;
 import top.potens.web.dao.db.auto.CourseTypeMapper;
 import top.potens.web.model.CourseType;
+import top.potens.web.model.CourseTypeExample;
+import top.potens.web.response.CourseTypeListItemResponse;
+import top.potens.web.response.CourseTypeTreeItemResponse;
 import top.potens.web.service.CourseTypeService;
 import top.potens.web.service.logic.CacheServiceLogic;
 
@@ -68,5 +75,50 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     @Override
     public Map<Integer, String> getNameMap(Integer courseTypeId) {
         return getNameMap(Collections.singletonList(courseTypeId));
+    }
+
+    @Override
+    public List<CourseTypeTreeItemResponse> treeByFilterNotPage() {
+        ArrayList<CourseTypeTreeItemResponse> courseTypeTreeItemResponseList = new ArrayList<>();
+        HashMap<Integer, List<CourseTypeTreeItemResponse>> parentMap = new HashMap<>();
+        cacheServiceLogic.getCourseTypeAll().forEach(courseType -> {
+            CourseTypeTreeItemResponse courseTypeTreeItemResponse = BeanCopierUtil.convert(courseType, CourseTypeTreeItemResponse.class);
+            List<CourseTypeTreeItemResponse> childCourseTypeTreeItemResponseList = new ArrayList<>();
+            parentMap.put(courseType.getCourseTypeId(), childCourseTypeTreeItemResponseList);
+
+            if (CourseConstant.Rank.STAIR.equals(courseType.getRank())) {
+                courseTypeTreeItemResponse.setChildList(childCourseTypeTreeItemResponseList);
+                courseTypeTreeItemResponseList.add(courseTypeTreeItemResponse);
+            } else if (CourseConstant.Rank.SECOND.equals(courseType.getRank()) || CourseConstant.Rank.THREE.equals(courseType.getRank())) {
+                if (parentMap.containsKey(courseType.getParentId())) {
+                    List<CourseTypeTreeItemResponse> child = parentMap.get(courseType.getParentId());
+                    courseTypeTreeItemResponse.setChildList(childCourseTypeTreeItemResponseList);
+                    child.add(courseTypeTreeItemResponse);
+                } else {
+                    AppLogger.info("从map没有找到parentId对应的value parentId:[{}]", courseType.getParentId());
+                }
+            } else {
+                AppLogger.error("课程分类rank错误 rank:[{}]", courseType.getRank());
+            }
+        });
+
+        return courseTypeTreeItemResponseList;
+    }
+
+    @Override
+    public List<CourseTypeListItemResponse> listByFilterNotPage(List<Integer> idList) {
+        ArrayList<CourseTypeListItemResponse> courseTypeListItemResponses = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(idList)) {
+            CourseTypeExample courseTypeExample = new CourseTypeExample();
+            courseTypeExample.createCriteria().andCourseTypeIdIn(idList);
+            List<CourseType> courseTypes = courseTypeMapper.selectByExample(courseTypeExample);
+            courseTypes.forEach(courseType -> {
+                CourseTypeListItemResponse convert = BeanCopierUtil.convert(courseType, CourseTypeListItemResponse.class);
+                courseTypeListItemResponses.add(convert);
+            });
+
+        }
+        return courseTypeListItemResponses;
+
     }
 }

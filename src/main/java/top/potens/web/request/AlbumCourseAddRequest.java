@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -20,11 +21,11 @@ import java.util.Date;
 public class AlbumCourseAddRequest {
     @ApiModelProperty(value = "专辑名称", name = "albumName", required = true, example = "")
     @NotNull
-    @Max(value = 255)
+    @Size(max = 255)
     private String albumName;
 
     @ApiModelProperty(value = "专辑描述", name = "albumDesc", required = true, example = "")
-    @Max(value = 2000)
+    @Size(max = 2000)
     private String albumDesc;
 
     @ApiModelProperty(value = "专辑描述", name = "albumDesc", required = true, example = "")

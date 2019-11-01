@@ -1,6 +1,8 @@
 package top.potens.web.service;
 
 import top.potens.web.model.CourseType;
+import top.potens.web.response.CourseTypeListItemResponse;
+import top.potens.web.response.CourseTypeTreeItemResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -74,4 +76,27 @@ public interface CourseTypeService {
      */
     Map<Integer, String> getNameMap(Integer courseTypeId);
 
+    /**
+     *
+     * 方法功能描述: 返回树形的课程分类
+     *
+     * @author yanshaowen
+     * @date 2019/11/1 11:21
+     * @param * @param
+     * @return
+     * @throws
+     */
+    List<CourseTypeTreeItemResponse> treeByFilterNotPage();
+
+    /**
+     *
+     * 方法功能描述: 返回树形的课程分类
+     *
+     * @author yanshaowen
+     * @date 2019/11/1 11:21
+     * @param * @param
+     * @return
+     * @throws
+     */
+    List<CourseTypeListItemResponse> listByFilterNotPage(List<Integer> idList);
 }

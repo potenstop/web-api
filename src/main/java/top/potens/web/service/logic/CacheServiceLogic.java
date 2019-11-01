@@ -85,6 +85,7 @@ public class CacheServiceLogic {
     @Cacheable(value = "courseType", keyGenerator = "simpleKeyGenerator")
     public List<CourseType> getCourseTypeAll() {
         CourseTypeExample courseTypeExample = new CourseTypeExample();
+        courseTypeExample.setOrderByClause("rank asc, sequence asc");
         return courseTypeMapper.selectByExample(courseTypeExample);
     }
 

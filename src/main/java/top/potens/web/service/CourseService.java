@@ -1,6 +1,7 @@
 package top.potens.web.service;
 
 import top.potens.web.model.Course;
+import top.potens.web.request.CourseAddRequest;
 import top.potens.web.response.CourseListItemResponse;
 
 import java.util.List;
@@ -46,4 +47,16 @@ public interface CourseService {
                                                            Integer courseStairId,
                                                            Integer courseSecondId,
                                                            Integer courseThreeId);
+
+    /**
+    *
+    * 方法功能描述: 插入一条记录
+    *
+    * @author yanshaowen
+    * @date 2019/11/1 11:08
+    * @param request
+    * @return
+    * @throws
+    */
+    Integer insertOne(CourseAddRequest request);
 }

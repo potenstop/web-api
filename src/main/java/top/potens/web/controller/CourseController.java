@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.potens.framework.model.ApiResult;
+import top.potens.web.request.CourseAddRequest;
 import top.potens.web.response.CourseListItemResponse;
 import top.potens.web.service.CourseService;
 
@@ -45,4 +46,13 @@ public class CourseController {
         result.setData(courseListItemResponses);
         return result;
     }
+
+    @PostMapping("/add")
+    @ApiOperation("创建一个课程记录")
+    public ApiResult<Integer> add(@RequestBody @Valid CourseAddRequest request) {
+        ApiResult<Integer> result = new ApiResult<>();
+        result.setData(courseService.insertOne(request));
+        return result;
+    }
+
 }
