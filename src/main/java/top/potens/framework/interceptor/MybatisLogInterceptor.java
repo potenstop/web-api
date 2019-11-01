@@ -77,6 +77,9 @@ public class MybatisLogInterceptor implements Interceptor {
         } catch (Exception e) {
             AppLogger.error("intercept error[" + e.getMessage() + "]", e);
         }
+        if ("update".equals(invocation.getMethod().getName())) {
+            return invocation.proceed();
+        }
         //注：下面的方法可以根据自己的逻辑调用多次，在分页插件中，count 和 page 各调用了一次
         return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
     }
