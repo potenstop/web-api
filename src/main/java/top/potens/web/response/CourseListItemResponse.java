@@ -27,7 +27,7 @@ public class CourseListItemResponse {
     @ApiModelProperty(value = "课程代码", name = "courseCode", required = true, example = "")
     private String courseCode;
 
-    @ApiModelProperty(value = "一级分类id", name = "contentCount", required = true, example = "1")
+    @ApiModelProperty(value = "一级分类id", name = "courseStairId", required = true, example = "1")
     private Integer courseStairId;
 
     @ApiModelProperty(value = "一级分类名称", name = "courseStairName", required = true, example = "一级")

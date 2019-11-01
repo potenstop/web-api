@@ -32,6 +32,7 @@ public interface CourseExMapper {
     List<Integer> selectCourseIdList(
             @Param("courseId") Integer courseId,
             @Param("courseName") String courseName,
+            @Param("courseCode") String courseCode,
             @Param("courseStairId") Integer courseStairId,
             @Param("courseSecondId") Integer courseSecondId,
             @Param("courseThreeId") Integer courseThreeId);

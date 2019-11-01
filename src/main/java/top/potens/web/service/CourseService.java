@@ -1,7 +1,9 @@
 package top.potens.web.service;
 
+import top.potens.framework.model.PageResponse;
 import top.potens.web.model.Course;
 import top.potens.web.request.CourseAddRequest;
+import top.potens.web.request.CourseListItemRequest;
 import top.potens.web.response.CourseListItemResponse;
 
 import java.util.List;
@@ -44,6 +46,7 @@ public interface CourseService {
      */
     List<CourseListItemResponse> selectListByFilterNotPage(Integer courseId,
                                                            String courseName,
+                                                           String courseCode,
                                                            Integer courseStairId,
                                                            Integer courseSecondId,
                                                            Integer courseThreeId);
@@ -59,4 +62,17 @@ public interface CourseService {
     * @throws
     */
     Integer insertOne(CourseAddRequest request);
+
+    /**
+     *
+     * 方法功能描述: 分页查询列表
+     *
+     * @author yanshaowen
+     * @date 2019/11/1 11:08
+     * @param request
+     * @return
+     * @throws
+     */
+    PageResponse<CourseListItemResponse> selectList(CourseListItemRequest request);
+
 }

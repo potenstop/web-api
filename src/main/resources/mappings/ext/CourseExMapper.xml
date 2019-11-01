@@ -7,7 +7,7 @@
     <result column="course_three_id" jdbcType="INTEGER" property="courseThreeId" />
   </resultMap>
   <select id="selectCourseIdList" resultType="java.lang.Integer">
-    SELECT course.course_id
+    SELECT 	DISTINCT course.course_id
     FROM course
     INNER JOIN course_type_relation ON course.course_id = course_type_relation.course_id
     <where>
@@ -16,6 +16,9 @@
       </if>
       <if test="courseName != null">
         and course.course_name like #{courseName,jdbcType=VARCHAR}
+      </if>
+      <if test="courseCode != null">
+        and course.course_code = #{courseName,jdbcType=VARCHAR}
       </if>
       <if test="courseStairId != null">
         and course_type_relation.course_stair_id = #{courseStairId,jdbcType=INTEGER}

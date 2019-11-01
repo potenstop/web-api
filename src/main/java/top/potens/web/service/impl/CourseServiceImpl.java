@@ -1,11 +1,14 @@
 package top.potens.web.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageSerializable;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
+import top.potens.framework.model.PageResponse;
 import top.potens.framework.serialization.JSON;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.web.bmo.CourseInfoTypeBo;
@@ -15,6 +18,7 @@ import top.potens.web.dao.db.ext.CourseExMapper;
 import top.potens.web.model.Course;
 import top.potens.web.model.CourseTypeRelation;
 import top.potens.web.request.CourseAddRequest;
+import top.potens.web.request.CourseListItemRequest;
 import top.potens.web.response.CourseListItemResponse;
 import top.potens.web.response.CourseTypeListItemResponse;
 import top.potens.web.response.CourseTypeSimpleResponse;
@@ -56,15 +60,8 @@ public class CourseServiceImpl implements CourseService {
         }
         return data;
     }
-
-    @Override
-    public List<CourseListItemResponse> selectListByFilterNotPage(Integer courseId, String courseName, Integer courseStairId, Integer courseSecondId, Integer courseThreeId) {
+    private List<CourseListItemResponse> selectItemListByIdList(List<Integer> courseIdList) {
         ArrayList<CourseListItemResponse> courseListItemResponseList = new ArrayList<>();
-        if (courseName != null) {
-            courseName = "%" + courseName + "%";
-        }
-
-        List<Integer> courseIdList = courseExMapper.selectCourseIdList(courseId, courseName, courseStairId, courseSecondId, courseThreeId);
         if (CollectionUtils.isEmpty(courseIdList)) {
             return courseListItemResponseList;
         }
@@ -107,6 +104,16 @@ public class CourseServiceImpl implements CourseService {
             courseListItemResponseList.add(courseListItemResponse);
         });
         return courseListItemResponseList;
+    }
+
+    @Override
+    public List<CourseListItemResponse> selectListByFilterNotPage(Integer courseId, String courseName, String courseCode, Integer courseStairId, Integer courseSecondId, Integer courseThreeId) {
+        if (courseName != null) {
+            courseName = "%" + courseName + "%";
+        }
+        List<Integer> courseIdList = courseExMapper.selectCourseIdList(courseId, courseName, courseCode, courseStairId, courseSecondId, courseThreeId);
+        return selectItemListByIdList(courseIdList);
+
     }
 
     @Override
@@ -159,5 +166,20 @@ public class CourseServiceImpl implements CourseService {
         return course.getCourseId();
     }
 
+    @Override
+    public PageResponse<CourseListItemResponse> selectList(CourseListItemRequest request) {
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
+        String courseName = request.getCourseName();
+        if (courseName != null) {
+            courseName = "%" + courseName + "%";
+        }
+        List<Integer> courseIdList = courseExMapper.selectCourseIdList(request.getCourseId(), courseName, request.getCourseCode(), request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeId());
+        List<CourseListItemResponse> courseListItemResponses = selectItemListByIdList(courseIdList);
+        PageResponse<CourseListItemResponse> response = new PageResponse<>();
+        PageSerializable<Integer> of = PageSerializable.of(courseIdList);
+        response.setTotal(of.getTotal());
+        response.setList(courseListItemResponses);
+        return response;
+    }
 }
 
