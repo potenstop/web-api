@@ -534,6 +534,76 @@ public class CourseTypeExample {
             addCriterion("`sequence` not between", value1, value2, "sequence");
             return (Criteria) this;
         }
+
+        public Criteria andTypeCodeIsNull() {
+            addCriterion("type_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeIsNotNull() {
+            addCriterion("type_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeEqualTo(String value) {
+            addCriterion("type_code =", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeNotEqualTo(String value) {
+            addCriterion("type_code <>", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeGreaterThan(String value) {
+            addCriterion("type_code >", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("type_code >=", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeLessThan(String value) {
+            addCriterion("type_code <", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeLessThanOrEqualTo(String value) {
+            addCriterion("type_code <=", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeLike(String value) {
+            addCriterion("type_code like", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeNotLike(String value) {
+            addCriterion("type_code not like", value, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeIn(List<String> values) {
+            addCriterion("type_code in", values, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeNotIn(List<String> values) {
+            addCriterion("type_code not in", values, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeBetween(String value1, String value2) {
+            addCriterion("type_code between", value1, value2, "typeCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeCodeNotBetween(String value1, String value2) {
+            addCriterion("type_code not between", value1, value2, "typeCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

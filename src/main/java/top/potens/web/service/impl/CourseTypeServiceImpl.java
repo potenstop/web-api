@@ -106,7 +106,7 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     }
 
     @Override
-    public List<CourseTypeListItemResponse> listByFilterNotPage(List<Integer> idList) {
+    public List<CourseTypeListItemResponse> listByIdList(List<Integer> idList) {
         ArrayList<CourseTypeListItemResponse> courseTypeListItemResponses = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(idList)) {
             CourseTypeExample courseTypeExample = new CourseTypeExample();
@@ -118,6 +118,25 @@ public class CourseTypeServiceImpl implements CourseTypeService {
             });
 
         }
+        return courseTypeListItemResponses;
+    }
+
+    @Override
+    public List<CourseTypeListItemResponse> listByFilterNotPage(Integer rank, List<Integer> idList) {
+        ArrayList<CourseTypeListItemResponse> courseTypeListItemResponses = new ArrayList<>();
+        CourseTypeExample courseTypeExample = new CourseTypeExample();
+        CourseTypeExample.Criteria criteria = courseTypeExample.createCriteria();
+        if (rank != null) {
+            criteria.andRankEqualTo(rank);
+        }
+        if (CollectionUtils.isNotEmpty(idList)) {
+            criteria.andCourseTypeIdIn(idList);
+        }
+        List<CourseType> courseTypes = courseTypeMapper.selectByExample(courseTypeExample);
+        courseTypes.forEach(courseType -> {
+            CourseTypeListItemResponse convert = BeanCopierUtil.convert(courseType, CourseTypeListItemResponse.class);
+            courseTypeListItemResponses.add(convert);
+        });
         return courseTypeListItemResponses;
 
     }

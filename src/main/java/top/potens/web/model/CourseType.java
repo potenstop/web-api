@@ -18,6 +18,8 @@ public class CourseType implements Serializable {
 
     private Integer sequence;
 
+    private String typeCode;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getCourseTypeId() {
@@ -74,5 +76,13 @@ public class CourseType implements Serializable {
 
     public void setSequence(Integer sequence) {
         this.sequence = sequence;
+    }
+
+    public String getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode == null ? null : typeCode.trim();
     }
 }

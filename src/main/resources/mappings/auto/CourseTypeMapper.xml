@@ -9,6 +9,7 @@
     <result column="rank" jdbcType="TINYINT" property="rank" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="sequence" jdbcType="TINYINT" property="sequence" />
+    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    course_type_id, create_time, update_time, type_name, `rank`, parent_id, `sequence`
+    course_type_id, create_time, update_time, type_name, `rank`, parent_id, `sequence`, 
+    type_code
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.CourseTypeExample" resultMap="BaseResultMap">
     select
@@ -106,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `course_type` (create_time, update_time, type_name, 
-      `rank`, parent_id, `sequence`
-      )
+      `rank`, parent_id, `sequence`, 
+      type_code)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{typeName,jdbcType=VARCHAR}, 
-      #{rank,jdbcType=TINYINT}, #{parentId,jdbcType=INTEGER}, #{sequence,jdbcType=TINYINT}
-      )
+      #{rank,jdbcType=TINYINT}, #{parentId,jdbcType=INTEGER}, #{sequence,jdbcType=TINYINT}, 
+      #{typeCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.CourseType">
     <selectKey keyProperty="courseTypeId" order="AFTER" resultType="java.lang.Integer">
@@ -136,6 +138,9 @@
       <if test="sequence != null">
         `sequence`,
       </if>
+      <if test="typeCode != null">
+        type_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
@@ -155,6 +160,9 @@
       </if>
       <if test="sequence != null">
         #{sequence,jdbcType=TINYINT},
+      </if>
+      <if test="typeCode != null">
+        #{typeCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="record.sequence != null">
         `sequence` = #{record.sequence,jdbcType=TINYINT},
       </if>
+      <if test="record.typeCode != null">
+        type_code = #{record.typeCode,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +212,8 @@
       type_name = #{record.typeName,jdbcType=VARCHAR},
       `rank` = #{record.rank,jdbcType=TINYINT},
       parent_id = #{record.parentId,jdbcType=INTEGER},
-      `sequence` = #{record.sequence,jdbcType=TINYINT}
+      `sequence` = #{record.sequence,jdbcType=TINYINT},
+      type_code = #{record.typeCode,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +239,9 @@
       <if test="sequence != null">
         `sequence` = #{sequence,jdbcType=TINYINT},
       </if>
+      <if test="typeCode != null">
+        type_code = #{typeCode,jdbcType=VARCHAR},
+      </if>
     </set>
     where course_type_id = #{courseTypeId,jdbcType=INTEGER}
   </update>
@@ -237,7 +252,8 @@
       type_name = #{typeName,jdbcType=VARCHAR},
       `rank` = #{rank,jdbcType=TINYINT},
       parent_id = #{parentId,jdbcType=INTEGER},
-      `sequence` = #{sequence,jdbcType=TINYINT}
+      `sequence` = #{sequence,jdbcType=TINYINT},
+      type_code = #{typeCode,jdbcType=VARCHAR}
     where course_type_id = #{courseTypeId,jdbcType=INTEGER}
   </update>
 </mapper>

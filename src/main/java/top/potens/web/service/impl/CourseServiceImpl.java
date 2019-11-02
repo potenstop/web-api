@@ -123,7 +123,7 @@ public class CourseServiceImpl implements CourseService {
         idList.add(request.getCourseStairId());
         idList.add(request.getCourseSecondId());
         idList.addAll(request.getCourseThreeIdList());
-        List<CourseTypeListItemResponse> courseTypeListItemResponses = courseTypeService.listByFilterNotPage(idList);
+        List<CourseTypeListItemResponse> courseTypeListItemResponses = courseTypeService.listByIdList(idList);
         if (idList.size() != courseTypeListItemResponses.size()) {
             AppLogger.warn("id有不存在");
             throw new ApiException(CourseCode.COURSE_TYPE_ID_ERROR);

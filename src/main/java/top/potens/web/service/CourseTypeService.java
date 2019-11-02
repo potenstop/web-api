@@ -90,7 +90,7 @@ public interface CourseTypeService {
 
     /**
      *
-     * 方法功能描述: 返回树形的课程分类
+     * 方法功能描述: 返回课程列表 指定id查询
      *
      * @author yanshaowen
      * @date 2019/11/1 11:21
@@ -98,5 +98,17 @@ public interface CourseTypeService {
      * @return
      * @throws
      */
-    List<CourseTypeListItemResponse> listByFilterNotPage(List<Integer> idList);
+    List<CourseTypeListItemResponse> listByIdList(List<Integer> idList);
+
+    /**
+     *
+     * 方法功能描述: 返回课程列表
+     *
+     * @author yanshaowen
+     * @date 2019/11/1 11:21
+     * @param * @param
+     * @return
+     * @throws
+     */
+    List<CourseTypeListItemResponse> listByFilterNotPage(Integer rank, List<Integer> idList);
 }

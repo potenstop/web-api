@@ -32,6 +32,9 @@ public class CourseTypeListItemResponse {
     @ApiModelProperty(value = "名称", name = "typeName", required = true, example = "")
     private String typeName;
 
+    @ApiModelProperty(value = "代码", name = "typeCode", required = true, example = "")
+    private String typeCode;
+
     @ApiModelProperty(value = "级别  1: 一级分类 2:  二级分类 3: 三级分类", name = "rank", required = true, example = "1")
     private Integer rank;
 
