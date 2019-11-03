@@ -35,7 +35,9 @@ public interface CourseExMapper {
             @Param("courseCode") String courseCode,
             @Param("courseStairId") Integer courseStairId,
             @Param("courseSecondId") Integer courseSecondId,
-            @Param("courseThreeId") Integer courseThreeId);
+            @Param("courseThreeId") Integer courseThreeId,
+            @Param("orderBy") String orderBy
+    );
 
     /**
     *

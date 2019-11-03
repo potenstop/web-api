@@ -111,7 +111,7 @@ public class CourseServiceImpl implements CourseService {
         if (courseName != null) {
             courseName = "%" + courseName + "%";
         }
-        List<Integer> courseIdList = courseExMapper.selectCourseIdList(courseId, courseName, courseCode, courseStairId, courseSecondId, courseThreeId);
+        List<Integer> courseIdList = courseExMapper.selectCourseIdList(courseId, courseName, courseCode, courseStairId, courseSecondId, courseThreeId, null);
         return selectItemListByIdList(courseIdList);
 
     }
@@ -173,7 +173,7 @@ public class CourseServiceImpl implements CourseService {
         if (courseName != null) {
             courseName = "%" + courseName + "%";
         }
-        List<Integer> courseIdList = courseExMapper.selectCourseIdList(request.getCourseId(), courseName, request.getCourseCode(), request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeId());
+        List<Integer> courseIdList = courseExMapper.selectCourseIdList(request.getCourseId(), courseName, request.getCourseCode(), request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeId(), request.getOrderBy());
         List<CourseListItemResponse> courseListItemResponses = selectItemListByIdList(courseIdList);
         PageResponse<CourseListItemResponse> response = new PageResponse<>();
         PageSerializable<Integer> of = PageSerializable.of(courseIdList);

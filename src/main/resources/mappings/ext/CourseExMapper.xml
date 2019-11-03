@@ -30,6 +30,14 @@
         and course_type_relation.course_three_id = #{courseThreeId,jdbcType=INTEGER}
       </if>
     </where>
+    <choose>
+      <when test="orderBy != null">
+        order by ${orderBy}
+      </when>
+      <otherwise>
+        order by course_id desc
+      </otherwise>
+    </choose>
   </select>
   <select id="selectCourseListByIds" resultMap="test">
     SELECT course.*,course_type_relation.course_stair_id,course_type_relation.course_second_id,course_type_relation.course_three_id
