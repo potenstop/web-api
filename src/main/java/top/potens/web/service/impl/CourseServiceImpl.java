@@ -174,7 +174,16 @@ public class CourseServiceImpl implements CourseService {
             courseName = "%" + courseName + "%";
         }
         List<Integer> courseIdList = courseExMapper.selectCourseIdList(request.getCourseId(), courseName, request.getCourseCode(), request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeId(), request.getOrderBy());
-        List<CourseListItemResponse> courseListItemResponses = selectItemListByIdList(courseIdList);
+        Map<Integer, List<CourseListItemResponse>> map = selectItemListByIdList(courseIdList).stream().collect(Collectors.groupingBy(CourseListItemResponse::getCourseId));
+        // 排序
+        List<CourseListItemResponse> courseListItemResponses = new ArrayList<>();
+
+        courseIdList.forEach(id -> {
+            if (map.containsKey(id) && map.get(id).size() == 1) {
+                CourseListItemResponse courseListItemResponse = map.get(id).get(0);
+                courseListItemResponses.add(courseListItemResponse);
+            }
+        });
         PageResponse<CourseListItemResponse> response = new PageResponse<>();
         PageSerializable<Integer> of = PageSerializable.of(courseIdList);
         response.setTotal(of.getTotal());
