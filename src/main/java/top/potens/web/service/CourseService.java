@@ -4,7 +4,9 @@ import top.potens.framework.model.PageResponse;
 import top.potens.web.model.Course;
 import top.potens.web.request.CourseAddRequest;
 import top.potens.web.request.CourseListItemRequest;
+import top.potens.web.request.CourseUpdateRequest;
 import top.potens.web.response.CourseListItemResponse;
+import top.potens.web.response.CourseViewResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -74,5 +76,29 @@ public interface CourseService {
      * @throws
      */
     PageResponse<CourseListItemResponse> selectList(CourseListItemRequest request);
+
+    /**
+    *
+    * 方法功能描述: 编辑页按id查询单个对象
+    *
+    * @author yanshaowen
+    * @date 2019/11/4 15:06
+    * @param courseId
+    * @return
+    * @throws
+    */
+    CourseViewResponse viewById(Integer courseId);
+
+    /**
+    *
+    * 方法功能描述: 按id更新course
+    *
+    * @author yanshaowen
+    * @date 2019/11/4 15:08
+    * @param request
+    * @return
+    * @throws
+    */
+    Integer updateById(CourseUpdateRequest request);
 
 }

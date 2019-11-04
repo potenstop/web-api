@@ -13,4 +13,7 @@ import top.potens.framework.annotation.ResultMessage;
 public class CourseCode {
     @ResultMessage("课程分类id错误")
     public static final String COURSE_TYPE_ID_ERROR = "40000";
+
+    @ResultMessage("课程id不存在")
+    public static final String COURSE_ID_NOT_FOUND = "40001";
 }

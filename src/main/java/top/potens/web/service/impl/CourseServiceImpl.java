@@ -14,14 +14,17 @@ import top.potens.framework.util.BeanCopierUtil;
 import top.potens.web.bmo.CourseInfoTypeBo;
 import top.potens.web.code.CourseCode;
 import top.potens.web.common.constant.CourseConstant;
+import top.potens.web.dao.db.auto.CourseMapper;
 import top.potens.web.dao.db.ext.CourseExMapper;
 import top.potens.web.model.Course;
 import top.potens.web.model.CourseTypeRelation;
 import top.potens.web.request.CourseAddRequest;
 import top.potens.web.request.CourseListItemRequest;
+import top.potens.web.request.CourseUpdateRequest;
 import top.potens.web.response.CourseListItemResponse;
 import top.potens.web.response.CourseTypeListItemResponse;
 import top.potens.web.response.CourseTypeSimpleResponse;
+import top.potens.web.response.CourseViewResponse;
 import top.potens.web.service.CourseService;
 import top.potens.web.service.CourseTypeService;
 import top.potens.web.service.logic.CacheServiceLogic;
@@ -44,7 +47,19 @@ public class CourseServiceImpl implements CourseService {
     private final CacheServiceLogic cacheServiceLogic;
     private final CourseTypeService courseTypeService;
     private final CourseExMapper courseExMapper;
+    private final CourseMapper courseMapper;
     private final CourseServiceLogic courseServiceLogic;
+
+    private Course byId(Integer courseId) {
+        if (courseId == null) {
+            throw new ApiException(CourseCode.COURSE_ID_NOT_FOUND);
+        }
+        Course course = courseMapper.selectByPrimaryKey(courseId);
+        if (course == null) {
+            throw new ApiException(CourseCode.COURSE_ID_NOT_FOUND);
+        }
+        return course;
+    }
     @Override
     public Map<Integer, Course> selectNameByIdList(List<Integer> idList) {
         List<Course> courseAll = cacheServiceLogic.getCourseAll();
@@ -116,22 +131,21 @@ public class CourseServiceImpl implements CourseService {
 
     }
 
-    @Override
-    public Integer insertOne(CourseAddRequest request) {
+    private List<CourseTypeRelation> checkCourseRelation(Integer courseStairId, Integer courseSecondId, List<Integer> courseThreeIdList) {
         // 校验选择的分类关系是否正确
         ArrayList<Integer> idList = new ArrayList<>();
-        idList.add(request.getCourseStairId());
-        idList.add(request.getCourseSecondId());
-        idList.addAll(request.getCourseThreeIdList());
+        idList.add(courseStairId);
+        idList.add(courseSecondId);
+        idList.addAll(courseThreeIdList);
         List<CourseTypeListItemResponse> courseTypeListItemResponses = courseTypeService.listByIdList(idList);
         if (idList.size() != courseTypeListItemResponses.size()) {
             AppLogger.warn("id有不存在");
             throw new ApiException(CourseCode.COURSE_TYPE_ID_ERROR);
         }
         courseTypeListItemResponses.forEach(courseTypeListItemResponse -> {
-            if (courseTypeListItemResponse.getCourseTypeId().equals(request.getCourseSecondId())) {
-                if (!courseTypeListItemResponse.getParentId().equals(request.getCourseStairId())) {
-                    AppLogger.warn("二级的父id不等于一级id CourseStairId:[{}] ParentId:[{}]", request.getCourseStairId(), courseTypeListItemResponse.getParentId());
+            if (courseTypeListItemResponse.getCourseTypeId().equals(courseSecondId)) {
+                if (!courseTypeListItemResponse.getParentId().equals(courseStairId)) {
+                    AppLogger.warn("二级的父id不等于一级id courseSecondId:[{}] ParentId:[{}]", courseSecondId, courseTypeListItemResponse.getParentId());
                     throw new ApiException(CourseCode.COURSE_TYPE_ID_ERROR);
                 }
                 if (!CourseConstant.Rank.SECOND.equals(courseTypeListItemResponse.getRank())) {
@@ -141,25 +155,32 @@ public class CourseServiceImpl implements CourseService {
             }
             // 判断三级id
             if (CourseConstant.Rank.THREE.equals(courseTypeListItemResponse.getRank())) {
-                if (!courseTypeListItemResponse.getParentId().equals(request.getCourseSecondId())) {
-                    AppLogger.warn("三级的父级错误 CourseSecondId:[{}] ParentId:[{}]", request.getCourseSecondId(), courseTypeListItemResponse.getParentId());
+                if (!courseTypeListItemResponse.getParentId().equals(courseSecondId)) {
+                    AppLogger.warn("三级的父级错误 CourseSecondId:[{}] ParentId:[{}]", courseSecondId, courseTypeListItemResponse.getParentId());
                     throw new ApiException(CourseCode.COURSE_TYPE_ID_ERROR);
                 }
             }
         });
+        List<CourseTypeRelation> courseTypeRelationList = new ArrayList<>();
+        courseThreeIdList.forEach(threeId -> {
+            CourseTypeRelation courseTypeRelation = new CourseTypeRelation();
+            courseTypeRelation.setCourseStairId(courseStairId);
+            courseTypeRelation.setCourseSecondId(courseSecondId);
+            courseTypeRelation.setCourseThreeId(threeId);
+            courseTypeRelationList.add(courseTypeRelation);
+        });
+        return courseTypeRelationList;
+    }
+
+    @Override
+    public Integer insertOne(CourseAddRequest request) {
+        List<CourseTypeRelation> courseTypeRelationList = checkCourseRelation(request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeIdList());
 
         // 组装数据
         Course course = new Course();
         course.setCourseName(request.getCourseName());
         course.setCourseCode(request.getCourseCode());
-        ArrayList<CourseTypeRelation> courseTypeRelationList = new ArrayList<>();
-        request.getCourseThreeIdList().forEach(threeId -> {
-            CourseTypeRelation courseTypeRelation = new CourseTypeRelation();
-            courseTypeRelation.setCourseStairId(request.getCourseStairId());
-            courseTypeRelation.setCourseSecondId(request.getCourseSecondId());
-            courseTypeRelation.setCourseThreeId(threeId);
-            courseTypeRelationList.add(courseTypeRelation);
-        });
+
         // 入库
         courseServiceLogic.insertDataAndRelation(course, courseTypeRelationList);
 
@@ -189,6 +210,45 @@ public class CourseServiceImpl implements CourseService {
         response.setTotal(of.getTotal());
         response.setList(courseListItemResponses);
         return response;
+    }
+
+    @Override
+    public CourseViewResponse viewById(Integer courseId) {
+        ArrayList<Integer> idList = new ArrayList<>();
+        idList.add(courseId);
+        List<CourseInfoTypeBo> courseInfoTypeBos = courseExMapper.selectCourseListByIds(idList);
+        if (CollectionUtils.isEmpty(courseInfoTypeBos)) {
+            throw new ApiException(CourseCode.COURSE_ID_NOT_FOUND);
+        }
+        CourseViewResponse courseViewResponse = BeanCopierUtil.convert(courseInfoTypeBos.get(0), CourseViewResponse.class);
+        courseViewResponse.setCourseStairName(courseTypeService.getName(courseViewResponse.getCourseStairId()));
+        courseViewResponse.setCourseSecondName(courseTypeService.getName(courseViewResponse.getCourseSecondId()));
+
+        ArrayList<CourseTypeSimpleResponse> threeList = new ArrayList<>();
+        courseInfoTypeBos.forEach(item -> {
+            CourseTypeSimpleResponse courseTypeSimpleResponse = new CourseTypeSimpleResponse();
+            courseTypeSimpleResponse.setCourseTypeId(item.getCourseThreeId());
+            courseTypeSimpleResponse.setTypeName(courseTypeService.getName(item.getCourseThreeId()));
+            threeList.add(courseTypeSimpleResponse);
+        });
+        courseViewResponse.setCourseThreeList(threeList);
+        return courseViewResponse;
+    }
+
+    @Override
+    public Integer updateById(CourseUpdateRequest request) {
+        // 判断id是否存在
+        byId(request.getCourseId());
+        // 校验关系
+        List<CourseTypeRelation> courseTypeRelationList = checkCourseRelation(request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeIdList());
+        // 入库
+        Course updateCourse = new Course();
+        updateCourse.setCourseId(request.getCourseId());
+        updateCourse.setCourseCode(request.getCourseCode());
+        updateCourse.setCourseName(request.getCourseName());
+
+        courseServiceLogic.deleteRelationAndUpdate(updateCourse, courseTypeRelationList);
+        return updateCourse.getCourseId();
     }
 }
 

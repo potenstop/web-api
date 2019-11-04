@@ -11,7 +11,9 @@ import top.potens.framework.model.ApiResult;
 import top.potens.framework.model.PageResponse;
 import top.potens.web.request.CourseAddRequest;
 import top.potens.web.request.CourseListItemRequest;
+import top.potens.web.request.CourseUpdateRequest;
 import top.potens.web.response.CourseListItemResponse;
+import top.potens.web.response.CourseViewResponse;
 import top.potens.web.service.CourseService;
 
 import javax.validation.Valid;
@@ -64,6 +66,18 @@ public class CourseController {
         result.setData(courseService.selectList(request));
         return result;
     }
-
-
+    @GetMapping("/view")
+    @ApiOperation("查看一个课程记录")
+    public ApiResult<CourseViewResponse> view(@ApiParam(value = "课程id", example = "1") @RequestParam @NotNull Integer courseId) {
+        ApiResult<CourseViewResponse> result = new ApiResult<>();
+        result.setData(courseService.viewById(courseId));
+        return result;
+    }
+    @PostMapping("/update")
+    @ApiOperation("更新一个课程记录")
+    public ApiResult<Integer> update(@RequestBody @Valid CourseUpdateRequest request) {
+        ApiResult<Integer> result = new ApiResult<>();
+        result.setData(courseService.updateById(request));
+        return result;
+    }
 }
