@@ -11,6 +11,7 @@ import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.serialization.JSON;
 import top.potens.framework.util.BeanCopierUtil;
+import top.potens.framework.util.CollectionUtil;
 import top.potens.web.bmo.CourseInfoTypeBo;
 import top.potens.web.code.CourseCode;
 import top.potens.web.common.constant.CourseConstant;
@@ -119,6 +120,7 @@ public class CourseServiceImpl implements CourseService {
             courseListItemResponse.setCourseThreeList(courseTypeSimpleResponseList);
             courseListItemResponseList.add(courseListItemResponse);
         });
+        CollectionUtil.referenceSort(courseListItemResponseList, courseIdList, CourseListItemResponse::getCourseId);
         return courseListItemResponseList;
     }
 
@@ -196,16 +198,7 @@ public class CourseServiceImpl implements CourseService {
             courseName = "%" + courseName + "%";
         }
         List<Integer> courseIdList = courseExMapper.selectCourseIdList(request.getCourseId(), courseName, request.getCourseCode(), request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeId(), request.getOrderBy());
-        Map<Integer, List<CourseListItemResponse>> map = selectItemListByIdList(courseIdList).stream().collect(Collectors.groupingBy(CourseListItemResponse::getCourseId));
-        // 排序
-        List<CourseListItemResponse> courseListItemResponses = new ArrayList<>();
-
-        courseIdList.forEach(id -> {
-            if (map.containsKey(id) && map.get(id).size() == 1) {
-                CourseListItemResponse courseListItemResponse = map.get(id).get(0);
-                courseListItemResponses.add(courseListItemResponse);
-            }
-        });
+        List<CourseListItemResponse> courseListItemResponses = selectItemListByIdList(courseIdList);
         PageResponse<CourseListItemResponse> response = new PageResponse<>();
         PageSerializable<Integer> of = PageSerializable.of(courseIdList);
         response.setTotal(of.getTotal());

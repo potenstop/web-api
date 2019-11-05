@@ -22,16 +22,19 @@
     <select id="selectAlbumCount" resultType="java.lang.Long">
         SELECT COUNT(DISTINCT album.album_id)
         <include refid="filterAlbumList"/>
-        order by album.album_id
     </select>
     <select id="selectAlbumIdList" resultType="java.lang.Integer">
         SELECT album.album_id
         <include refid="filterAlbumList"/>
         group by album.album_id
-        order by album.album_id
+        <choose>
+            <when test="orderBy != null">
+                order by ${orderBy}
+            </when>
+            <otherwise>
+                order by album.album_id desc
+            </otherwise>
+        </choose>
         limit #{limit,jdbcType=INTEGER} offset #{offset,jdbcType=INTEGER}
-        <if test="orderBy != null">
-            order by ${orderBy}
-        </if>
     </select>
 </mapper>

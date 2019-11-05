@@ -8,6 +8,7 @@ import top.potens.framework.exception.ApiException;
 import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.util.BeanCopierUtil;
+import top.potens.framework.util.CollectionUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.CommonIdCountBo;
@@ -114,6 +115,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
 
         }
         response.setTotal(count);
+        CollectionUtil.referenceSort(albumCourseListItemResponseList, idList, AlbumCourseListItemResponse::getAlbumId);
         response.setList(albumCourseListItemResponseList);
         return response;
     }
