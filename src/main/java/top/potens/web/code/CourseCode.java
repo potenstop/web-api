@@ -16,4 +16,5 @@ public class CourseCode {
 
     @ResultMessage("课程id不存在")
     public static final String COURSE_ID_NOT_FOUND = "40001";
+
 }

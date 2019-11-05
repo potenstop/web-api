@@ -50,7 +50,8 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
     private final CourseServiceLogic courseServiceLogic;
 
-    private Course byId(Integer courseId) {
+    @Override
+    public Course byId(Integer courseId) {
         if (courseId == null) {
             throw new ApiException(CourseCode.COURSE_ID_NOT_FOUND);
         }

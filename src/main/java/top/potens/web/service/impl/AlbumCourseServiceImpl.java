@@ -1,24 +1,32 @@
 package top.potens.web.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.potens.framework.exception.ApiException;
 import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.CommonIdCountBo;
+import top.potens.web.code.AlbumCode;
 import top.potens.web.dao.db.auto.AlbumCourseMapper;
 import top.potens.web.dao.db.auto.AlbumMapper;
 import top.potens.web.dao.db.ext.AlbumContentRelationExMapper;
 import top.potens.web.dao.db.ext.AlbumCourseExMapper;
 import top.potens.web.model.*;
+import top.potens.web.request.AlbumCourseAddRequest;
 import top.potens.web.request.AlbumCourseListItemRequest;
+import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
+import top.potens.web.response.AlbumCourseViewResponse;
 import top.potens.web.service.AlbumCourseService;
+import top.potens.web.service.AlbumService;
 import top.potens.web.service.CourseService;
 import top.potens.web.service.CourseTypeService;
+import top.potens.web.service.logic.AlbumCourseServiceLogic;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -44,9 +52,23 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
     private final CourseTypeService courseTypeService;
     private final AlbumContentRelationExMapper albumContentRelationExMapper;
     private final CourseService courseService;
+    private final AlbumCourseServiceLogic albumCourseServiceLogic;
+    private final AlbumService albumService;
 
+    private AlbumCourse byAlbumId(Integer albumId) {
+        if (albumId == null) {
+            throw new ApiException(AlbumCode.ALBUM_ID_ERROR);
+        }
+        AlbumCourseExample albumCourseExample = new AlbumCourseExample();
+        albumCourseExample.createCriteria().andAlbumIdEqualTo(albumId);
+        List<AlbumCourse> albumCourseList = albumCourseMapper.selectByExample(albumCourseExample);
+        if (CollectionUtils.isEmpty(albumCourseList)) {
+            throw new ApiException(AlbumCode.ALBUM_ID_ERROR);
+        }
+        return albumCourseList.get(0);
+    }
     @Override
-    public PageResponse<AlbumCourseListItemResponse> selectCourseList(AlbumCourseListItemRequest request) {
+    public PageResponse<AlbumCourseListItemResponse> selectList(AlbumCourseListItemRequest request) {
         PageResponse<AlbumCourseListItemResponse> response = new PageResponse<>();
         DateScope dateScope = DateUtil.getDateScope(request.getCreateTime());
         Long count = albumCourseExMapper.selectAlbumCount(request.getAlbumId(), request.getAlbumName(), dateScope.getStartDate(), dateScope.getEndDate());
@@ -87,8 +109,6 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
                     item.setCourseId(courseId);
                     item.setCourseName(courseMap.get(courseId).getCourseName());
                 }
-                // 设置分类
-
                 item.setContentCount(albumIdCount.getOrDefault(albumId, 0L));
             });
 
@@ -96,5 +116,50 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
         response.setTotal(count);
         response.setList(albumCourseListItemResponseList);
         return response;
+    }
+
+    @Override
+    public Integer insertOne(AlbumCourseAddRequest request) {
+        // 判断课程id是否存在
+        courseService.byId(request.getCourseId());
+        // 组装数据
+        Album album = new Album();
+        AlbumCourse albumCourse = new AlbumCourse();
+        album.setAlbumName(request.getAlbumName());
+        album.setAlbumDesc(request.getAlbumDesc());
+        albumCourse.setCourseId(request.getCourseId());
+        // 入库
+        albumCourseServiceLogic.insertAlbumCourseAndAlbum(album, albumCourse);
+        return album.getAlbumId();
+    }
+
+    @Override
+    public AlbumCourseViewResponse viewById(Integer albumId) {
+        AlbumCourse albumCourse = byAlbumId(albumId);
+        Album album = albumService.byId(albumId);
+        Course course = courseService.byId(albumCourse.getCourseId());
+        AlbumCourseViewResponse albumCourseViewResponse = new AlbumCourseViewResponse();
+        albumCourseViewResponse.setAlbumId(album.getAlbumId());
+        albumCourseViewResponse.setAlbumName(album.getAlbumName());
+        albumCourseViewResponse.setAlbumDesc(album.getAlbumDesc());
+        albumCourseViewResponse.setCourseId(course.getCourseId());
+        albumCourseViewResponse.setCourseName(course.getCourseName());
+        return albumCourseViewResponse;
+    }
+
+    @Override
+    public Integer updateById(AlbumCourseUpdateRequest request) {
+        AlbumCourse albumCourse = byAlbumId(request.getAlbumId());
+        Album album = albumService.byId(request.getAlbumId());
+        courseService.byId(request.getCourseId());
+        Album updateAlbum = new Album();
+        AlbumCourse updateAlbumCourse = new AlbumCourse();
+        updateAlbum.setAlbumId(album.getAlbumId());
+        updateAlbum.setAlbumName(request.getAlbumName());
+        updateAlbum.setAlbumDesc(request.getAlbumDesc());
+        updateAlbumCourse.setCourseId(request.getCourseId());
+        updateAlbumCourse.setAlbumCourseId(albumCourse.getAlbumCourseId());
+        albumCourseServiceLogic.updateAlbumCourseAndAlbum(updateAlbum, updateAlbumCourse);
+        return album.getAlbumId();
     }
 }

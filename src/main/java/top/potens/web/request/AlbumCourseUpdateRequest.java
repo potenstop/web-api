@@ -1,13 +1,10 @@
 package top.potens.web.request;
 
-import lombok.Data;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * 功能描述:
@@ -18,7 +15,11 @@ import java.util.Date;
  * @date 2019/10/27 17:36
  */
 @Data
-public class AlbumCourseAddRequest {
+public class AlbumCourseUpdateRequest {
+    @ApiModelProperty(value = "专辑id", name = "albumId", required = true, example = "1")
+    @NotNull
+    private Integer albumId;
+
     @ApiModelProperty(value = "专辑名称", name = "albumName", required = true, example = "")
     @NotNull
     @Size(max = 255)
@@ -28,7 +29,7 @@ public class AlbumCourseAddRequest {
     @Size(max = 2000)
     private String albumDesc;
 
-    @ApiModelProperty(value = "课程id", name = "courseId", required = true, example = "")
+    @ApiModelProperty(value = "课程id", name = "courseId", required = true, example = "1")
     @NotNull
     private Integer courseId;
 }

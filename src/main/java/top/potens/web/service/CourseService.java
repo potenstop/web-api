@@ -21,6 +21,17 @@ import java.util.Map;
  */
 public interface CourseService {
     /**
+    *
+    * 方法功能描述: 按id查看课程对象
+    *
+    * @author yanshaowen
+    * @date 2019/11/5 11:38
+    * @param courseId
+    * @return
+    * @throws
+    */
+    Course byId(Integer courseId);
+    /**
      *
      * 方法功能描述: 根据id批量查询课程对象
      *
