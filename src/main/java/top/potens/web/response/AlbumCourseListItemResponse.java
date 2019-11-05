@@ -25,7 +25,4 @@ public class AlbumCourseListItemResponse extends AlbumResponse {
 
     @ApiModelProperty(value = "所属课程名称", name = "courseName", required = true, example = "高等数学")
     private String courseName;
-
-    @ApiModelProperty(value = "所属课程分类", name = "courseTypeRelationList", required = true)
-    private List<CourseTypeRelationResponse> courseTypeRelationList;
 }

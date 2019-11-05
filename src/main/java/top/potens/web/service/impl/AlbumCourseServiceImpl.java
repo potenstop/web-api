@@ -87,6 +87,8 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
                     item.setCourseId(courseId);
                     item.setCourseName(courseMap.get(courseId).getCourseName());
                 }
+                // 设置分类
+
                 item.setContentCount(albumIdCount.getOrDefault(albumId, 0L));
             });
 

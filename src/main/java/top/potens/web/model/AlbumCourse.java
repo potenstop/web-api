@@ -12,12 +12,6 @@ public class AlbumCourse implements Serializable {
 
     private Integer albumId;
 
-    private Integer courseStairId;
-
-    private Integer courseSecondId;
-
-    private Integer courseThreeId;
-
     private Integer courseId;
 
     private static final long serialVersionUID = 1L;
@@ -52,30 +46,6 @@ public class AlbumCourse implements Serializable {
 
     public void setAlbumId(Integer albumId) {
         this.albumId = albumId;
-    }
-
-    public Integer getCourseStairId() {
-        return courseStairId;
-    }
-
-    public void setCourseStairId(Integer courseStairId) {
-        this.courseStairId = courseStairId;
-    }
-
-    public Integer getCourseSecondId() {
-        return courseSecondId;
-    }
-
-    public void setCourseSecondId(Integer courseSecondId) {
-        this.courseSecondId = courseSecondId;
-    }
-
-    public Integer getCourseThreeId() {
-        return courseThreeId;
-    }
-
-    public void setCourseThreeId(Integer courseThreeId) {
-        this.courseThreeId = courseThreeId;
     }
 
     public Integer getCourseId() {

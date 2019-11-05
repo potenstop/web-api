@@ -6,9 +6,6 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="album_id" jdbcType="INTEGER" property="albumId" />
-    <result column="course_stair_id" jdbcType="INTEGER" property="courseStairId" />
-    <result column="course_second_id" jdbcType="INTEGER" property="courseSecondId" />
-    <result column="course_three_id" jdbcType="INTEGER" property="courseThreeId" />
     <result column="course_id" jdbcType="INTEGER" property="courseId" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -70,8 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    album_course_id, create_time, update_time, album_id, course_stair_id, course_second_id, 
-    course_three_id, course_id
+    album_course_id, create_time, update_time, album_id, course_id
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.AlbumCourseExample" resultMap="BaseResultMap">
     select
@@ -108,10 +104,8 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `album_course` (create_time, update_time, album_id, 
-      course_stair_id, course_second_id, course_three_id, 
       course_id)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{albumId,jdbcType=INTEGER}, 
-      #{courseStairId,jdbcType=INTEGER}, #{courseSecondId,jdbcType=INTEGER}, #{courseThreeId,jdbcType=INTEGER}, 
       #{courseId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.AlbumCourse">
@@ -129,15 +123,6 @@
       <if test="albumId != null">
         album_id,
       </if>
-      <if test="courseStairId != null">
-        course_stair_id,
-      </if>
-      <if test="courseSecondId != null">
-        course_second_id,
-      </if>
-      <if test="courseThreeId != null">
-        course_three_id,
-      </if>
       <if test="courseId != null">
         course_id,
       </if>
@@ -151,15 +136,6 @@
       </if>
       <if test="albumId != null">
         #{albumId,jdbcType=INTEGER},
-      </if>
-      <if test="courseStairId != null">
-        #{courseStairId,jdbcType=INTEGER},
-      </if>
-      <if test="courseSecondId != null">
-        #{courseSecondId,jdbcType=INTEGER},
-      </if>
-      <if test="courseThreeId != null">
-        #{courseThreeId,jdbcType=INTEGER},
       </if>
       <if test="courseId != null">
         #{courseId,jdbcType=INTEGER},
@@ -187,15 +163,6 @@
       <if test="record.albumId != null">
         album_id = #{record.albumId,jdbcType=INTEGER},
       </if>
-      <if test="record.courseStairId != null">
-        course_stair_id = #{record.courseStairId,jdbcType=INTEGER},
-      </if>
-      <if test="record.courseSecondId != null">
-        course_second_id = #{record.courseSecondId,jdbcType=INTEGER},
-      </if>
-      <if test="record.courseThreeId != null">
-        course_three_id = #{record.courseThreeId,jdbcType=INTEGER},
-      </if>
       <if test="record.courseId != null">
         course_id = #{record.courseId,jdbcType=INTEGER},
       </if>
@@ -210,9 +177,6 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       album_id = #{record.albumId,jdbcType=INTEGER},
-      course_stair_id = #{record.courseStairId,jdbcType=INTEGER},
-      course_second_id = #{record.courseSecondId,jdbcType=INTEGER},
-      course_three_id = #{record.courseThreeId,jdbcType=INTEGER},
       course_id = #{record.courseId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -230,15 +194,6 @@
       <if test="albumId != null">
         album_id = #{albumId,jdbcType=INTEGER},
       </if>
-      <if test="courseStairId != null">
-        course_stair_id = #{courseStairId,jdbcType=INTEGER},
-      </if>
-      <if test="courseSecondId != null">
-        course_second_id = #{courseSecondId,jdbcType=INTEGER},
-      </if>
-      <if test="courseThreeId != null">
-        course_three_id = #{courseThreeId,jdbcType=INTEGER},
-      </if>
       <if test="courseId != null">
         course_id = #{courseId,jdbcType=INTEGER},
       </if>
@@ -250,9 +205,6 @@
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       album_id = #{albumId,jdbcType=INTEGER},
-      course_stair_id = #{courseStairId,jdbcType=INTEGER},
-      course_second_id = #{courseSecondId,jdbcType=INTEGER},
-      course_three_id = #{courseThreeId,jdbcType=INTEGER},
       course_id = #{courseId,jdbcType=INTEGER}
     where album_course_id = #{albumCourseId,jdbcType=INTEGER}
   </update>
