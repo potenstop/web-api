@@ -93,12 +93,6 @@
         <table tableName="album_content_relation" delimitIdentifiers="true">
             <generatedKey column="album_content_relation_id" sqlStatement="MySql" identity="true" />
         </table>
-        <table tableName="content_select" delimitIdentifiers="true">
-            <generatedKey column="content_select_id" sqlStatement="MySql" identity="true" />
-        </table>
-        <table tableName="content_select_option" delimitIdentifiers="true">
-            <generatedKey column="content_select_option_id" sqlStatement="MySql" identity="true" />
-        </table>
         <table tableName="course_type" delimitIdentifiers="true">
             <generatedKey column="course_type_id" sqlStatement="MySql" identity="true" />
         </table>
@@ -110,6 +104,13 @@
         </table>
         <table tableName="course_type_relation" delimitIdentifiers="true">
             <generatedKey column="course_type_relation_id" sqlStatement="MySql" identity="true" />
+        </table>
+
+        <table tableName="content_topic" delimitIdentifiers="true">
+            <generatedKey column="content_topic_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="content_topic_select_option" delimitIdentifiers="true">
+            <generatedKey column="content_topic_select_option_id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>

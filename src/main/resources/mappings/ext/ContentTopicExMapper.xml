@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.potens.web.dao.db.ext.ContentTopicExMapper">
+    <select id="selectIdListByFilter" resultType="java.lang.Integer">
+        select content.content_id
+        FROM content_topic
+        INNER JOIN content ON content.content_id=content_topic.content_id
+        <where>
+            <if test="contentId != null">
+                and content.content_id = #{contentId,jdbcType=INTEGER}
+            </if>
+            <if test="title != null">
+                and content_topic.title like #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="createTimeStart != null">
+                and content_topic.create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTimeEnd != null">
+                and content_topic.create_time &lt;= #{createTimeEnd,jdbcType=TIMESTAMP}
+            </if>
+            <if test="state != null">
+                and content.state = #{state,jdbcType=INTEGER}
+            </if>
+        </where>
+        <choose>
+            <when test="myOrderBy != null">
+                order by ${myOrderBy}
+            </when>
+            <otherwise>
+                order by content.content_id desc
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

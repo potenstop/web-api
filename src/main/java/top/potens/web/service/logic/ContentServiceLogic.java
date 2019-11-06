@@ -7,16 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.serialization.JSON;
-import top.potens.web.dao.db.auto.ContentCommentMapper;
-import top.potens.web.dao.db.auto.ContentMapper;
-import top.potens.web.dao.db.auto.ContentNewsMapper;
+import top.potens.framework.util.StringUtil;
+import top.potens.web.dao.db.auto.*;
 import top.potens.web.model.*;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wenshao on 2019/7/21.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className ContentServiceLogic
+ * @projectName web-api
+ * @date 2019/11/1 14:23
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -24,6 +28,8 @@ public class ContentServiceLogic {
     private final ContentMapper contentMapper;
     private final ContentNewsMapper contentNewsMapper;
     private final ContentCommentMapper contentCommentMapper;
+    private final ContentTopicMapper contentTopicMapper;
+    private final ContentTopicSelectOptionMapper contentTopicSelectOptionMapper;
 
     /***
      * 插入新闻数据
@@ -63,5 +69,27 @@ public class ContentServiceLogic {
             }
         });
         return contentId;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void insertContentAndTopic(Content content, ContentTopic contentTopic, List<ContentTopicSelectOption> contentTopicSelectOptionList) {
+        Date now = new Date();
+        content.setCreateTime(now);
+        content.setUpdateTime(now);
+        content.setOutId(StringUtil.getUuid());
+        contentMapper.insertSelective(content);
+        contentTopic.setCreateTime(now);
+        contentTopic.setUpdateTime(now);
+        contentTopic.setContentId(content.getContentId());
+        contentTopicMapper.insertSelective(contentTopic);
+        if (CollectionUtils.isNotEmpty(contentTopicSelectOptionList)) {
+            contentTopicSelectOptionList.forEach(contentTopicSelectOption -> {
+                contentTopicSelectOption.setCreateTime(now);
+                contentTopicSelectOption.setUpdateTime(now);
+                contentTopicSelectOption.setContentId(content.getContentId());
+                contentTopicSelectOption.setContentTopicId(contentTopic.getContentTopicId());
+                contentTopicSelectOptionMapper.insertSelective(contentTopicSelectOption);
+            });
+        }
     }
 }

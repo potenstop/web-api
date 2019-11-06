@@ -28,8 +28,8 @@
         <include refid="filterAlbumList"/>
         group by album.album_id
         <choose>
-            <when test="orderBy != null">
-                order by ${orderBy}
+            <when test="myOrderBy != null">
+                order by ${myOrderBy}
             </when>
             <otherwise>
                 order by album.album_id desc

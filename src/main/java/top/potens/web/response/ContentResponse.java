@@ -41,4 +41,7 @@ public class ContentResponse {
 
     @ApiModelProperty(value = "外部链接", name = "outUrl", required = true, example = "")
     private String outUrl;
+
+    @ApiModelProperty(value = "内容类型 1:news新闻 2:select选择题 3:formulation", name = "contentType", required = true, example = "1")
+    private Integer contentType;
 }

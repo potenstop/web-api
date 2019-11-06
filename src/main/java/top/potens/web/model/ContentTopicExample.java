@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ContentSelectExample {
+public class ContentTopicExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ContentSelectExample() {
+    public ContentTopicExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,63 +105,63 @@ public class ContentSelectExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andContentSelectIdIsNull() {
-            addCriterion("content_select_id is null");
+        public Criteria andContentTopicIdIsNull() {
+            addCriterion("content_topic_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdIsNotNull() {
-            addCriterion("content_select_id is not null");
+        public Criteria andContentTopicIdIsNotNull() {
+            addCriterion("content_topic_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdEqualTo(Integer value) {
-            addCriterion("content_select_id =", value, "contentSelectId");
+        public Criteria andContentTopicIdEqualTo(Integer value) {
+            addCriterion("content_topic_id =", value, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdNotEqualTo(Integer value) {
-            addCriterion("content_select_id <>", value, "contentSelectId");
+        public Criteria andContentTopicIdNotEqualTo(Integer value) {
+            addCriterion("content_topic_id <>", value, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdGreaterThan(Integer value) {
-            addCriterion("content_select_id >", value, "contentSelectId");
+        public Criteria andContentTopicIdGreaterThan(Integer value) {
+            addCriterion("content_topic_id >", value, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("content_select_id >=", value, "contentSelectId");
+        public Criteria andContentTopicIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("content_topic_id >=", value, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdLessThan(Integer value) {
-            addCriterion("content_select_id <", value, "contentSelectId");
+        public Criteria andContentTopicIdLessThan(Integer value) {
+            addCriterion("content_topic_id <", value, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdLessThanOrEqualTo(Integer value) {
-            addCriterion("content_select_id <=", value, "contentSelectId");
+        public Criteria andContentTopicIdLessThanOrEqualTo(Integer value) {
+            addCriterion("content_topic_id <=", value, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdIn(List<Integer> values) {
-            addCriterion("content_select_id in", values, "contentSelectId");
+        public Criteria andContentTopicIdIn(List<Integer> values) {
+            addCriterion("content_topic_id in", values, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdNotIn(List<Integer> values) {
-            addCriterion("content_select_id not in", values, "contentSelectId");
+        public Criteria andContentTopicIdNotIn(List<Integer> values) {
+            addCriterion("content_topic_id not in", values, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdBetween(Integer value1, Integer value2) {
-            addCriterion("content_select_id between", value1, value2, "contentSelectId");
+        public Criteria andContentTopicIdBetween(Integer value1, Integer value2) {
+            addCriterion("content_topic_id between", value1, value2, "contentTopicId");
             return (Criteria) this;
         }
 
-        public Criteria andContentSelectIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("content_select_id not between", value1, value2, "contentSelectId");
+        public Criteria andContentTopicIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("content_topic_id not between", value1, value2, "contentTopicId");
             return (Criteria) this;
         }
 
@@ -285,63 +285,133 @@ public class ContentSelectExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsSignIsNull() {
-            addCriterion("is_sign is null");
+        public Criteria andTitleIsNull() {
+            addCriterion("title is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignIsNotNull() {
-            addCriterion("is_sign is not null");
+        public Criteria andTitleIsNotNull() {
+            addCriterion("title is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignEqualTo(Integer value) {
-            addCriterion("is_sign =", value, "isSign");
+        public Criteria andTitleEqualTo(String value) {
+            addCriterion("title =", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignNotEqualTo(Integer value) {
-            addCriterion("is_sign <>", value, "isSign");
+        public Criteria andTitleNotEqualTo(String value) {
+            addCriterion("title <>", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignGreaterThan(Integer value) {
-            addCriterion("is_sign >", value, "isSign");
+        public Criteria andTitleGreaterThan(String value) {
+            addCriterion("title >", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignGreaterThanOrEqualTo(Integer value) {
-            addCriterion("is_sign >=", value, "isSign");
+        public Criteria andTitleGreaterThanOrEqualTo(String value) {
+            addCriterion("title >=", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignLessThan(Integer value) {
-            addCriterion("is_sign <", value, "isSign");
+        public Criteria andTitleLessThan(String value) {
+            addCriterion("title <", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignLessThanOrEqualTo(Integer value) {
-            addCriterion("is_sign <=", value, "isSign");
+        public Criteria andTitleLessThanOrEqualTo(String value) {
+            addCriterion("title <=", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignIn(List<Integer> values) {
-            addCriterion("is_sign in", values, "isSign");
+        public Criteria andTitleLike(String value) {
+            addCriterion("title like", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignNotIn(List<Integer> values) {
-            addCriterion("is_sign not in", values, "isSign");
+        public Criteria andTitleNotLike(String value) {
+            addCriterion("title not like", value, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignBetween(Integer value1, Integer value2) {
-            addCriterion("is_sign between", value1, value2, "isSign");
+        public Criteria andTitleIn(List<String> values) {
+            addCriterion("title in", values, "title");
             return (Criteria) this;
         }
 
-        public Criteria andIsSignNotBetween(Integer value1, Integer value2) {
-            addCriterion("is_sign not between", value1, value2, "isSign");
+        public Criteria andTitleNotIn(List<String> values) {
+            addCriterion("title not in", values, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleBetween(String value1, String value2) {
+            addCriterion("title between", value1, value2, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleNotBetween(String value1, String value2) {
+            addCriterion("title not between", value1, value2, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdIsNull() {
+            addCriterion("content_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdIsNotNull() {
+            addCriterion("content_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdEqualTo(Integer value) {
+            addCriterion("content_id =", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdNotEqualTo(Integer value) {
+            addCriterion("content_id <>", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdGreaterThan(Integer value) {
+            addCriterion("content_id >", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("content_id >=", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdLessThan(Integer value) {
+            addCriterion("content_id <", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("content_id <=", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdIn(List<Integer> values) {
+            addCriterion("content_id in", values, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdNotIn(List<Integer> values) {
+            addCriterion("content_id not in", values, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdBetween(Integer value1, Integer value2) {
+            addCriterion("content_id between", value1, value2, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("content_id not between", value1, value2, "contentId");
             return (Criteria) this;
         }
 
@@ -482,6 +552,66 @@ public class ContentSelectExample {
 
         public Criteria andAnalysisNotBetween(String value1, String value2) {
             addCriterion("analysis not between", value1, value2, "analysis");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeIsNull() {
+            addCriterion("topic_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeIsNotNull() {
+            addCriterion("topic_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeEqualTo(Integer value) {
+            addCriterion("topic_type =", value, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeNotEqualTo(Integer value) {
+            addCriterion("topic_type <>", value, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeGreaterThan(Integer value) {
+            addCriterion("topic_type >", value, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("topic_type >=", value, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeLessThan(Integer value) {
+            addCriterion("topic_type <", value, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("topic_type <=", value, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeIn(List<Integer> values) {
+            addCriterion("topic_type in", values, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeNotIn(List<Integer> values) {
+            addCriterion("topic_type not in", values, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeBetween(Integer value1, Integer value2) {
+            addCriterion("topic_type between", value1, value2, "topicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andTopicTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("topic_type not between", value1, value2, "topicType");
             return (Criteria) this;
         }
     }

@@ -3,27 +3,31 @@ package top.potens.web.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ContentSelect implements Serializable {
-    private Integer contentSelectId;
+public class ContentTopic implements Serializable {
+    private Integer contentTopicId;
 
     private Date createTime;
 
     private Date updateTime;
 
-    private Integer isSign;
+    private String title;
+
+    private Integer contentId;
 
     private String answer;
 
     private String analysis;
 
+    private Integer topicType;
+
     private static final long serialVersionUID = 1L;
 
-    public Integer getContentSelectId() {
-        return contentSelectId;
+    public Integer getContentTopicId() {
+        return contentTopicId;
     }
 
-    public void setContentSelectId(Integer contentSelectId) {
-        this.contentSelectId = contentSelectId;
+    public void setContentTopicId(Integer contentTopicId) {
+        this.contentTopicId = contentTopicId;
     }
 
     public Date getCreateTime() {
@@ -42,12 +46,20 @@ public class ContentSelect implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public Integer getIsSign() {
-        return isSign;
+    public String getTitle() {
+        return title;
     }
 
-    public void setIsSign(Integer isSign) {
-        this.isSign = isSign;
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public Integer getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Integer contentId) {
+        this.contentId = contentId;
     }
 
     public String getAnswer() {
@@ -64,5 +76,13 @@ public class ContentSelect implements Serializable {
 
     public void setAnalysis(String analysis) {
         this.analysis = analysis == null ? null : analysis.trim();
+    }
+
+    public Integer getTopicType() {
+        return topicType;
+    }
+
+    public void setTopicType(Integer topicType) {
+        this.topicType = topicType;
     }
 }

@@ -16,4 +16,16 @@ public class ContentCode {
 
     @ResultMessage("分区没有找到")
     public static final String CONTENT_ZONE_NOT_FOUND = "30001";
+
+    @ResultMessage("内容没有找到")
+    public static final String CONTENT_ID_NOT_FOUND = "30002";
+
+    @ResultMessage("题目类型错误")
+    public static final String CONTENT_TOPIC_TYPE_ERROR = "30003";
+
+    @ResultMessage("内容状态错误")
+    public static final String CONTENT_STATE_ERROR = "30004";
+
+    @ResultMessage("内容状态错误")
+    public static final String CONTENT_SELECT_NOT_OPTION   = "30005";
 }

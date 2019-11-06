@@ -37,11 +37,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Created by wenshao on 2019/7/20.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className ContentNewsServiceImpl
+ * @projectName web-api
+ * @date 2019/6/27 17:56
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ContentNewsImpl implements ContentNewsService {
+public class ContentNewsServiceImpl implements ContentNewsService {
     private final CacheServiceLogic cacheServiceLogic;
     private final ContentServiceLogic contentServiceLogic;
     private final ContentLabelExMapper contentLabelExMapper;

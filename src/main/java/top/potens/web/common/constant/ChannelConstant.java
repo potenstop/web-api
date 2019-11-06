@@ -25,5 +25,10 @@ public class ChannelConstant {
          * 网易用户_爬虫
          */
         public static final String SELF_LDAP = "self_ldap";
+
+        /**
+         * 本网站录入
+         */
+        public static final String SELF_INSERT = "self_insert";
     }
 }

@@ -4,10 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 /**
@@ -22,12 +19,12 @@ import java.util.List;
 @Data
 public class CourseAddRequest {
     @ApiModelProperty(value = "课程名称", name = "courseName", required = true, example = "")
-    @NotNull
+    @NotBlank
     @Size(max = 255)
     private String courseName;
 
     @ApiModelProperty(value = "课程代码", name = "courseCode", required = true, example = "")
-    @NotNull
+    @NotBlank
     @Size(max = 50)
     private String courseCode;
 

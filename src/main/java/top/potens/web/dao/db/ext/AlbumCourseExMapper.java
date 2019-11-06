@@ -48,7 +48,7 @@ public interface AlbumCourseExMapper {
     */
 
     List<Integer> selectAlbumIdList(
-            @Param("limit") Integer limit, @Param("offset") Long offset, @Param("orderBy") String orderBy,
+            @Param("limit") Integer limit, @Param("offset") Long offset, @Param("myOrderBy") String orderBy,
             @Param("albumId") Integer albumId, @Param("albumName") String albumName,
             @Param("createTimeStart") Date createTimeStart, @Param("createTimeEnd") Date createTimeEnd);
 }

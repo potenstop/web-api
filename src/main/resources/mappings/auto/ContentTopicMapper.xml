@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.potens.web.dao.db.auto.ContentSelectMapper">
-  <resultMap id="BaseResultMap" type="top.potens.web.model.ContentSelect">
-    <id column="content_select_id" jdbcType="INTEGER" property="contentSelectId" />
+<mapper namespace="top.potens.web.dao.db.auto.ContentTopicMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.ContentTopic">
+    <id column="content_topic_id" jdbcType="INTEGER" property="contentTopicId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="is_sign" jdbcType="TINYINT" property="isSign" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content_id" jdbcType="INTEGER" property="contentId" />
     <result column="answer" jdbcType="VARCHAR" property="answer" />
     <result column="analysis" jdbcType="VARCHAR" property="analysis" />
+    <result column="topic_type" jdbcType="TINYINT" property="topicType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,15 +70,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    content_select_id, create_time, update_time, is_sign, answer, analysis
+    content_topic_id, create_time, update_time, title, content_id, answer, analysis, 
+    topic_type
   </sql>
-  <select id="selectByExample" parameterType="top.potens.web.model.ContentSelectExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="top.potens.web.model.ContentTopicExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from `content_select`
+    from `content_topic`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,33 +90,35 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from `content_select`
-    where content_select_id = #{contentSelectId,jdbcType=INTEGER}
+    from `content_topic`
+    where content_topic_id = #{contentTopicId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from `content_select`
-    where content_select_id = #{contentSelectId,jdbcType=INTEGER}
+    delete from `content_topic`
+    where content_topic_id = #{contentTopicId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="top.potens.web.model.ContentSelectExample">
-    delete from `content_select`
+  <delete id="deleteByExample" parameterType="top.potens.web.model.ContentTopicExample">
+    delete from `content_topic`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="top.potens.web.model.ContentSelect">
-    <selectKey keyProperty="contentSelectId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="top.potens.web.model.ContentTopic">
+    <selectKey keyProperty="contentTopicId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `content_select` (create_time, update_time, is_sign, 
-      answer, analysis)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isSign,jdbcType=TINYINT}, 
-      #{answer,jdbcType=VARCHAR}, #{analysis,jdbcType=VARCHAR})
+    insert into `content_topic` (create_time, update_time, title, 
+      content_id, answer, analysis, 
+      topic_type)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
+      #{contentId,jdbcType=INTEGER}, #{answer,jdbcType=VARCHAR}, #{analysis,jdbcType=VARCHAR}, 
+      #{topicType,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="top.potens.web.model.ContentSelect">
-    <selectKey keyProperty="contentSelectId" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="top.potens.web.model.ContentTopic">
+    <selectKey keyProperty="contentTopicId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into `content_select`
+    insert into `content_topic`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
         create_time,
@@ -121,14 +126,20 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="isSign != null">
-        is_sign,
+      <if test="title != null">
+        title,
+      </if>
+      <if test="contentId != null">
+        content_id,
       </if>
       <if test="answer != null">
         answer,
       </if>
       <if test="analysis != null">
         analysis,
+      </if>
+      <if test="topicType != null">
+        topic_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -138,8 +149,11 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isSign != null">
-        #{isSign,jdbcType=TINYINT},
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="contentId != null">
+        #{contentId,jdbcType=INTEGER},
       </if>
       <if test="answer != null">
         #{answer,jdbcType=VARCHAR},
@@ -147,19 +161,22 @@
       <if test="analysis != null">
         #{analysis,jdbcType=VARCHAR},
       </if>
+      <if test="topicType != null">
+        #{topicType,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="top.potens.web.model.ContentSelectExample" resultType="java.lang.Long">
-    select count(*) from `content_select`
+  <select id="countByExample" parameterType="top.potens.web.model.ContentTopicExample" resultType="java.lang.Long">
+    select count(*) from `content_topic`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update `content_select`
+    update `content_topic`
     <set>
-      <if test="record.contentSelectId != null">
-        content_select_id = #{record.contentSelectId,jdbcType=INTEGER},
+      <if test="record.contentTopicId != null">
+        content_topic_id = #{record.contentTopicId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -167,8 +184,11 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isSign != null">
-        is_sign = #{record.isSign,jdbcType=TINYINT},
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentId != null">
+        content_id = #{record.contentId,jdbcType=INTEGER},
       </if>
       <if test="record.answer != null">
         answer = #{record.answer,jdbcType=VARCHAR},
@@ -176,25 +196,30 @@
       <if test="record.analysis != null">
         analysis = #{record.analysis,jdbcType=VARCHAR},
       </if>
+      <if test="record.topicType != null">
+        topic_type = #{record.topicType,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update `content_select`
-    set content_select_id = #{record.contentSelectId,jdbcType=INTEGER},
+    update `content_topic`
+    set content_topic_id = #{record.contentTopicId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      is_sign = #{record.isSign,jdbcType=TINYINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      content_id = #{record.contentId,jdbcType=INTEGER},
       answer = #{record.answer,jdbcType=VARCHAR},
-      analysis = #{record.analysis,jdbcType=VARCHAR}
+      analysis = #{record.analysis,jdbcType=VARCHAR},
+      topic_type = #{record.topicType,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.ContentSelect">
-    update `content_select`
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.ContentTopic">
+    update `content_topic`
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -202,8 +227,11 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isSign != null">
-        is_sign = #{isSign,jdbcType=TINYINT},
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="contentId != null">
+        content_id = #{contentId,jdbcType=INTEGER},
       </if>
       <if test="answer != null">
         answer = #{answer,jdbcType=VARCHAR},
@@ -211,16 +239,21 @@
       <if test="analysis != null">
         analysis = #{analysis,jdbcType=VARCHAR},
       </if>
+      <if test="topicType != null">
+        topic_type = #{topicType,jdbcType=TINYINT},
+      </if>
     </set>
-    where content_select_id = #{contentSelectId,jdbcType=INTEGER}
+    where content_topic_id = #{contentTopicId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.ContentSelect">
-    update `content_select`
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.ContentTopic">
+    update `content_topic`
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      is_sign = #{isSign,jdbcType=TINYINT},
+      title = #{title,jdbcType=VARCHAR},
+      content_id = #{contentId,jdbcType=INTEGER},
       answer = #{answer,jdbcType=VARCHAR},
-      analysis = #{analysis,jdbcType=VARCHAR}
-    where content_select_id = #{contentSelectId,jdbcType=INTEGER}
+      analysis = #{analysis,jdbcType=VARCHAR},
+      topic_type = #{topicType,jdbcType=TINYINT}
+    where content_topic_id = #{contentTopicId,jdbcType=INTEGER}
   </update>
 </mapper>
