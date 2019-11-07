@@ -5,21 +5,26 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.potens.framework.annotation.Lock;
+import top.potens.framework.enums.LockModel;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
+import top.potens.web.code.CommonCode;
 import top.potens.web.code.ContentCode;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.constant.ContentConstant;
 import top.potens.web.common.constant.ContentTopicConstant;
+import top.potens.web.common.constant.LockConstant;
 import top.potens.web.dao.db.auto.ContentTopicMapper;
 import top.potens.web.dao.db.auto.ContentTopicSelectOptionMapper;
 import top.potens.web.dao.db.ext.ContentTopicExMapper;
 import top.potens.web.model.*;
 import top.potens.web.request.ContentTopicAddRequest;
 import top.potens.web.request.ContentTopicListItemRequest;
+import top.potens.web.request.ContentTopicSelectOptionRequest;
 import top.potens.web.request.ContentTopicUpdateRequest;
 import top.potens.web.response.ContentTopicListItemResponse;
 import top.potens.web.response.ContentTopicSelectOptionResponse;
@@ -30,6 +35,7 @@ import top.potens.web.service.logic.CacheServiceLogic;
 import top.potens.web.service.logic.ContentServiceLogic;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -170,8 +176,83 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         return contentTopicViewResponse;
     }
 
+    private void checkOptionIdNotFoundByOptionList(List<ContentTopicSelectOptionRequest> optionList) {
+        if (CollectionUtils.isNotEmpty(optionList)) {
+            optionList.forEach(item -> {
+                if (item.getContentTopicSelectOptionId() == null) {
+                    throw new ApiException(ContentCode.CONTENT_SELECT_OPTION_ID_NOT_PARAMS);
+                }
+            });
+        }
+    }
+
     @Override
+    @Lock(lockModel = LockModel.FAIR, keys = LockConstant.CONTENT_TOPIC_UPDATE + "#{#request.contentId}", attemptTimeout = 10, lockWatchTimeout = 120)
     public Integer updateById(ContentTopicUpdateRequest request) {
+        // 判断id是否存在
+        ContentTopicViewResponse contentTopicViewResponse = viewById(request.getContentId());
+        // 判断删除和修改的必填id
+        checkOptionIdNotFoundByOptionList(request.getModifyOptionList());
+        // 验证状态
+        if (!ContentConstant.ContentState.ONLINE.equals(request.getState()) && !ContentConstant.ContentState.OFFLINE.equals(request.getState())) {
+            throw new ApiException(ContentCode.CONTENT_STATE_ERROR);
+        }
+
+        // 查询库里的数据
+
+        Content updateContent = new Content();
+        ContentTopic updateContentTopic = new ContentTopic();
+
+        updateContent.setState(request.getState());
+        updateContent.setContentId(contentTopicViewResponse.getContentId());
+
+        updateContentTopic.setContentTopicId(contentTopicViewResponse.getContentTopicId());
+        updateContentTopic.setTitle(request.getTitle());
+        updateContentTopic.setAnalysis(request.getAnalysis());
+        updateContentTopic.setAnswer(request.getAnswer());
+        // 选择题处理
+        List<ContentTopicSelectOption> addContentTopicSelectOptionList = new ArrayList<>();
+        List<Integer> removeContentTopicSelectOptionIdList = new ArrayList<>();
+        List<ContentTopicSelectOption> modifyContentTopicSelectOptionList = new ArrayList<>();
+        if (ContentTopicConstant.TopicType.SIGN_SELECT.equals(contentTopicViewResponse.getTopicType()) || ContentTopicConstant.TopicType.MUL_SELECT.equals(contentTopicViewResponse.getTopicType())) {
+            Map<Integer, ContentTopicSelectOptionResponse> contentTopicSelectOptionResponseMap = contentTopicViewResponse.getAddOptionList().stream().collect(Collectors.toMap(ContentTopicSelectOptionResponse::getContentTopicSelectOptionId, v -> v));
+            Date now = new Date();
+            if (CollectionUtils.isNotEmpty(request.getAddOptionList())) {
+                request.getAddOptionList().forEach(item -> {
+                    ContentTopicSelectOption contentTopicSelectOption = new ContentTopicSelectOption();
+                    contentTopicSelectOption.setIsOptionAnswer(item.getIsOptionAnswer());
+                    contentTopicSelectOption.setOptionLabel(item.getOptionLabel());
+                    contentTopicSelectOption.setContentId(contentTopicViewResponse.getContentId());
+                    contentTopicSelectOption.setContentTopicId(contentTopicViewResponse.getContentTopicId());
+                    contentTopicSelectOption.setCreateTime(now);
+                    contentTopicSelectOption.setUpdateTime(now);
+                    addContentTopicSelectOptionList.add(contentTopicSelectOption);
+                });
+            }
+            if (CollectionUtils.isNotEmpty(request.getRemoveOptionIdList())) {
+                request.getRemoveOptionIdList().forEach(item -> {
+                    if (!contentTopicSelectOptionResponseMap.containsKey(item)) {
+                        throw new ApiException(ContentCode.CONTENT_SELECT_OPTION_ID_NOT_FOUND);
+                    }
+                    removeContentTopicSelectOptionIdList.add(item);
+                });
+            }
+            if (CollectionUtils.isNotEmpty(request.getModifyOptionList())) {
+                request.getModifyOptionList().forEach(item -> {
+                    if (!contentTopicSelectOptionResponseMap.containsKey(item.getContentTopicSelectOptionId())) {
+                        throw new ApiException(ContentCode.CONTENT_SELECT_OPTION_ID_NOT_FOUND);
+                    }
+                    ContentTopicSelectOption contentTopicSelectOption = new ContentTopicSelectOption();
+                    contentTopicSelectOption.setContentTopicSelectOptionId(item.getContentTopicSelectOptionId());
+                    contentTopicSelectOption.setOptionLabel(item.getOptionLabel());
+                    contentTopicSelectOption.setIsOptionAnswer(item.getIsOptionAnswer());
+                    modifyContentTopicSelectOptionList.add(contentTopicSelectOption);
+                });
+            }
+        }
+
+        // 入库
+        contentServiceLogic.updateContentAndTopic(updateContent, updateContentTopic, addContentTopicSelectOptionList, removeContentTopicSelectOptionIdList, modifyContentTopicSelectOptionList);
         return null;
     }
 }

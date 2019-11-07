@@ -73,6 +73,8 @@ public class ContentServiceLogic {
 
     @Transactional(rollbackFor = Exception.class)
     public void insertContentAndTopic(Content content, ContentTopic contentTopic, List<ContentTopicSelectOption> contentTopicSelectOptionList) {
+        AppLogger.info("开始插入题目数据 content:[{}] contentTopic:[{}] contentTopicSelectOptionList:[{}]",
+                JSON.toJSONString(content), JSON.toJSONString(contentTopic), JSON.toJSONString(contentTopicSelectOptionList));
         Date now = new Date();
         content.setCreateTime(now);
         content.setUpdateTime(now);
@@ -91,5 +93,28 @@ public class ContentServiceLogic {
                 contentTopicSelectOptionMapper.insertSelective(contentTopicSelectOption);
             });
         }
+        AppLogger.info("结束插入题目数据 contentId:[{}]", content.getContentId());
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateContentAndTopic(Content content, ContentTopic contentTopic, List<ContentTopicSelectOption> addContentTopicSelectOptionList, List<Integer> removeContentTopicSelectOptionIdList, List<ContentTopicSelectOption> modifyContentTopicSelectOptionList) {
+        AppLogger.info("开始更新题目数据 content:[{}] contentTopic:[{}] addContentTopicSelectOptionList:[{}] removeContentTopicSelectOptionIdList:[{}] modifyContentTopicSelectOptionList:[{}]",
+                JSON.toJSONString(content), JSON.toJSONString(contentTopic),
+                JSON.toJSONString(addContentTopicSelectOptionList), JSON.toJSONString(removeContentTopicSelectOptionIdList),
+                JSON.toJSONString(modifyContentTopicSelectOptionList));
+
+        contentMapper.updateByPrimaryKeySelective(content);
+        contentTopicMapper.updateByPrimaryKeySelective(contentTopic);
+        if (CollectionUtils.isNotEmpty(addContentTopicSelectOptionList)) {
+            addContentTopicSelectOptionList.forEach(contentTopicSelectOptionMapper::insertSelective);
+        }
+        if (CollectionUtils.isNotEmpty(removeContentTopicSelectOptionIdList)) {
+            ContentTopicSelectOptionExample contentTopicSelectOptionExample = new ContentTopicSelectOptionExample();
+            contentTopicSelectOptionExample.createCriteria().andContentTopicSelectOptionIdIn(removeContentTopicSelectOptionIdList);
+            contentTopicSelectOptionMapper.deleteByExample(contentTopicSelectOptionExample);
+        }
+        if (CollectionUtils.isNotEmpty(modifyContentTopicSelectOptionList)) {
+            modifyContentTopicSelectOptionList.forEach(contentTopicSelectOptionMapper::updateByPrimaryKeySelective);
+        }
+        AppLogger.info("结束更新题目数据 contentId:[{}]", content.getContentId());
     }
 }

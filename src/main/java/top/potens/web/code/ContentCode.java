@@ -27,5 +27,11 @@ public class ContentCode {
     public static final String CONTENT_STATE_ERROR = "30004";
 
     @ResultMessage("内容状态错误")
-    public static final String CONTENT_SELECT_NOT_OPTION   = "30005";
+    public static final String CONTENT_SELECT_NOT_OPTION = "30005";
+
+    @ResultMessage("选项id没有传")
+    public static final String CONTENT_SELECT_OPTION_ID_NOT_PARAMS = "30006";
+
+    @ResultMessage("选项id没有找到")
+    public static final String CONTENT_SELECT_OPTION_ID_NOT_FOUND = "30007";
 }

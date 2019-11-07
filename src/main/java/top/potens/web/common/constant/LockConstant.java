@@ -18,4 +18,9 @@ public class LockConstant {
      * 外部新闻id
      */
     public static final String LDAP_LOGIN = "ldap:login:";
+
+    /**
+     * 题目更新
+     */
+    public static final String CONTENT_TOPIC_UPDATE = "content:topic:update:";
 }

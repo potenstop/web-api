@@ -19,8 +19,11 @@ import java.util.List;
  */
 @Data
 public class ContentTopicViewResponse {
-    @ApiModelProperty(value = "id", name = "contentId", required = true, example = "1")
+    @ApiModelProperty(value = "内容id", name = "contentId", required = true, example = "1")
     private Integer contentId;
+
+    @ApiModelProperty(value = "题目id 不对外展示", name = "contentTopicId", required = true, example = "1")
+    private Integer contentTopicId;
 
     @ApiModelProperty(value = "状态 1 展示 2 不展示", name = "state", required = true, example = "1")
     private Integer state;

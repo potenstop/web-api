@@ -46,9 +46,9 @@ public class ContentTopicUpdateRequest {
     @Valid
     private List<ContentTopicSelectOptionRequest> addOptionList;
 
-    @ApiModelProperty(value = "删除的选项列表", name = "removeOptionList", required = false)
+    @ApiModelProperty(value = "删除的id列表", name = "removeOptionIdList", required = false)
     @Valid
-    private List<ContentTopicSelectOptionRequest> removeOptionList;
+    private List<Integer> removeOptionIdList;
 
     @ApiModelProperty(value = "修改的选项列表", name = "modifyOptionList", required = false)
     @Valid
