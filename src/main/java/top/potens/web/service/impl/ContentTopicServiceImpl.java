@@ -97,7 +97,8 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         if (title != null) {
             title = "%" + title + "%";
         }
-        List<Integer> idList = contentTopicExMapper.selectIdListByFilter(request.getContentId(), dateScope.getStartDate(), dateScope.getEndDate(), title, request.getState(), request.getOrderBy());
+        List<Integer> idList = contentTopicExMapper.selectIdListByFilter(request.getContentId(), dateScope.getStartDate(),
+                dateScope.getEndDate(), title, request.getState(), request.getOrderBy(), request.getContentIdList());
         Map<Integer, Content> contentMap = contentService.byIdListResultMap(idList);
         Map<Integer, ContentTopic> contentTopicMap = byIdListResultMap(idList);
         List<ContentTopicListItemResponse> contentTopicListItemResponses = new ArrayList<>();

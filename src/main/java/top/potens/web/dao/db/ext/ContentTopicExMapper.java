@@ -26,6 +26,7 @@ public interface ContentTopicExMapper {
     * @param title
     * @param state
     * @param orderBy
+    * @param contentIdList
     * @return
     * @throws
     */
@@ -35,6 +36,7 @@ public interface ContentTopicExMapper {
             @Param("createTimeEnd") Date createTimeEnd,
             @Param("title") String title,
             @Param("state") Integer state,
-            @Param("myOrderBy") String orderBy
+            @Param("myOrderBy") String orderBy,
+            @Param("contentIdList") List<Integer> contentIdList
     );
 }

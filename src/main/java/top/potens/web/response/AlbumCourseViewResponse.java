@@ -3,6 +3,8 @@ package top.potens.web.response;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 功能描述:
  *
@@ -27,4 +29,7 @@ public class AlbumCourseViewResponse {
 
     @ApiModelProperty(value = "课程名称", name = "courseName", required = true, example = "")
     private String courseName;
+
+    @ApiModelProperty(value = "绑定题目id列表", name = "contentIdList", required = true)
+    private List<Integer> contentIdList;
 }

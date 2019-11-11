@@ -15,6 +15,7 @@ import top.potens.web.bmo.CommonIdCountBo;
 import top.potens.web.code.AlbumCode;
 import top.potens.web.code.ContentCode;
 import top.potens.web.common.constant.ContentConstant;
+import top.potens.web.dao.db.auto.AlbumContentRelationMapper;
 import top.potens.web.dao.db.auto.AlbumCourseMapper;
 import top.potens.web.dao.db.auto.AlbumMapper;
 import top.potens.web.dao.db.ext.AlbumContentRelationExMapper;
@@ -56,6 +57,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
     private final AlbumCourseServiceLogic albumCourseServiceLogic;
     private final AlbumService albumService;
     private final ContentService contentService;
+    private final AlbumContentRelationMapper albumContentRelationMapper;
 
     private AlbumCourse byAlbumId(Integer albumId) {
         if (albumId == null) {
@@ -147,6 +149,15 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
         albumCourseViewResponse.setAlbumDesc(album.getAlbumDesc());
         albumCourseViewResponse.setCourseId(course.getCourseId());
         albumCourseViewResponse.setCourseName(course.getCourseName());
+
+        AlbumContentRelationExample albumContentRelationExample = new AlbumContentRelationExample();
+        albumContentRelationExample.createCriteria().andAlbumIdEqualTo(albumCourse.getAlbumId());
+        List<AlbumContentRelation> albumContentRelations = albumContentRelationMapper.selectByExample(albumContentRelationExample);
+        List<Integer> idList = new ArrayList<>();
+        albumContentRelations.forEach(item -> {
+            idList.add(item.getContentId());
+        });
+        albumCourseViewResponse.setContentIdList(idList);
         return albumCourseViewResponse;
     }
 

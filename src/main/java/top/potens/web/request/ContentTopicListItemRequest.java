@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.potens.framework.model.PageRequest;
 
+import java.util.List;
+
 /**
  * 功能描述:
  *
@@ -25,6 +27,9 @@ public class ContentTopicListItemRequest extends PageRequest {
     @ApiModelProperty(value = "状态 1 展示 2 不展示", name = "state", required = true, example = "1")
     private Integer state;
 
-    @ApiModelProperty(value = "标题", name = "title", required = true, example = "1")
+    @ApiModelProperty(value = "标题", name = "title", required = false, example = "1")
     private String title;
+
+    @ApiModelProperty(value = "id列表", name = "contentIdList", required = false)
+    private List<Integer> contentIdList;
 }
