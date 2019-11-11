@@ -1,6 +1,7 @@
 package top.potens.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageSerializable;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +112,8 @@ public class ContentTopicServiceImpl implements ContentTopicService {
                 contentTopicListItemResponses.add(itemResponse);
             }
         });
+        PageSerializable<Integer> of = PageSerializable.of(idList);
+        response.setTotal(of.getTotal());
         response.setList(contentTopicListItemResponses);
         return response;
     }
