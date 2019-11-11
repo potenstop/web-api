@@ -11,6 +11,7 @@ import top.potens.framework.model.ApiResult;
 import top.potens.framework.model.PageResponse;
 import top.potens.web.request.AlbumCourseAddRequest;
 import top.potens.web.request.AlbumCourseListItemRequest;
+import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
 import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
@@ -62,6 +63,13 @@ public class AlbumCourseController {
     public ApiResult<Integer> albumCourseUpdate(@RequestBody @Valid AlbumCourseUpdateRequest request) {
         ApiResult<Integer> result = new ApiResult<>();
         result.setData(albumCourseService.updateById(request));
+        return result;
+    }
+    @PostMapping("/update-course-relation")
+    @ApiOperation("专辑绑定课程")
+    public ApiResult<Integer> albumCourseUpdateCourseRelation(@RequestBody @Valid AlbumCourseUpdateCourseRelationRequest request) {
+        ApiResult<Integer> result = new ApiResult<>();
+        result.setData(albumCourseService.updateCourseRelationById(request));
         return result;
     }
 }

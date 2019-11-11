@@ -34,4 +34,7 @@ public class ContentCode {
 
     @ResultMessage("选项id没有找到")
     public static final String CONTENT_SELECT_OPTION_ID_NOT_FOUND = "30007";
+
+    @ResultMessage("内容不是课程类型")
+    public static final String CONTENT_TYPE_NOT_IS_TOPIC = "30008";
 }

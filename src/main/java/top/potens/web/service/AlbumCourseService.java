@@ -3,6 +3,7 @@ package top.potens.web.service;
 import top.potens.framework.model.PageResponse;
 import top.potens.web.request.AlbumCourseAddRequest;
 import top.potens.web.request.AlbumCourseListItemRequest;
+import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
 import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
@@ -56,7 +57,7 @@ public interface AlbumCourseService {
 
     /**
     *
-    * 方法功能描述: 按id更新课程专辑
+    * 方法功能描述: 按id更新课程专辑基本信息
     *
     * @author yanshaowen
     * @date 2019/11/5 14:35
@@ -65,4 +66,16 @@ public interface AlbumCourseService {
     * @throws
     */
     Integer updateById(AlbumCourseUpdateRequest request);
+
+    /**
+     *
+     * 方法功能描述: 按id更新课程专辑的绑定关系
+     *
+     * @author yanshaowen
+     * @date 2019/11/5 14:35
+     * @param request
+     * @return
+     * @throws
+     */
+    Integer updateCourseRelationById(AlbumCourseUpdateCourseRelationRequest request);
 }

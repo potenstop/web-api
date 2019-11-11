@@ -13,6 +13,8 @@ import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.CommonIdCountBo;
 import top.potens.web.code.AlbumCode;
+import top.potens.web.code.ContentCode;
+import top.potens.web.common.constant.ContentConstant;
 import top.potens.web.dao.db.auto.AlbumCourseMapper;
 import top.potens.web.dao.db.auto.AlbumMapper;
 import top.potens.web.dao.db.ext.AlbumContentRelationExMapper;
@@ -20,13 +22,11 @@ import top.potens.web.dao.db.ext.AlbumCourseExMapper;
 import top.potens.web.model.*;
 import top.potens.web.request.AlbumCourseAddRequest;
 import top.potens.web.request.AlbumCourseListItemRequest;
+import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
 import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
-import top.potens.web.service.AlbumCourseService;
-import top.potens.web.service.AlbumService;
-import top.potens.web.service.CourseService;
-import top.potens.web.service.CourseTypeService;
+import top.potens.web.service.*;
 import top.potens.web.service.logic.AlbumCourseServiceLogic;
 
 import java.math.BigDecimal;
@@ -55,6 +55,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
     private final CourseService courseService;
     private final AlbumCourseServiceLogic albumCourseServiceLogic;
     private final AlbumService albumService;
+    private final ContentService contentService;
 
     private AlbumCourse byAlbumId(Integer albumId) {
         if (albumId == null) {
@@ -163,5 +164,30 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
         updateAlbumCourse.setAlbumCourseId(albumCourse.getAlbumCourseId());
         albumCourseServiceLogic.updateAlbumCourseAndAlbum(updateAlbum, updateAlbumCourse);
         return album.getAlbumId();
+    }
+
+    @Override
+    public Integer updateCourseRelationById(AlbumCourseUpdateCourseRelationRequest request) {
+        byAlbumId(request.getAlbumId());
+        List<AlbumContentRelation> albumContentRelationList = new ArrayList<>();
+        if (request.getContentIdList() != null) {
+            List<Content> contents = contentService.byIdList(request.getContentIdList());
+            if (contents.size() != request.getContentIdList().size()) {
+                throw new ApiException(ContentCode.CONTENT_ID_NOT_FOUND);
+            }
+            contents.forEach(item -> {
+                if (!ContentConstant.ContentType.TOPIC.equals(item.getContentType())) {
+                    throw new ApiException(ContentCode.CONTENT_TYPE_NOT_IS_TOPIC);
+                }
+            });
+            request.getContentIdList().forEach(item -> {
+                AlbumContentRelation albumContentRelation = new AlbumContentRelation();
+                albumContentRelation.setAlbumId(request.getAlbumId());
+                albumContentRelation.setContentId(item);
+                albumContentRelationList.add(albumContentRelation);
+            });
+        }
+        albumCourseServiceLogic.updateAlbumContentRelation(request.getAlbumId(), albumContentRelationList);
+        return 1;
     }
 }

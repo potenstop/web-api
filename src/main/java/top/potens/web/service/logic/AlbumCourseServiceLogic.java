@@ -1,15 +1,21 @@
 package top.potens.web.service.logic;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.potens.framework.util.CollectionUtil;
+import top.potens.web.dao.db.auto.AlbumContentRelationMapper;
 import top.potens.web.dao.db.auto.AlbumCourseMapper;
 import top.potens.web.dao.db.auto.AlbumMapper;
 import top.potens.web.model.Album;
+import top.potens.web.model.AlbumContentRelation;
+import top.potens.web.model.AlbumContentRelationExample;
 import top.potens.web.model.AlbumCourse;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 功能描述:
@@ -24,6 +30,7 @@ import java.util.Date;
 public class AlbumCourseServiceLogic {
     private final AlbumMapper albumMapper;
     private final AlbumCourseMapper albumCourseMapper;
+    private final AlbumContentRelationMapper albumContentRelationMapper;
 
     @Transactional(rollbackFor = Exception.class)
     public void insertAlbumCourseAndAlbum(Album album, AlbumCourse albumCourse) {
@@ -44,5 +51,20 @@ public class AlbumCourseServiceLogic {
         albumMapper.updateByPrimaryKeySelective(album);
         albumCourse.setUpdateTime(now);
         albumCourseMapper.updateByPrimaryKeySelective(albumCourse);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAlbumContentRelation(Integer albumId, List<AlbumContentRelation> albumContentRelationList) {
+        Date now = new Date();
+        AlbumContentRelationExample albumContentRelationExample = new AlbumContentRelationExample();
+        albumContentRelationExample.createCriteria().andAlbumIdEqualTo(albumId);
+        albumContentRelationMapper.deleteByExample(albumContentRelationExample);
+        if (CollectionUtils.isNotEmpty(albumContentRelationList)) {
+            albumContentRelationList.forEach(item -> {
+                item.setCreateTime(now);
+                item.setUpdateTime(now);
+                albumContentRelationMapper.insertSelective(item);
+            });
+        }
     }
 }
