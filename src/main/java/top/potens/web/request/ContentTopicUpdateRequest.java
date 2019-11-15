@@ -32,8 +32,11 @@ public class ContentTopicUpdateRequest {
     @Size(max = 2000)
     private String title;
 
+    @ApiModelProperty(value = "题目类型", name = "topicType", required = true, example = "1")
+    @NotNull
+    private Integer topicType;
+
     @ApiModelProperty(value = "答案", name = "answer", required = true, example = "")
-    @NotBlank
     @Size(max = 5000)
     private String answer;
 
