@@ -30,6 +30,6 @@ public class AlbumCourseTopicViewResponse {
     @ApiModelProperty(value = "课程名称", name = "courseName", required = true, example = "")
     private String courseName;
 
-    @ApiModelProperty(value = "绑定题目列表", name = "contentIdList", required = true)
-    private List<ContentTopicViewResponse> contentIdList;
+    @ApiModelProperty(value = "绑定题目列表", name = "contentList", required = true)
+    private List<ContentTopicViewResponse> contentList;
 }

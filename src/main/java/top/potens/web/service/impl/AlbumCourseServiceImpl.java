@@ -210,7 +210,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
         AlbumCourseViewResponse albumCourseViewResponse = selectById(albumId);
         AlbumCourseTopicViewResponse albumCourseTopicViewResponse = BeanCopierUtil.convert(albumCourseViewResponse, AlbumCourseTopicViewResponse.class);
         List<ContentTopicViewResponse> contentTopicViewResponses = contentTopicService.selectByIdList(albumCourseViewResponse.getContentIdList());
-        albumCourseTopicViewResponse.setContentIdList(contentTopicViewResponses);
+        albumCourseTopicViewResponse.setContentList(contentTopicViewResponses);
         return albumCourseTopicViewResponse;
     }
 }
