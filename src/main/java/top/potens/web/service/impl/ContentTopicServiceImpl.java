@@ -144,7 +144,7 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         contentTopic.setAnswer(request.getAnswer());
         contentTopic.setTopicType(request.getTopicType());
         List<ContentTopicSelectOption> contentTopicSelectOptionList = new ArrayList<>();
-        if (ContentTopicConstant.TopicType.SIGN_SELECT.equals(request.getTopicType()) || ContentTopicConstant.TopicType.MUL_SELECT.equals(request.getTopicType())) {
+        if (ContentTopicConstant.TopicType.SELECT_SET.contains(request.getTopicType())) {
             request.getAddOptionList().forEach(option -> {
                 ContentTopicSelectOption contentTopicSelectOption = new ContentTopicSelectOption();
                 contentTopicSelectOption.setOptionLabel(option.getOptionLabel());
@@ -192,18 +192,23 @@ public class ContentTopicServiceImpl implements ContentTopicService {
     public Integer updateById(ContentTopicUpdateRequest request) {
         // 判断id是否存在
         ContentTopicViewResponse contentTopicViewResponse = viewById(request.getContentId());
+        // 验证题目类型
+        if (!ContentTopicConstant.TopicType.ALL_SET.contains(request.getTopicType())) {
+            throw new ApiException(ContentCode.CONTENT_TOPIC_TYPE_ERROR);
+        }
+        // 验证选择题有没有选项
+        if (ContentTopicConstant.TopicType.SELECT_SET.contains(request.getTopicType())) {
+            if (CollectionUtils.isEmpty(request.getAddOptionList())) {
+                throw new ApiException(ContentCode.CONTENT_SELECT_NOT_OPTION);
+            }
+        }
         // 判断删除和修改的必填id
         checkOptionIdNotFoundByOptionList(request.getModifyOptionList());
         // 验证状态
         if (!ContentConstant.ContentState.ONLINE.equals(request.getState()) && !ContentConstant.ContentState.OFFLINE.equals(request.getState())) {
             throw new ApiException(ContentCode.CONTENT_STATE_ERROR);
         }
-        Set<Integer> selectSet = new HashSet<>();
-        Set<Integer> notSelectSet = new HashSet<>();
-        selectSet.add(ContentTopicConstant.TopicType.SIGN_SELECT);
-        selectSet.add(ContentTopicConstant.TopicType.MUL_SELECT);
-        notSelectSet.add(ContentTopicConstant.TopicType.FILL_BLANK);
-        notSelectSet.add(ContentTopicConstant.TopicType.SHORT_ANSWER);
+
 
 
         Content updateContent = new Content();
@@ -216,23 +221,24 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         updateContentTopic.setTitle(request.getTitle());
         updateContentTopic.setAnalysis(request.getAnalysis());
         updateContentTopic.setAnswer(request.getAnswer());
+        updateContentTopic.setTopicType(request.getTopicType());
         // 选择题处理
         List<ContentTopicSelectOption> addContentTopicSelectOptionList = new ArrayList<>();
         List<Integer> removeContentTopicSelectOptionIdList = new ArrayList<>();
         List<ContentTopicSelectOption> modifyContentTopicSelectOptionList = new ArrayList<>();
         if (contentTopicViewResponse.getTopicType().equals(request.getTopicType())) {
             // 修改了类型
-            if (selectSet.contains(contentTopicViewResponse.getTopicType()) && notSelectSet.contains(request.getTopicType())) {
+            if (ContentTopicConstant.TopicType.SELECT_SET.contains(contentTopicViewResponse.getTopicType()) && ContentTopicConstant.TopicType.NOT_SELECT_SET.contains(request.getTopicType())) {
                 // 从选项题改为非选择题
                 contentTopicViewResponse.getAddOptionList().forEach(item -> {
                     removeContentTopicSelectOptionIdList.add(item.getContentTopicSelectOptionId());
                 });
-            } else if (selectSet.contains(request.getTopicType()) && notSelectSet.contains(contentTopicViewResponse.getTopicType())) {
+            } else if (ContentTopicConstant.TopicType.SELECT_SET.contains(request.getTopicType()) && ContentTopicConstant.TopicType.NOT_SELECT_SET.contains(contentTopicViewResponse.getTopicType())) {
                 // 从非选项题改为选择题
 
             }
         }
-        if (selectSet.contains(request.getTopicType())) {
+        if (ContentTopicConstant.TopicType.SELECT_SET.contains(request.getTopicType())) {
             Map<Integer, ContentTopicSelectOptionResponse> contentTopicSelectOptionResponseMap = contentTopicViewResponse.getAddOptionList().stream().collect(Collectors.toMap(ContentTopicSelectOptionResponse::getContentTopicSelectOptionId, v -> v));
             Date now = new Date();
             if (CollectionUtils.isNotEmpty(request.getAddOptionList())) {

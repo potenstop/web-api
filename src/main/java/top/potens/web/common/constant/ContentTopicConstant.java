@@ -29,12 +29,21 @@ public class ContentTopicConstant {
          * 简答
          */
         public final static Integer SHORT_ANSWER = 4;
+
+
         public final static Set<Integer> ALL_SET = new HashSet<>();
+        public final static Set<Integer> SELECT_SET = new HashSet<>();
+        public final static Set<Integer> NOT_SELECT_SET = new HashSet<>();
         static {
             ALL_SET.add(SIGN_SELECT);
             ALL_SET.add(MUL_SELECT);
             ALL_SET.add(FILL_BLANK);
             ALL_SET.add(SHORT_ANSWER);
+
+            SELECT_SET.add(SIGN_SELECT);
+            SELECT_SET.add(MUL_SELECT);
+            NOT_SELECT_SET.add(FILL_BLANK);
+            NOT_SELECT_SET.add(SHORT_ANSWER);
         }
     }
 
