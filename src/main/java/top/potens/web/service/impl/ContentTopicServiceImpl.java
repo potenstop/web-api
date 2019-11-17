@@ -196,12 +196,7 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         if (!ContentTopicConstant.TopicType.ALL_SET.contains(request.getTopicType())) {
             throw new ApiException(ContentCode.CONTENT_TOPIC_TYPE_ERROR);
         }
-        // 验证选择题有没有选项
-        if (ContentTopicConstant.TopicType.SELECT_SET.contains(request.getTopicType())) {
-            if (CollectionUtils.isEmpty(request.getAddOptionList())) {
-                throw new ApiException(ContentCode.CONTENT_SELECT_NOT_OPTION);
-            }
-        }
+
         // 判断删除和修改的必填id
         checkOptionIdNotFoundByOptionList(request.getModifyOptionList());
         // 验证状态
@@ -277,6 +272,6 @@ public class ContentTopicServiceImpl implements ContentTopicService {
 
         // 入库
         contentServiceLogic.updateContentAndTopic(updateContent, updateContentTopic, addContentTopicSelectOptionList, removeContentTopicSelectOptionIdList, modifyContentTopicSelectOptionList);
-        return null;
+        return updateContent.getContentId();
     }
 }
