@@ -207,7 +207,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseViewResponse viewById(Integer courseId) {
+    public CourseViewResponse selectById(Integer courseId) {
         ArrayList<Integer> idList = new ArrayList<>();
         idList.add(courseId);
         List<CourseInfoTypeBo> courseInfoTypeBos = courseExMapper.selectCourseListByIds(idList);

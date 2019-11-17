@@ -6,6 +6,7 @@ import top.potens.web.request.AlbumCourseListItemRequest;
 import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
 import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
+import top.potens.web.response.AlbumCourseTopicViewResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public interface AlbumCourseService {
     * @return
     * @throws
     */
-    AlbumCourseViewResponse viewById(Integer albumId);
+    AlbumCourseViewResponse selectById(Integer albumId);
 
     /**
     *
@@ -78,4 +79,17 @@ public interface AlbumCourseService {
      * @throws
      */
     Integer updateCourseRelationById(AlbumCourseUpdateCourseRelationRequest request);
+
+    /**
+     *
+     * 方法功能描述: 按id查询详情集题目列表
+     *
+     * @author yanshaowen
+     * @date 2019/11/5 14:35
+     * @param albumId
+     * @return
+     * @throws
+     */
+    AlbumCourseTopicViewResponse selectTopicListById(Integer albumId);
+
 }

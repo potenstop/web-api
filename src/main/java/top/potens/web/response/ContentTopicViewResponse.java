@@ -43,6 +43,6 @@ public class ContentTopicViewResponse {
     @ApiModelProperty(value = "题目类型 1: 选择题 2 填空题 3 简答题", name = "topicType", required = true, example = "1")
     private Integer topicType;
 
-    @ApiModelProperty(value = "新增的选项列表", name = "addOptionList", required = false)
+    @ApiModelProperty(value = "选项列表", name = "addOptionList", required = false)
     private List<ContentTopicSelectOptionResponse> addOptionList;
 }

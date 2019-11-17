@@ -26,7 +26,9 @@ import top.potens.web.request.AlbumCourseListItemRequest;
 import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
 import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
+import top.potens.web.response.AlbumCourseTopicViewResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
+import top.potens.web.response.ContentTopicViewResponse;
 import top.potens.web.service.*;
 import top.potens.web.service.logic.AlbumCourseServiceLogic;
 
@@ -58,6 +60,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
     private final AlbumService albumService;
     private final ContentService contentService;
     private final AlbumContentRelationMapper albumContentRelationMapper;
+    private final ContentTopicService contentTopicService;
 
     private AlbumCourse byAlbumId(Integer albumId) {
         if (albumId == null) {
@@ -139,7 +142,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
     }
 
     @Override
-    public AlbumCourseViewResponse viewById(Integer albumId) {
+    public AlbumCourseViewResponse selectById(Integer albumId) {
         AlbumCourse albumCourse = byAlbumId(albumId);
         Album album = albumService.byId(albumId);
         Course course = courseService.byId(albumCourse.getCourseId());
@@ -200,5 +203,14 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
         }
         albumCourseServiceLogic.updateAlbumContentRelation(request.getAlbumId(), albumContentRelationList);
         return 1;
+    }
+
+    @Override
+    public AlbumCourseTopicViewResponse selectTopicListById(Integer albumId) {
+        AlbumCourseViewResponse albumCourseViewResponse = selectById(albumId);
+        AlbumCourseTopicViewResponse albumCourseTopicViewResponse = BeanCopierUtil.convert(albumCourseViewResponse, AlbumCourseTopicViewResponse.class);
+        List<ContentTopicViewResponse> contentTopicViewResponses = contentTopicService.selectByIdList(albumCourseViewResponse.getContentIdList());
+        albumCourseTopicViewResponse.setContentIdList(contentTopicViewResponses);
+        return albumCourseTopicViewResponse;
     }
 }

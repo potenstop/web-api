@@ -98,7 +98,7 @@ public interface CourseService {
     * @return
     * @throws
     */
-    CourseViewResponse viewById(Integer courseId);
+    CourseViewResponse selectById(Integer courseId);
 
     /**
     *

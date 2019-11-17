@@ -70,7 +70,7 @@ public class CourseController {
     @ApiOperation("查看一个课程记录")
     public ApiResult<CourseViewResponse> view(@ApiParam(value = "课程id", example = "1") @RequestParam @NotNull Integer courseId) {
         ApiResult<CourseViewResponse> result = new ApiResult<>();
-        result.setData(courseService.viewById(courseId));
+        result.setData(courseService.selectById(courseId));
         return result;
     }
     @PostMapping("/update")

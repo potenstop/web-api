@@ -14,11 +14,13 @@ import top.potens.web.request.AlbumCourseListItemRequest;
 import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
 import top.potens.web.request.AlbumCourseUpdateRequest;
 import top.potens.web.response.AlbumCourseListItemResponse;
+import top.potens.web.response.AlbumCourseTopicViewResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
 import top.potens.web.service.AlbumCourseService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 功能描述:
@@ -55,7 +57,7 @@ public class AlbumCourseController {
     @ApiOperation("查看课程专辑")
     public ApiResult<AlbumCourseViewResponse> albumCourseView(@ApiParam(value = "专辑id", example = "1") @RequestParam @NotNull Integer albumId) {
         ApiResult<AlbumCourseViewResponse> result = new ApiResult<>();
-        result.setData(albumCourseService.viewById(albumId));
+        result.setData(albumCourseService.selectById(albumId));
         return result;
     }
     @PostMapping("/update")
@@ -70,6 +72,13 @@ public class AlbumCourseController {
     public ApiResult<Integer> albumCourseUpdateCourseRelation(@RequestBody @Valid AlbumCourseUpdateCourseRelationRequest request) {
         ApiResult<Integer> result = new ApiResult<>();
         result.setData(albumCourseService.updateCourseRelationById(request));
+        return result;
+    }
+    @GetMapping("/topic-list")
+    @ApiOperation("查看专辑详情及专辑下题目")
+    public ApiResult<AlbumCourseTopicViewResponse> albumCourseTopicList(@ApiParam(value = "专辑id", example = "1") @RequestParam @NotNull Integer albumId) {
+        ApiResult<AlbumCourseTopicViewResponse> result = new ApiResult<>();
+        result.setData(albumCourseService.selectTopicListById(albumId));
         return result;
     }
 }

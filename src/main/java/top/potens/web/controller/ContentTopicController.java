@@ -55,7 +55,7 @@ public class ContentTopicController {
     @ApiOperation("查看题目")
     public ApiResult<ContentTopicViewResponse> contentTopicView(@ApiParam(value = "内容id", example = "1") @RequestParam @NotNull Integer contentId) {
         ApiResult<ContentTopicViewResponse> result = new ApiResult<>();
-        result.setData(contentTopicService.viewById(contentId));
+        result.setData(contentTopicService.selectById(contentId));
         return result;
     }
     @PostMapping("/update")

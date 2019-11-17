@@ -90,7 +90,19 @@ public interface ContentTopicService {
     * @return
     * @throws
     */
-    ContentTopicViewResponse viewById(Integer contentId);
+    ContentTopicViewResponse selectById(Integer contentId);
+
+    /**
+     *
+     * 方法功能描述: 按多个内容id 查询课程题目对象
+     *
+     * @author yanshaowen
+     * @date 2019/11/5 11:56
+     * @param contentIdList
+     * @return
+     * @throws
+     */
+    List<ContentTopicViewResponse> selectByIdList(List<Integer> contentIdList);
 
     /**
     *

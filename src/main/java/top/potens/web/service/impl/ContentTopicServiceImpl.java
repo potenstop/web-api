@@ -13,7 +13,6 @@ import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
-import top.potens.web.code.CommonCode;
 import top.potens.web.code.ContentCode;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.constant.ContentConstant;
@@ -158,14 +157,14 @@ public class ContentTopicServiceImpl implements ContentTopicService {
     }
 
     @Override
-    public ContentTopicViewResponse viewById(Integer contentId) {
+    public ContentTopicViewResponse selectById(Integer contentId) {
         Content content = contentService.byId(contentId);
         ContentTopic contentTopic = byId(content.getContentId());
 
         ContentTopicViewResponse contentTopicViewResponse = BeanCopierUtil.convert(content, ContentTopicViewResponse.class);
         BeanCopierUtil.convert(contentTopic, contentTopicViewResponse);
 
-        if (ContentTopicConstant.TopicType.SIGN_SELECT.equals(contentTopic.getTopicType()) || ContentTopicConstant.TopicType.MUL_SELECT.equals(contentTopic.getTopicType())) {
+        if (ContentTopicConstant.TopicType.SELECT_SET.contains(contentTopic.getTopicType())) {
             ContentTopicSelectOptionExample contentTopicSelectOptionExample = new ContentTopicSelectOptionExample();
             contentTopicSelectOptionExample.createCriteria().andContentIdEqualTo(content.getContentId());
             List<ContentTopicSelectOption> contentTopicSelectOptions = contentTopicSelectOptionMapper.selectByExample(contentTopicSelectOptionExample);
@@ -175,6 +174,32 @@ public class ContentTopicServiceImpl implements ContentTopicService {
             contentTopicViewResponse.setAddOptionList(new ArrayList<>());
         }
         return contentTopicViewResponse;
+    }
+    @Override
+    public List<ContentTopicViewResponse> selectByIdList(List<Integer> contentIdList) {
+        List<Content> contentList = contentService.byIdList(contentIdList);
+        Map<Integer, ContentTopic> integerContentTopicMap = byIdListResultMap(contentIdList);
+        Map<Integer, List<ContentTopicSelectOption>> contentTopicSelectOptionMap = new HashMap<>();
+        List<ContentTopicViewResponse> contentTopicViewResponseList = new ArrayList<>();
+        // 找出选择题
+        List<Integer> selectIdList = contentList.stream().filter(content -> ContentTopicConstant.TopicType.SELECT_SET.contains(content.getContentType())).map(Content::getContentId).collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(selectIdList)) {
+            ContentTopicSelectOptionExample contentTopicSelectOptionExample = new ContentTopicSelectOptionExample();
+            contentTopicSelectOptionExample.createCriteria().andContentIdIn(selectIdList);
+            contentTopicSelectOptionMap = contentTopicSelectOptionMapper.selectByExample(contentTopicSelectOptionExample).stream().collect(Collectors.groupingBy(ContentTopicSelectOption::getContentId));
+        }
+        for (Content content : contentList) {
+            ContentTopicViewResponse contentTopicViewResponse = BeanCopierUtil.convert(content, ContentTopicViewResponse.class);
+            if (integerContentTopicMap.containsKey(content.getContentId())) {
+                BeanCopierUtil.convert(integerContentTopicMap.get(content.getContentId()), contentTopicViewResponse);
+            }
+            if (contentTopicSelectOptionMap.containsKey(content.getContentId())) {
+                List<ContentTopicSelectOptionResponse> contentTopicSelectOptionResponseList = BeanCopierUtil.convert(contentTopicSelectOptionMap.get(content.getContentId()), ContentTopicSelectOptionResponse.class);
+                contentTopicViewResponse.setAddOptionList(contentTopicSelectOptionResponseList);
+            }
+            contentTopicViewResponseList.add(contentTopicViewResponse);
+        }
+        return contentTopicViewResponseList;
     }
 
     private void checkOptionIdNotFoundByOptionList(List<ContentTopicSelectOptionRequest> optionList) {
@@ -191,7 +216,7 @@ public class ContentTopicServiceImpl implements ContentTopicService {
     @Lock(lockModel = LockModel.FAIR, keys = LockConstant.CONTENT_TOPIC_UPDATE + "#{#request.contentId}", attemptTimeout = 10, lockWatchTimeout = 120)
     public Integer updateById(ContentTopicUpdateRequest request) {
         // 判断id是否存在
-        ContentTopicViewResponse contentTopicViewResponse = viewById(request.getContentId());
+        ContentTopicViewResponse contentTopicViewResponse = selectById(request.getContentId());
         // 验证题目类型
         if (!ContentTopicConstant.TopicType.ALL_SET.contains(request.getTopicType())) {
             throw new ApiException(ContentCode.CONTENT_TOPIC_TYPE_ERROR);
