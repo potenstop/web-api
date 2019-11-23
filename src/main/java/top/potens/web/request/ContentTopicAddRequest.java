@@ -33,7 +33,6 @@ public class ContentTopicAddRequest {
     private String title;
 
     @ApiModelProperty(value = "答案", name = "answer", required = true, example = "")
-    @NotBlank
     @Size(max = 5000)
     private String answer;
 
