@@ -15,6 +15,7 @@ public class WebApiApplication {
 
     public static void main(String[] args) {
         ResultCodeInit.addResultCodeDefinitionClassByPackage("top.potens.web.code");
+        ResultCodeInit.addResultCodeDefinitionClassByPackage("top.potens.cms.code");
         SpringApplication.run(WebApiApplication.class, args);
     }
 }

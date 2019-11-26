@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import top.potens.cms.response.TopicResponse;
 import top.potens.cms.service.WordAnalysisService;
 import top.potens.framework.model.ApiResult;
+
+import java.util.List;
 
 /**
  * 功能描述:
@@ -28,8 +31,8 @@ public class WordAnalysisController {
     private final WordAnalysisService wordAnalysisService;
     @ApiOperation(value = "批量题目解析")
     @PostMapping(value = "/batch/course/topic")
-    public ApiResult<String> batchCourseTopic(MultipartFile file) {
-        ApiResult<String> result = new ApiResult<>();
+    public ApiResult<List<TopicResponse>> batchCourseTopic(MultipartFile file) {
+        ApiResult<List<TopicResponse>> result = new ApiResult<>();
         result.setData(wordAnalysisService.batchCourseTopic(file));
         return result;
     }

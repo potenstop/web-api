@@ -2,6 +2,9 @@ package top.potens.cms.service;
 
 
 import org.springframework.web.multipart.MultipartFile;
+import top.potens.cms.response.TopicResponse;
+
+import java.util.List;
 
 /**
  * 功能描述:
@@ -12,5 +15,5 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2019/11/26 6:04
  */
 public interface WordAnalysisService {
-    String batchCourseTopic(MultipartFile file);
+    List<TopicResponse> batchCourseTopic(MultipartFile file);
 }
