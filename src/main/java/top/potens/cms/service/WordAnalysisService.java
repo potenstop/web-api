@@ -2,7 +2,7 @@ package top.potens.cms.service;
 
 
 import org.springframework.web.multipart.MultipartFile;
-import top.potens.cms.response.TopicResponse;
+import top.potens.cms.response.UploadTopicListItemResponse;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ import java.util.List;
  * @date 2019/11/26 6:04
  */
 public interface WordAnalysisService {
-    List<TopicResponse> batchCourseTopic(MultipartFile file);
+    List<UploadTopicListItemResponse> batchCourseTopic(MultipartFile file);
 }

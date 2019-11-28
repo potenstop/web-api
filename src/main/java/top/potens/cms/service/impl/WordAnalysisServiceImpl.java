@@ -7,16 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import top.potens.cms.code.WordCode;
-import top.potens.cms.response.TopicResponse;
+import top.potens.cms.response.UploadTopicListItemResponse;
 import top.potens.cms.service.WordAnalysisService;
 import top.potens.framework.exception.ApiException;
-import top.potens.framework.log.AppLogger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -55,20 +52,20 @@ public class WordAnalysisServiceImpl implements WordAnalysisService {
         }
         return randList;
     }
-    private List<TopicResponse> handleSelect(List<String> select, Integer type) {
-        List<TopicResponse> topicResponseList = new ArrayList<>();
+    private List<UploadTopicListItemResponse> handleSelect(List<String> select, Integer type) {
+        List<UploadTopicListItemResponse> uploadTopicListItemResponseList = new ArrayList<>();
         String titlePattern = "^\\d+．";
         Iterator<String> iterator = select.iterator();
         while (iterator.hasNext()) {
             String str = iterator.next();
             str = str.replaceAll("\r|\n", "");
-            TopicResponse topicResponse = new TopicResponse();
+            UploadTopicListItemResponse uploadTopicListItemResponse = new UploadTopicListItemResponse();
             Pattern p = Pattern.compile(titlePattern);
             Matcher m = p.matcher(str);
             if (m.find()) {
                 str = str.trim().replaceAll("【\\s+】$", "");
-                topicResponse.setTitle(str.substring(m.end(), str.length() - 1).trim());
-                topicResponse.setTopicType(type);
+                uploadTopicListItemResponse.setTitle(str.substring(m.end(), str.length() - 1).trim());
+                uploadTopicListItemResponse.setTopicType(type);
                 List<String> optionList = new ArrayList<>();
                 // 找选项
                 String option = iterator.next();
@@ -95,33 +92,33 @@ public class WordAnalysisServiceImpl implements WordAnalysisService {
                     optionList.add(optionC.substring(2, optionC.length() - 1).trim());
                     optionList.add(optionD.substring(2, optionD.length() - 1).trim());
                 }
-                topicResponse.setOptionList(optionList);
-                topicResponseList.add(topicResponse);
+                uploadTopicListItemResponse.setOptionList(optionList);
+                uploadTopicListItemResponseList.add(uploadTopicListItemResponse);
             }
         }
-        return topicResponseList;
+        return uploadTopicListItemResponseList;
     }
-    private List<TopicResponse> handleDiscuss(List<String> select, Integer type) {
-        List<TopicResponse> topicResponseList = new ArrayList<>();
+    private List<UploadTopicListItemResponse> handleDiscuss(List<String> select, Integer type) {
+        List<UploadTopicListItemResponse> uploadTopicListItemResponseList = new ArrayList<>();
         String titlePattern = "^\\d+．";
         Iterator<String> iterator = select.iterator();
         while (iterator.hasNext()) {
             String str = iterator.next();
             str = str.replaceAll("\r|\n", "");
-            TopicResponse topicResponse = new TopicResponse();
+            UploadTopicListItemResponse uploadTopicListItemResponse = new UploadTopicListItemResponse();
             Pattern p = Pattern.compile(titlePattern);
             Matcher m = p.matcher(str);
             if (m.find()) {
-                topicResponse.setTitle(str.substring(m.end(), str.length() - 1).trim());
-                topicResponse.setTopicType(type);
-                topicResponseList.add(topicResponse);
+                uploadTopicListItemResponse.setTitle(str.substring(m.end(), str.length() - 1).trim());
+                uploadTopicListItemResponse.setTopicType(type);
+                uploadTopicListItemResponseList.add(uploadTopicListItemResponse);
             }
         }
-        return topicResponseList;
+        return uploadTopicListItemResponseList;
     }
 
     @Override
-    public List<TopicResponse> batchCourseTopic(MultipartFile file) {
+    public List<UploadTopicListItemResponse> batchCourseTopic(MultipartFile file) {
         List<String> randList = getRandList(file);
         List<Integer> questionNumberList = new ArrayList<>();
         // 解析出题目和选项
@@ -163,14 +160,14 @@ public class WordAnalysisServiceImpl implements WordAnalysisService {
             }
             index++;
         }
-        ArrayList<TopicResponse> topicResponseList = new ArrayList<>();
-        List<TopicResponse> signTopicResponseList = this.handleSelect(signSelect, 1);
-        List<TopicResponse> mulTopicResponseList = this.handleSelect(mulSelect, 2);
-        List<TopicResponse> discussTopicResponseList = this.handleDiscuss(discuss, 4);
-        topicResponseList.addAll(signTopicResponseList);
-        topicResponseList.addAll(mulTopicResponseList);
-        topicResponseList.addAll(discussTopicResponseList);
+        ArrayList<UploadTopicListItemResponse> uploadTopicListItemResponseList = new ArrayList<>();
+        List<UploadTopicListItemResponse> signTopicResponseList = this.handleSelect(signSelect, 1);
+        List<UploadTopicListItemResponse> mulTopicResponseList = this.handleSelect(mulSelect, 2);
+        List<UploadTopicListItemResponse> discussTopicResponseList = this.handleDiscuss(discuss, 4);
+        uploadTopicListItemResponseList.addAll(signTopicResponseList);
+        uploadTopicListItemResponseList.addAll(mulTopicResponseList);
+        uploadTopicListItemResponseList.addAll(discussTopicResponseList);
 
-        return topicResponseList;
+        return uploadTopicListItemResponseList;
     }
 }

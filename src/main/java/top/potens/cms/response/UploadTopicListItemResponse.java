@@ -9,12 +9,12 @@ import java.util.List;
  * 功能描述:
  *
  * @author yanshaowen
- * @className TopicResponse
+ * @className UploadTopicListItemResponse
  * @projectName web-api
  * @date 2019/11/26 16:39
  */
 @Data
-public class TopicResponse {
+public class UploadTopicListItemResponse {
     @ApiModelProperty(value = "题目标题", name = "title", required = true, example = "1")
     private String title;
     @ApiModelProperty(value = "题目类型 1: 单选 2 多选 3 填空题 4 简答题", name = "topicType", required = true, example = "1")
