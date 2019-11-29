@@ -115,4 +115,16 @@ public interface ContentTopicService {
     * @throws
     */
     Integer updateById(ContentTopicUpdateRequest request);
+
+    /**
+    *
+    * 方法功能描述: 插入多条
+    *
+    * @author yanshaowen
+    * @date 2019/11/29 14:25
+    * @param request
+    * @return
+    * @throws
+    */
+    Integer insertMultiple(List<ContentTopicAddRequest> requestList);
 }

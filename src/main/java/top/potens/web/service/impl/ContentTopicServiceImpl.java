@@ -13,6 +13,7 @@ import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
+import top.potens.web.bmo.ContentTopicCompleteBo;
 import top.potens.web.code.ContentCode;
 import top.potens.web.common.constant.ChannelConstant;
 import top.potens.web.common.constant.ContentConstant;
@@ -114,8 +115,7 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         return response;
     }
 
-    @Override
-    public Integer insertOne(ContentTopicAddRequest request) {
+    private void insertCheck(ContentTopicAddRequest request) {
         // 验证题目类型
         if (!ContentTopicConstant.TopicType.ALL_SET.contains(request.getTopicType())) {
             throw new ApiException(ContentCode.CONTENT_TOPIC_TYPE_ERROR);
@@ -130,18 +130,24 @@ public class ContentTopicServiceImpl implements ContentTopicService {
                 throw new ApiException(ContentCode.CONTENT_SELECT_NOT_OPTION);
             }
         }
+    }
+    private Content insertAssembleContent(ContentTopicAddRequest request) {
         Channel channel = cacheServiceLogic.getChannelByCode(ChannelConstant.ChannelCode.SELF_INSERT);
-        // 组装数据
         Content content = new Content();
-        ContentTopic contentTopic = new ContentTopic();
         content.setChannelId(channel.getChannelId());
         content.setState(request.getState());
         content.setContentType(ContentConstant.ContentType.TOPIC);
-
+        return content;
+    }
+    private ContentTopic insertAssembleContentTopic(ContentTopicAddRequest request) {
+        ContentTopic contentTopic = new ContentTopic();
         contentTopic.setTitle(request.getTitle());
         contentTopic.setAnalysis(request.getAnalysis());
         contentTopic.setAnswer(request.getAnswer());
         contentTopic.setTopicType(request.getTopicType());
+        return contentTopic;
+    }
+    private List<ContentTopicSelectOption> insertAssembleContentTopicSelectOption(ContentTopicAddRequest request) {
         List<ContentTopicSelectOption> contentTopicSelectOptionList = new ArrayList<>();
         if (ContentTopicConstant.TopicType.SELECT_SET.contains(request.getTopicType())) {
             request.getAddOptionList().forEach(option -> {
@@ -151,6 +157,15 @@ public class ContentTopicServiceImpl implements ContentTopicService {
                 contentTopicSelectOptionList.add(contentTopicSelectOption);
             });
         }
+        return contentTopicSelectOptionList;
+    }
+    @Override
+    public Integer insertOne(ContentTopicAddRequest request) {
+        insertCheck(request);
+        // 组装数据
+        Content content = insertAssembleContent(request);
+        ContentTopic contentTopic = insertAssembleContentTopic(request);
+        List<ContentTopicSelectOption> contentTopicSelectOptionList = insertAssembleContentTopicSelectOption(request);
         // 入库
         contentServiceLogic.insertContentAndTopic(content, contentTopic, contentTopicSelectOptionList);
         return content.getContentId();
@@ -298,5 +313,27 @@ public class ContentTopicServiceImpl implements ContentTopicService {
         // 入库
         contentServiceLogic.updateContentAndTopic(updateContent, updateContentTopic, addContentTopicSelectOptionList, removeContentTopicSelectOptionIdList, modifyContentTopicSelectOptionList);
         return updateContent.getContentId();
+    }
+
+    @Override
+    public Integer insertMultiple(List<ContentTopicAddRequest> requestList) {
+        if (CollectionUtils.isEmpty(requestList)) {
+            return 0;
+        }
+        List<ContentTopicCompleteBo> contentTopicCompleteBoList = new ArrayList<>();
+        requestList.forEach(request -> {
+            insertCheck(request);
+            ContentTopicCompleteBo contentTopicCompleteBo = new ContentTopicCompleteBo();
+            // 组装数据
+            Content content = insertAssembleContent(request);
+            ContentTopic contentTopic = insertAssembleContentTopic(request);
+            List<ContentTopicSelectOption> contentTopicSelectOptionList = insertAssembleContentTopicSelectOption(request);
+            contentTopicCompleteBo.setContent(content);
+            contentTopicCompleteBo.setContentTopic(contentTopic);
+            contentTopicCompleteBo.setContentTopicSelectOptionList(contentTopicSelectOptionList);
+            contentTopicCompleteBoList.add(contentTopicCompleteBo);
+        });
+        contentServiceLogic.insertContentAndTopicMul(contentTopicCompleteBoList);
+        return 1;
     }
 }

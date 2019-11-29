@@ -19,6 +19,7 @@ import top.potens.web.service.ContentTopicService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 功能描述:
@@ -63,6 +64,13 @@ public class ContentTopicController {
     public ApiResult<Integer> contentTopicUpdate(@RequestBody @Valid ContentTopicUpdateRequest request) {
         ApiResult<Integer> result = new ApiResult<>();
         result.setData(contentTopicService.updateById(request));
+        return result;
+    }
+    @PostMapping("/mul-add")
+    @ApiOperation("批量添加题目")
+    public ApiResult<Integer> contentTopicMulAdd(@RequestBody @Valid List<ContentTopicAddRequest> request) {
+        ApiResult<Integer> result = new ApiResult<>();
+        result.setData(contentTopicService.insertMultiple(request));
         return result;
     }
 }

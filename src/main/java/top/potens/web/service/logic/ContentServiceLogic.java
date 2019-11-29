@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.serialization.JSON;
 import top.potens.framework.util.StringUtil;
+import top.potens.web.bmo.ContentTopicCompleteBo;
 import top.potens.web.dao.db.auto.*;
 import top.potens.web.model.*;
 
@@ -116,5 +117,13 @@ public class ContentServiceLogic {
             modifyContentTopicSelectOptionList.forEach(contentTopicSelectOptionMapper::updateByPrimaryKeySelective);
         }
         AppLogger.info("结束更新题目数据 contentId:[{}]", content.getContentId());
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void insertContentAndTopicMul(List<ContentTopicCompleteBo> contentTopicCompleteBoList) {
+        AppLogger.info("开始批量插入题目 size:[{}]", contentTopicCompleteBoList.size());
+        contentTopicCompleteBoList.forEach(item -> {
+            insertContentAndTopic(item.getContent(), item.getContentTopic(), item.getContentTopicSelectOptionList());
+        });
+        AppLogger.info("结束批量插入题目 size:[{}]", contentTopicCompleteBoList.size());
     }
 }

@@ -43,7 +43,7 @@ public class ControllerVisitAspect {
 
         String uri = request.getRequestURI().replace(request.getContextPath(), "");
 
-        if (!request.getContentType().contains("multipart/form-data")) {
+        if (!"multipart/form-data".equals(request.getContentType())) {
             AppLogger.info("controller-start-request uri:[{}] methodName:[{}] param:[{}]", uri, joinPoint.getSignature().getName(), JSON.toJSONStringNotEx(joinPoint.getArgs()));
         }
         Object result = joinPoint.proceed();
