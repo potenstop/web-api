@@ -11,6 +11,7 @@ import top.potens.framework.model.ApiResult;
 import top.potens.framework.model.PageResponse;
 import top.potens.web.request.ContentTopicAddRequest;
 import top.potens.web.request.ContentTopicListItemRequest;
+import top.potens.web.request.ContentTopicMulAddRequest;
 import top.potens.web.request.ContentTopicUpdateRequest;
 import top.potens.web.response.ContentTopicListItemResponse;
 import top.potens.web.response.ContentTopicViewResponse;
@@ -68,7 +69,7 @@ public class ContentTopicController {
     }
     @PostMapping("/mul-add")
     @ApiOperation("批量添加题目")
-    public ApiResult<Integer> contentTopicMulAdd(@RequestBody @Valid List<ContentTopicAddRequest> request) {
+    public ApiResult<Integer> contentTopicMulAdd(@RequestBody @Valid ContentTopicMulAddRequest request) {
         ApiResult<Integer> result = new ApiResult<>();
         result.setData(contentTopicService.insertMultiple(request));
         return result;

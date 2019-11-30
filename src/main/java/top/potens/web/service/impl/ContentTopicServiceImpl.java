@@ -23,10 +23,7 @@ import top.potens.web.dao.db.auto.ContentTopicMapper;
 import top.potens.web.dao.db.auto.ContentTopicSelectOptionMapper;
 import top.potens.web.dao.db.ext.ContentTopicExMapper;
 import top.potens.web.model.*;
-import top.potens.web.request.ContentTopicAddRequest;
-import top.potens.web.request.ContentTopicListItemRequest;
-import top.potens.web.request.ContentTopicSelectOptionRequest;
-import top.potens.web.request.ContentTopicUpdateRequest;
+import top.potens.web.request.*;
 import top.potens.web.response.ContentTopicListItemResponse;
 import top.potens.web.response.ContentTopicSelectOptionResponse;
 import top.potens.web.response.ContentTopicViewResponse;
@@ -316,18 +313,16 @@ public class ContentTopicServiceImpl implements ContentTopicService {
     }
 
     @Override
-    public Integer insertMultiple(List<ContentTopicAddRequest> requestList) {
-        if (CollectionUtils.isEmpty(requestList)) {
-            return 0;
-        }
+    public Integer insertMultiple(ContentTopicMulAddRequest request) {
+        List<ContentTopicAddRequest> contentTopicAddRequestList = request.getContentTopicAddRequestList();
         List<ContentTopicCompleteBo> contentTopicCompleteBoList = new ArrayList<>();
-        requestList.forEach(request -> {
-            insertCheck(request);
+        contentTopicAddRequestList.forEach(contentTopicAddRequest -> {
+            insertCheck(contentTopicAddRequest);
             ContentTopicCompleteBo contentTopicCompleteBo = new ContentTopicCompleteBo();
             // 组装数据
-            Content content = insertAssembleContent(request);
-            ContentTopic contentTopic = insertAssembleContentTopic(request);
-            List<ContentTopicSelectOption> contentTopicSelectOptionList = insertAssembleContentTopicSelectOption(request);
+            Content content = insertAssembleContent(contentTopicAddRequest);
+            ContentTopic contentTopic = insertAssembleContentTopic(contentTopicAddRequest);
+            List<ContentTopicSelectOption> contentTopicSelectOptionList = insertAssembleContentTopicSelectOption(contentTopicAddRequest);
             contentTopicCompleteBo.setContent(content);
             contentTopicCompleteBo.setContentTopic(contentTopic);
             contentTopicCompleteBo.setContentTopicSelectOptionList(contentTopicSelectOptionList);

@@ -4,6 +4,7 @@ import top.potens.framework.model.PageResponse;
 import top.potens.web.model.ContentTopic;
 import top.potens.web.request.ContentTopicAddRequest;
 import top.potens.web.request.ContentTopicListItemRequest;
+import top.potens.web.request.ContentTopicMulAddRequest;
 import top.potens.web.request.ContentTopicUpdateRequest;
 import top.potens.web.response.ContentTopicListItemResponse;
 import top.potens.web.response.ContentTopicViewResponse;
@@ -126,5 +127,5 @@ public interface ContentTopicService {
     * @return
     * @throws
     */
-    Integer insertMultiple(List<ContentTopicAddRequest> requestList);
+    Integer insertMultiple(ContentTopicMulAddRequest request);
 }
