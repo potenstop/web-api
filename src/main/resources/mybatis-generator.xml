@@ -112,6 +112,15 @@
         <table tableName="content_topic_select_option" delimitIdentifiers="true">
             <generatedKey column="content_topic_select_option_id" sqlStatement="MySql" identity="true" />
         </table>
+        <table tableName="content_topic_select_option" delimitIdentifiers="true">
+            <generatedKey column="content_topic_select_option_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="album_course_problem" delimitIdentifiers="true">
+            <generatedKey column="album_course_problem_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="album_course_problem_topic" delimitIdentifiers="true">
+            <generatedKey column="album_course_problem_topic_id" sqlStatement="MySql" identity="true" />
+        </table>
 
     </context>
 </generatorConfiguration>

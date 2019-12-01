@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.potens.web.dao.db.auto.AlbumCourseProblemTopicMapper">
+  <resultMap id="BaseResultMap" type="top.potens.web.model.AlbumCourseProblemTopic">
+    <id column="album_course_problem_topic_id" jdbcType="INTEGER" property="albumCourseProblemTopicId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="album_course_problem_id" jdbcType="INTEGER" property="albumCourseProblemId" />
+    <result column="input_problem" jdbcType="VARCHAR" property="inputProblem" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="grade_amount" jdbcType="DECIMAL" property="gradeAmount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    album_course_problem_topic_id, create_time, update_time, album_course_problem_id, 
+    input_problem, `state`, grade_amount
+  </sql>
+  <select id="selectByExample" parameterType="top.potens.web.model.AlbumCourseProblemTopicExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from `album_course_problem_topic`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `album_course_problem_topic`
+    where album_course_problem_topic_id = #{albumCourseProblemTopicId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `album_course_problem_topic`
+    where album_course_problem_topic_id = #{albumCourseProblemTopicId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="top.potens.web.model.AlbumCourseProblemTopicExample">
+    delete from `album_course_problem_topic`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="top.potens.web.model.AlbumCourseProblemTopic">
+    <selectKey keyProperty="albumCourseProblemTopicId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into `album_course_problem_topic` (create_time, update_time, album_course_problem_id, 
+      input_problem, `state`, grade_amount
+      )
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{albumCourseProblemId,jdbcType=INTEGER}, 
+      #{inputProblem,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{gradeAmount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="top.potens.web.model.AlbumCourseProblemTopic">
+    <selectKey keyProperty="albumCourseProblemTopicId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into `album_course_problem_topic`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="albumCourseProblemId != null">
+        album_course_problem_id,
+      </if>
+      <if test="inputProblem != null">
+        input_problem,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="gradeAmount != null">
+        grade_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="albumCourseProblemId != null">
+        #{albumCourseProblemId,jdbcType=INTEGER},
+      </if>
+      <if test="inputProblem != null">
+        #{inputProblem,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="gradeAmount != null">
+        #{gradeAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="top.potens.web.model.AlbumCourseProblemTopicExample" resultType="java.lang.Long">
+    select count(*) from `album_course_problem_topic`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update `album_course_problem_topic`
+    <set>
+      <if test="record.albumCourseProblemTopicId != null">
+        album_course_problem_topic_id = #{record.albumCourseProblemTopicId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.albumCourseProblemId != null">
+        album_course_problem_id = #{record.albumCourseProblemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.inputProblem != null">
+        input_problem = #{record.inputProblem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        `state` = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.gradeAmount != null">
+        grade_amount = #{record.gradeAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update `album_course_problem_topic`
+    set album_course_problem_topic_id = #{record.albumCourseProblemTopicId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      album_course_problem_id = #{record.albumCourseProblemId,jdbcType=INTEGER},
+      input_problem = #{record.inputProblem,jdbcType=VARCHAR},
+      `state` = #{record.state,jdbcType=TINYINT},
+      grade_amount = #{record.gradeAmount,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.potens.web.model.AlbumCourseProblemTopic">
+    update `album_course_problem_topic`
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="albumCourseProblemId != null">
+        album_course_problem_id = #{albumCourseProblemId,jdbcType=INTEGER},
+      </if>
+      <if test="inputProblem != null">
+        input_problem = #{inputProblem,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="gradeAmount != null">
+        grade_amount = #{gradeAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where album_course_problem_topic_id = #{albumCourseProblemTopicId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.potens.web.model.AlbumCourseProblemTopic">
+    update `album_course_problem_topic`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      album_course_problem_id = #{albumCourseProblemId,jdbcType=INTEGER},
+      input_problem = #{inputProblem,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=TINYINT},
+      grade_amount = #{gradeAmount,jdbcType=DECIMAL}
+    where album_course_problem_topic_id = #{albumCourseProblemTopicId,jdbcType=INTEGER}
+  </update>
+</mapper>
