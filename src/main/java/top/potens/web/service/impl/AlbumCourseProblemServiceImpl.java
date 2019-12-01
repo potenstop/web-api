@@ -19,7 +19,6 @@ import top.potens.web.service.AlbumCourseProblemService;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AlbumCourseProblemServiceImpl implements AlbumCourseProblemService {
 
-
     @Override
     public Integer insertOne(AlbumCourseProblemAddRequest request, Integer userId) {
         return null;
