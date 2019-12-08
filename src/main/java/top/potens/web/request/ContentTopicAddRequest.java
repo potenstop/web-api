@@ -37,7 +37,6 @@ public class ContentTopicAddRequest {
     private String answer;
 
     @ApiModelProperty(value = "解析描述", name = "analysis", required = true, example = "")
-    @NotBlank
     @Size(max = 2000)
     private String analysis;
 
