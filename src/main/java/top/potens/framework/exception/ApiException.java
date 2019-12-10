@@ -1,5 +1,6 @@
 package top.potens.framework.exception;
 
+import top.potens.framework.enums.CommonExceptionCodeEnums;
 import top.potens.framework.response.ResultCodeInit;
 
 /**
@@ -9,8 +10,10 @@ public class ApiException extends RuntimeException {
     private String code;
     private String message;
 
-    public ApiException() {
-        super("");
+    public ApiException(CommonExceptionCodeEnums commonExceptionCodeEnums) {
+        super(commonExceptionCodeEnums.getMessage());
+        this.code = commonExceptionCodeEnums.getCode();
+        this.message = commonExceptionCodeEnums.getMessage();
     }
     public ApiException(String code, String message) {
         super(message);

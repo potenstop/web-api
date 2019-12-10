@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.CollectionUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.bmo.CommonIdCountBo;
 import top.potens.web.code.AlbumCode;
+import top.potens.web.code.CommonCode;
 import top.potens.web.code.ContentCode;
 import top.potens.web.common.constant.ContentConstant;
 import top.potens.web.dao.db.auto.AlbumContentRelationMapper;
@@ -48,7 +50,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class AlbumCourseServiceImpl implements AlbumCourseService {
+public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl<AlbumCourse> implements AlbumCourseService {
 
     private final AlbumCourseExMapper albumCourseExMapper;
     private final AlbumMapper albumMapper;
@@ -62,18 +64,27 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
     private final AlbumContentRelationMapper albumContentRelationMapper;
     private final ContentTopicService contentTopicService;
 
-    private AlbumCourse byAlbumId(Integer albumId) {
-        if (albumId == null) {
-            throw new ApiException(AlbumCode.ALBUM_ID_ERROR);
-        }
+    @Override
+    protected AlbumCourse mapperByPrimaryKey(Integer id) {
+        return albumCourseMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected AlbumCourse mapperBySecondPrimaryKey(Integer id) {
         AlbumCourseExample albumCourseExample = new AlbumCourseExample();
-        albumCourseExample.createCriteria().andAlbumIdEqualTo(albumId);
+        albumCourseExample.createCriteria().andAlbumIdEqualTo(id);
         List<AlbumCourse> albumCourseList = albumCourseMapper.selectByExample(albumCourseExample);
         if (CollectionUtils.isEmpty(albumCourseList)) {
-            throw new ApiException(AlbumCode.ALBUM_ID_ERROR);
+            return null;
         }
         return albumCourseList.get(0);
     }
+
+    @Override
+    protected Boolean isDelete(AlbumCourse albumCourse) {
+        return false;
+    }
+
     @Override
     public PageResponse<AlbumCourseListItemResponse> selectList(AlbumCourseListItemRequest request) {
         PageResponse<AlbumCourseListItemResponse> response = new PageResponse<>();
@@ -143,8 +154,8 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
 
     @Override
     public AlbumCourseViewResponse selectById(Integer albumId) {
-        AlbumCourse albumCourse = byAlbumId(albumId);
-        Album album = albumService.byId(albumId);
+        AlbumCourse albumCourse = bySecondPrimaryKeyException(albumId);
+        Album album = albumService.byPrimaryKeyException(albumId);
         Course course = courseService.byId(albumCourse.getCourseId());
         AlbumCourseViewResponse albumCourseViewResponse = new AlbumCourseViewResponse();
         albumCourseViewResponse.setAlbumId(album.getAlbumId());
@@ -166,8 +177,8 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
 
     @Override
     public Integer updateById(AlbumCourseUpdateRequest request) {
-        AlbumCourse albumCourse = byAlbumId(request.getAlbumId());
-        Album album = albumService.byId(request.getAlbumId());
+        AlbumCourse albumCourse = bySecondPrimaryKeyException(request.getAlbumId());
+        Album album = albumService.byPrimaryKeyException(request.getAlbumId());
         courseService.byId(request.getCourseId());
         Album updateAlbum = new Album();
         AlbumCourse updateAlbumCourse = new AlbumCourse();
@@ -182,7 +193,7 @@ public class AlbumCourseServiceImpl implements AlbumCourseService {
 
     @Override
     public Integer updateCourseRelationById(AlbumCourseUpdateCourseRelationRequest request) {
-        byAlbumId(request.getAlbumId());
+        bySecondPrimaryKeyException(request.getAlbumId());
         List<AlbumContentRelation> albumContentRelationList = new ArrayList<>();
         if (request.getContentIdList() != null) {
             List<Content> contents = contentService.byIdList(request.getContentIdList());

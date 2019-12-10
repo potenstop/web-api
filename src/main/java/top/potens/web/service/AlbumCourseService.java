@@ -1,6 +1,8 @@
 package top.potens.web.service;
 
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.TableCommonService;
+import top.potens.web.model.AlbumCourse;
 import top.potens.web.request.AlbumCourseAddRequest;
 import top.potens.web.request.AlbumCourseListItemRequest;
 import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
@@ -19,7 +21,7 @@ import java.util.List;
  * @projectName web-api
  * @date 2019/10/22 10:02
  */
-public interface AlbumCourseService {
+public interface AlbumCourseService extends TableCommonService<AlbumCourse> {
     /**
     *
     * 方法功能描述: 获取课程的专辑列表

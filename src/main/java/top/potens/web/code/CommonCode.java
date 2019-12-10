@@ -27,5 +27,8 @@ public class CommonCode {
     @ResultMessage("渠道码没有找到")
     public static final String CHANNEL_CODE_NOT_FOUND = "10102";
 
+    @ResultMessage("记录不存在")
+    public static final String RECORD_NOT_FOUND_BY_ID = "10103";
+
 
 }

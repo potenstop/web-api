@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.potens.framework.annotation.JsonFormatDatetime;
 
 import java.util.Date;
 import java.util.List;
@@ -23,11 +24,11 @@ public class CourseTypeTreeItemResponse {
     private Integer courseTypeId;
 
     @ApiModelProperty(value = "创建时间", name = "createTime", required = true, example = "2019-01-01 00:0:00.0")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "GMT+8")
+    @JsonFormatDatetime
     private Date createTime;
 
     @ApiModelProperty(value = "更新时间", name = "updateTime", required = true, example = "2019-01-01 00:0:00.0")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "GMT+8")
+    @JsonFormatDatetime
     private Date updateTime;
 
     @ApiModelProperty(value = "名称", name = "typeName", required = true, example = "")

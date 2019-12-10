@@ -1,6 +1,7 @@
 package top.potens.web.service;
 
 
+import top.potens.framework.service.TableCommonService;
 import top.potens.web.model.Album;
 
 /**
@@ -11,16 +12,6 @@ import top.potens.web.model.Album;
  * @projectName web-api
  * @date 2019/11/5 12:05
  */
-public interface AlbumService {
-    /**
-     *
-     * 方法功能描述: 按专辑id 查询专辑对象
-     *
-     * @author yanshaowen
-     * @date 2019/11/5 11:56
-     * @param albumId
-     * @return
-     * @throws
-     */
-    Album byId(Integer albumId);
+public interface AlbumService extends TableCommonService<Album> {
+
 }

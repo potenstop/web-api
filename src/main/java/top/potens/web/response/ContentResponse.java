@@ -3,6 +3,7 @@ package top.potens.web.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.potens.framework.annotation.JsonFormatDatetime;
 
 import java.util.Date;
 
@@ -20,11 +21,11 @@ public class ContentResponse {
     private Integer contentId = 1;
 
     @ApiModelProperty(value = "创建时间", name = "createTime", required = true, example = "CURRENT_TIMESTAMP(3)")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "GMT+8")
+    @JsonFormatDatetime
     private Date createTime;
 
     @ApiModelProperty(value = "更新时间", name = "updateTime", required = true, example = "CURRENT_TIMESTAMP(3)")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "GMT+8")
+    @JsonFormatDatetime
     private Date updateTime;
 
     @ApiModelProperty(value = "状态 1 展示 2 不展示", name = "state", required = true, example = "")
