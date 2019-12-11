@@ -1,5 +1,7 @@
 package top.potens.web.service;
 
+import top.potens.framework.service.TableCommonService;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.web.model.CourseType;
 import top.potens.web.response.CourseTypeListItemResponse;
 import top.potens.web.response.CourseTypeTreeItemResponse;
@@ -15,7 +17,7 @@ import java.util.Map;
  * @projectName web-api
  * @date 2019/10/25 12:08
  */
-public interface CourseTypeService {
+public interface CourseTypeService extends TableCommonService<CourseType> {
     /**
     *
     * 方法功能描述: 根据id列表获取分类名称 分隔符默认为,

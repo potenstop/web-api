@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.potens.framework.log.AppLogger;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.web.common.constant.CourseConstant;
@@ -30,10 +31,26 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CourseTypeServiceImpl implements CourseTypeService {
+public class CourseTypeServiceImpl extends AbstractSimpleTableCommonServiceImpl<CourseType> implements CourseTypeService {
     private final CourseTypeMapper courseTypeMapper;
     private final CacheServiceLogic cacheServiceLogic;
     private final String defaultChar = ",";
+
+    @Override
+    protected CourseType mapperByPrimaryKey(Integer id) {
+        return courseTypeMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected CourseType mapperBySecondPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    protected Boolean isDelete(CourseType courseType) {
+        return false;
+    }
+
     @Override
     public String getName(List<Integer> courseTypeIdList) {
         return getName(courseTypeIdList, defaultChar);

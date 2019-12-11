@@ -1,6 +1,7 @@
 package top.potens.web.service;
 
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.TableCommonService;
 import top.potens.web.model.Content;
 import top.potens.web.model.ContentNews;
 import top.potens.web.request.ContentNewsListRequest;
@@ -8,9 +9,14 @@ import top.potens.web.request.ContentNewsOutRequest;
 import top.potens.web.response.ContentNewItemResponse;
 
 /**
- * Created by wenshao on 2019/7/20.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className ContentNewsService
+ * @projectName web-api
+ * @date 2019/11/5 12:05
  */
-public interface ContentNewsService {
+public interface ContentNewsService extends TableCommonService<ContentNews> {
 
     /**
     *

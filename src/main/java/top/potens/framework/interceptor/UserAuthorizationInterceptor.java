@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -34,6 +35,8 @@ public class UserAuthorizationInterceptor implements HandlerInterceptor {
 
     @Autowired
     private RedissonClient redisson;
+    @Value("${env:pro}")
+    private String env;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -48,12 +51,22 @@ public class UserAuthorizationInterceptor implements HandlerInterceptor {
         boolean notLogin = true;
         String token = request.getHeader(TokenConstant.TOKEN_NAME);
         if (token != null && token.length() != 0) {
-            RBucket<TokenUser> rBucket = redisson.getBucket(TokenConstant.TOKEN_REDISSION_NAME + token);
-            TokenUser tokenUser = rBucket.get();
-            if (tokenUser != null) {
+            if ("dev".equals(env) && token.indexOf(",") != -1) {
+                String[] split = token.split(",");
+                TokenUser tokenUser = new TokenUser();
+                tokenUser.setUserId(Integer.valueOf(split[0]));
+                tokenUser.setUsername(split[1]);
                 notLogin = false;
                 request.getSession().setAttribute(TokenConstant.REQUEST_CURRENT_KEY, tokenUser);
+            } else {
+                RBucket<TokenUser> rBucket = redisson.getBucket(TokenConstant.TOKEN_REDISSION_NAME + token);
+                TokenUser tokenUser = rBucket.get();
+                if (tokenUser != null) {
+                    notLogin = false;
+                    request.getSession().setAttribute(TokenConstant.REQUEST_CURRENT_KEY, tokenUser);
+                }
             }
+
         }
 
         // 如果打上了AuthToken注解则需要验证token

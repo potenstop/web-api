@@ -3,6 +3,7 @@ package top.potens.web.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.web.dao.db.auto.ContentZoneMapper;
 import top.potens.web.model.ContentZone;
 import top.potens.web.model.ContentZoneExample;
@@ -23,8 +24,24 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ContentZoneServiceImpl implements ContentZoneService {
+public class ContentZoneServiceImpl extends AbstractSimpleTableCommonServiceImpl<ContentZone> implements ContentZoneService {
     private final ContentZoneMapper contentZoneMapper;
+
+    @Override
+    protected ContentZone mapperByPrimaryKey(Integer id) {
+        return contentZoneMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected ContentZone mapperBySecondPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    protected Boolean isDelete(ContentZone contentZone) {
+        return false;
+    }
+
     @Override
     public Map<Integer, ContentZone> selectIdList(List<Integer> list) {
         if (list == null || list.size() == 0) {

@@ -18,6 +18,7 @@ import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.model.TokenUser;
 import top.potens.framework.serialization.JSON;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
@@ -56,7 +57,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractSimpleTableCommonServiceImpl<User> implements UserService {
     private final UserMapper userMapper;
     private final UserAuthMapper userAuthMapper;
     private final Neo4jService neo4JService;
@@ -67,19 +68,18 @@ public class UserServiceImpl implements UserService {
     private final ApolloConfiguration apolloConfiguration;
 
     @Override
-    public User queryById(@NotNull Integer userId) {
-        // 查询user信息
-        UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserIdEqualTo(userId);
-        List<User> users = userMapper.selectByExample(userExample);
-        if (users.size() != 1) {
-            throw new ApiException(UserCode.USER_NOT_FOUND);
-        }
-        if (CommonConstant.IsDelete.YES.equals(users.get(0).getIsDelete())) {
-            AppLogger.warn("查询user 用户已经被删除 userId:[{}]", userId);
-            throw new ApiException(UserCode.USER_NOT_FOUND);
-        }
-        return users.get(0);
+    protected User mapperByPrimaryKey(Integer id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected User mapperBySecondPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    protected Boolean isDelete(User user) {
+        return false;
     }
 
     @Override

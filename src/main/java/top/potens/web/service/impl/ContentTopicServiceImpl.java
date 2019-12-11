@@ -11,6 +11,7 @@ import top.potens.framework.enums.LockModel;
 import top.potens.framework.exception.ApiException;
 import top.potens.framework.model.DateScope;
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.web.bmo.ContentTopicCompleteBo;
@@ -45,7 +46,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ContentTopicServiceImpl implements ContentTopicService {
+public class ContentTopicServiceImpl extends AbstractSimpleTableCommonServiceImpl<ContentTopic> implements ContentTopicService {
     private final ContentTopicMapper contentTopicMapper;
     private final ContentTopicExMapper contentTopicExMapper;
     private final ContentService contentService;
@@ -54,19 +55,25 @@ public class ContentTopicServiceImpl implements ContentTopicService {
     private final ContentTopicSelectOptionMapper contentTopicSelectOptionMapper;
 
     @Override
-    public ContentTopic byId(Integer contentId) {
-        if (contentId == null) {
-            throw new ApiException(ContentCode.CONTENT_ID_NOT_FOUND);
-        }
-        ContentTopicExample example = new ContentTopicExample();
-        example.createCriteria().andContentIdEqualTo(contentId);
-        List<ContentTopic> contentTopicList = contentTopicMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(contentTopicList)) {
-            throw new ApiException(ContentCode.CONTENT_ID_NOT_FOUND);
-        }
-        return contentTopicList.get(0);
+    protected ContentTopic mapperByPrimaryKey(Integer id) {
+        return contentTopicMapper.selectByPrimaryKey(id);
     }
 
+    @Override
+    protected ContentTopic mapperBySecondPrimaryKey(Integer id) {
+        ContentTopicExample example = new ContentTopicExample();
+        example.createCriteria().andContentIdEqualTo(id);
+        List<ContentTopic> contentTopics = contentTopicMapper.selectByExample(example);
+        if (contentTopics.size() != 1) {
+            return null;
+        }
+        return contentTopics.get(0);
+    }
+
+    @Override
+    protected Boolean isDelete(ContentTopic contentTopic) {
+        return false;
+    }
     @Override
     public List<ContentTopic> byIdList(List<Integer> contentIdList) {
         if (CollectionUtils.isEmpty(contentIdList)) {
@@ -170,8 +177,8 @@ public class ContentTopicServiceImpl implements ContentTopicService {
 
     @Override
     public ContentTopicViewResponse selectById(Integer contentId) {
-        Content content = contentService.byId(contentId);
-        ContentTopic contentTopic = byId(content.getContentId());
+        Content content = contentService.byPrimaryKey(contentId);
+        ContentTopic contentTopic = byPrimaryKeyException(content.getContentId());
 
         ContentTopicViewResponse contentTopicViewResponse = BeanCopierUtil.convert(content, ContentTopicViewResponse.class);
         BeanCopierUtil.convert(contentTopic, contentTopicViewResponse);

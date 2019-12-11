@@ -1,6 +1,7 @@
 package top.potens.web.service;
 
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.TableCommonService;
 import top.potens.web.model.Course;
 import top.potens.web.request.CourseAddRequest;
 import top.potens.web.request.CourseListItemRequest;
@@ -19,18 +20,7 @@ import java.util.Map;
  * @projectName web-api
  * @date 2019/10/28 6:11
  */
-public interface CourseService {
-    /**
-    *
-    * 方法功能描述: 按id查看课程对象
-    *
-    * @author yanshaowen
-    * @date 2019/11/5 11:38
-    * @param courseId
-    * @return
-    * @throws
-    */
-    Course byId(Integer courseId);
+public interface CourseService extends TableCommonService<Course> {
     /**
      *
      * 方法功能描述: 根据id批量查询课程对象

@@ -1,5 +1,7 @@
 package top.potens.web.service;
 
+import top.potens.framework.service.TableCommonService;
+
 /**
  * 功能描述:
  *

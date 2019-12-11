@@ -1,6 +1,7 @@
 package top.potens.web.service;
 
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.TableCommonService;
 import top.potens.web.bmo.UserMoreAuthBo;
 import top.potens.web.bmo.UserSignAuthBo;
 import top.potens.web.model.Channel;
@@ -16,16 +17,14 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Created by wenshao on 2019/6/16.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className UserService
+ * @projectName web-api
+ * @date 2019/10/25 12:08
  */
-public interface UserService {
-
-    /**
-     * 按id查询用户的信息
-     * @param userId  userId
-     * @return          用户信息
-     */
-    User queryById(@NotNull Integer userId);
+public interface UserService extends TableCommonService<User> {
     /**
      * 按id查询用户的详细信息
      * @param userId  userId

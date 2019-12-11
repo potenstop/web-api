@@ -1,5 +1,6 @@
 package top.potens.web.service;
 
+import top.potens.framework.service.TableCommonService;
 import top.potens.web.model.ContentZone;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @projectName web-api
  * @date 2019/9/25 17:45
  */
-public interface ContentZoneService {
+public interface ContentZoneService extends TableCommonService<ContentZone> {
     /**
     *
     * 方法功能描述: 根据id批量查询频道对象

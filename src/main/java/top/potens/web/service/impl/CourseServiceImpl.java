@@ -10,6 +10,7 @@ import top.potens.framework.exception.ApiException;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.serialization.JSON;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.CollectionUtil;
 import top.potens.web.bmo.CourseInfoTypeBo;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class CourseServiceImpl implements CourseService {
+public class CourseServiceImpl extends AbstractSimpleTableCommonServiceImpl<Course> implements CourseService {
     private final CacheServiceLogic cacheServiceLogic;
     private final CourseTypeService courseTypeService;
     private final CourseExMapper courseExMapper;
@@ -52,16 +53,20 @@ public class CourseServiceImpl implements CourseService {
     private final CourseServiceLogic courseServiceLogic;
 
     @Override
-    public Course byId(Integer courseId) {
-        if (courseId == null) {
-            throw new ApiException(CourseCode.COURSE_ID_NOT_FOUND);
-        }
-        Course course = courseMapper.selectByPrimaryKey(courseId);
-        if (course == null) {
-            throw new ApiException(CourseCode.COURSE_ID_NOT_FOUND);
-        }
-        return course;
+    protected Course mapperByPrimaryKey(Integer id) {
+        return courseMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    protected Course mapperBySecondPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    protected Boolean isDelete(Course course) {
+        return false;
+    }
+
     @Override
     public Map<Integer, Course> selectNameByIdList(List<Integer> idList) {
         List<Course> courseAll = cacheServiceLogic.getCourseAll();
@@ -232,7 +237,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Integer updateById(CourseUpdateRequest request) {
         // 判断id是否存在
-        byId(request.getCourseId());
+        byPrimaryKey(request.getCourseId());
         // 校验关系
         List<CourseTypeRelation> courseTypeRelationList = checkCourseRelation(request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeIdList());
         // 入库

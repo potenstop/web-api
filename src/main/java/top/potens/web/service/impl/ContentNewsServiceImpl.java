@@ -9,6 +9,7 @@ import top.potens.framework.annotation.Lock;
 import top.potens.framework.enums.LockModel;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.BeanCopierUtil;
 import top.potens.framework.util.DateUtil;
 import top.potens.framework.util.StringUtil;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ContentNewsServiceImpl implements ContentNewsService {
+public class ContentNewsServiceImpl extends AbstractSimpleTableCommonServiceImpl<ContentNews> implements ContentNewsService {
     private final CacheServiceLogic cacheServiceLogic;
     private final ContentServiceLogic contentServiceLogic;
     private final ContentLabelExMapper contentLabelExMapper;
@@ -56,6 +57,27 @@ public class ContentNewsServiceImpl implements ContentNewsService {
     private final ContentMapper contentMapper;
     private final ChannelService channelService;
     private final ContentZoneService contentZoneService;
+
+    @Override
+    protected ContentNews mapperByPrimaryKey(Integer id) {
+        return contentNewsMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected ContentNews mapperBySecondPrimaryKey(Integer id) {
+        ContentNewsExample contentNewsExample = new ContentNewsExample();
+        contentNewsExample.createCriteria().andContentIdEqualTo(id);
+        List<ContentNews> contentNews = contentNewsMapper.selectByExample(contentNewsExample);
+        if (contentNews.size() != 1) {
+            return null;
+        }
+        return contentNews.get(0);
+    }
+
+    @Override
+    protected Boolean isDelete(ContentNews contentNews) {
+        return false;
+    }
 
     @Override
     @Lock(lockModel = LockModel.FAIR, keys = LockConstant.CONTENT_NEWS_OUT_KEY + "#{#request.webSource +':' + #request.id}", attemptTimeout = 10, lockWatchTimeout = 120)

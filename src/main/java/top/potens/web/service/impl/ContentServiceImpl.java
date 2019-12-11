@@ -5,6 +5,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.potens.framework.exception.ApiException;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.framework.util.CollectionUtil;
 import top.potens.web.code.ContentCode;
 import top.potens.web.dao.db.auto.ContentMapper;
@@ -27,18 +28,22 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ContentServiceImpl implements ContentService {
+public class ContentServiceImpl extends AbstractSimpleTableCommonServiceImpl<Content> implements ContentService {
     private final ContentMapper contentMapper;
+
     @Override
-    public Content byId(Integer contentId) {
-        if (contentId == null) {
-            throw new ApiException(ContentCode.CONTENT_ID_NOT_FOUND);
-        }
-        Content content = contentMapper.selectByPrimaryKey(contentId);
-        if (content == null) {
-            throw new ApiException(ContentCode.CONTENT_ID_NOT_FOUND);
-        }
-        return content;
+    protected Content mapperByPrimaryKey(Integer id) {
+        return contentMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected Content mapperBySecondPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    protected Boolean isDelete(Content content) {
+        return false;
     }
 
     @Override

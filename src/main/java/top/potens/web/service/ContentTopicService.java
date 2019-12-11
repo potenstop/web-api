@@ -1,6 +1,8 @@
 package top.potens.web.service;
 
 import top.potens.framework.model.PageResponse;
+import top.potens.framework.service.TableCommonService;
+import top.potens.web.model.Content;
 import top.potens.web.model.ContentTopic;
 import top.potens.web.request.ContentTopicAddRequest;
 import top.potens.web.request.ContentTopicListItemRequest;
@@ -21,19 +23,7 @@ import java.util.Map;
  * @projectName web-api
  * @date 2019/10/22 10:02
  */
-public interface ContentTopicService {
-    /**
-     *
-     * 方法功能描述: 按单个内容id获取单个对象
-     *
-     * @author yanshaowen
-     * @date 2019/11/6 14:52
-     * @param contentId
-     * @return
-     * @throws
-     */
-    ContentTopic byId(Integer contentId);
-
+public interface ContentTopicService extends TableCommonService<ContentTopic> {
     /**
      *
      * 方法功能描述: 按多个内容id获取多个对象

@@ -8,6 +8,7 @@
     <result column="album_id" jdbcType="INTEGER" property="albumId" />
     <result column="album_course_id" jdbcType="INTEGER" property="albumCourseId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="state" jdbcType="TINYINT" property="state" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    album_course_problem_id, create_time, update_time, album_id, album_course_id, user_id
+    album_course_problem_id, create_time, update_time, album_id, album_course_id, user_id, 
+    `state`
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.AlbumCourseProblemExample" resultMap="BaseResultMap">
     select
@@ -105,9 +107,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `album_course_problem` (create_time, update_time, album_id, 
-      album_course_id, user_id)
+      album_course_id, user_id, `state`
+      )
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{albumId,jdbcType=INTEGER}, 
-      #{albumCourseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER})
+      #{albumCourseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.AlbumCourseProblem">
     <selectKey keyProperty="albumCourseProblemId" order="AFTER" resultType="java.lang.Integer">
@@ -130,6 +134,9 @@
       <if test="userId != null">
         user_id,
       </if>
+      <if test="state != null">
+        `state`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
@@ -146,6 +153,9 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -176,6 +186,9 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
+      <if test="record.state != null">
+        `state` = #{record.state,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -188,7 +201,8 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       album_id = #{record.albumId,jdbcType=INTEGER},
       album_course_id = #{record.albumCourseId,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER}
+      user_id = #{record.userId,jdbcType=INTEGER},
+      `state` = #{record.state,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -211,6 +225,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=TINYINT},
+      </if>
     </set>
     where album_course_problem_id = #{albumCourseProblemId,jdbcType=INTEGER}
   </update>
@@ -220,7 +237,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       album_id = #{albumId,jdbcType=INTEGER},
       album_course_id = #{albumCourseId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER}
+      user_id = #{userId,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=TINYINT}
     where album_course_problem_id = #{albumCourseProblemId,jdbcType=INTEGER}
   </update>
 </mapper>

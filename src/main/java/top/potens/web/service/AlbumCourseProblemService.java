@@ -1,5 +1,7 @@
 package top.potens.web.service;
 
+import top.potens.framework.service.TableCommonService;
+import top.potens.web.model.AlbumCourseProblem;
 import top.potens.web.request.AlbumCourseProblemAddRequest;
 
 /**
@@ -10,10 +12,10 @@ import top.potens.web.request.AlbumCourseProblemAddRequest;
  * @projectName web-api
  * @date 2019/10/25 14:22
  */
-public interface AlbumCourseProblemService {
+public interface AlbumCourseProblemService extends TableCommonService<AlbumCourseProblem> {
     /**
      *
-     * 方法功能描述: 插入一个课程专辑
+     * 方法功能描述: 插入一个答题记录
      *
      * @author yanshaowen
      * @date 2019/10/22 10:35

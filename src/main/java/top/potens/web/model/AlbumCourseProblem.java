@@ -16,6 +16,8 @@ public class AlbumCourseProblem implements Serializable {
 
     private Integer userId;
 
+    private Integer state;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getAlbumCourseProblemId() {
@@ -64,5 +66,13 @@ public class AlbumCourseProblem implements Serializable {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

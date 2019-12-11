@@ -3,6 +3,7 @@ package top.potens.web.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.potens.framework.service.impl.AbstractSimpleTableCommonServiceImpl;
 import top.potens.web.dao.db.auto.ChannelMapper;
 import top.potens.web.model.Channel;
 import top.potens.web.model.ChannelExample;
@@ -25,8 +26,23 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ChannelServiceImpl implements ChannelService {
+public class ChannelServiceImpl extends AbstractSimpleTableCommonServiceImpl<Channel> implements ChannelService{
     private final ChannelMapper channelMapper;
+
+    @Override
+    protected Channel mapperByPrimaryKey(Integer id) {
+        return channelMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    protected Channel mapperBySecondPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    protected Boolean isDelete(Channel channel) {
+        return false;
+    }
 
     @Override
     public Map<Integer, Channel> selectIdList(List<Integer> list) {

@@ -94,26 +94,30 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
         if (StringUtil.isNotBlank(request.getAlbumName())) {
             request.setAlbumName("%" + request.getAlbumName() + "%");
         }
-        List<Integer> idList = albumCourseExMapper.selectAlbumIdList(request.getPageSize(), offset, request.getOrderBy(),
+        List<Integer> albumIdList = albumCourseExMapper.selectAlbumIdList(request.getPageSize(), offset, request.getOrderBy(),
                 request.getAlbumId(), request.getAlbumName(), dateScope.getStartDate(), dateScope.getEndDate());
 
         List<AlbumCourseListItemResponse> albumCourseListItemResponseList = new ArrayList<>();
-        if (idList.size() > 0){
+        if (albumIdList.size() > 0){
             // 获取专辑表的信息
             AlbumExample albumExample = new AlbumExample();
-            albumExample.createCriteria().andAlbumIdIn(idList);
+            albumExample.createCriteria().andAlbumIdIn(albumIdList);
             List<Album> albums = albumMapper.selectByExample(albumExample);
             albumCourseListItemResponseList = BeanCopierUtil.convert(albums, AlbumCourseListItemResponse.class);
             // 获取课程专辑的信息
             AlbumCourseExample albumCourseExample = new AlbumCourseExample();
-            albumCourseExample.createCriteria().andAlbumIdIn(idList);
-            Map<Integer, AlbumCourse> albumCourseMap = albumCourseMapper.selectByExample(albumCourseExample).stream().collect(Collectors.toMap(AlbumCourse::getAlbumId, albumCourse -> albumCourse));
+            albumCourseExample.createCriteria().andAlbumIdIn(albumIdList);
+            List<Integer> courseIdList = new ArrayList<>();
+            Map<Integer, AlbumCourse> albumCourseMap = albumCourseMapper.selectByExample(albumCourseExample).stream().collect(Collectors.toMap(AlbumCourse::getAlbumId, albumCourse -> {
+                courseIdList.add(albumCourse.getCourseId());
+                return albumCourse;
+            }));
 
             // 获取课程名称和id
-            Map<Integer, Course> courseMap = courseService.selectNameByIdList(idList);
+            Map<Integer, Course> courseMap = courseService.selectNameByIdList(courseIdList);
 
             // 获取课程专辑的内容总数
-            Map<Integer, Long> albumIdCount = albumContentRelationExMapper.countContentRelationByAlbumId(idList)
+            Map<Integer, Long> albumIdCount = albumContentRelationExMapper.countContentRelationByAlbumId(albumIdList)
                     .stream()
                     .collect(Collectors.toMap(CommonIdCountBo::getId, CommonIdCountBo::getCount));
             albumCourseListItemResponseList.forEach(item -> {
@@ -132,7 +136,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
 
         }
         response.setTotal(count);
-        CollectionUtil.referenceSort(albumCourseListItemResponseList, idList, AlbumCourseListItemResponse::getAlbumId);
+        CollectionUtil.referenceSort(albumCourseListItemResponseList, albumIdList, AlbumCourseListItemResponse::getAlbumId);
         response.setList(albumCourseListItemResponseList);
         return response;
     }
@@ -140,7 +144,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
     @Override
     public Integer insertOne(AlbumCourseAddRequest request) {
         // 判断课程id是否存在
-        courseService.byId(request.getCourseId());
+        courseService.byPrimaryKey(request.getCourseId());
         // 组装数据
         Album album = new Album();
         AlbumCourse albumCourse = new AlbumCourse();
@@ -156,7 +160,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
     public AlbumCourseViewResponse selectById(Integer albumId) {
         AlbumCourse albumCourse = bySecondPrimaryKeyException(albumId);
         Album album = albumService.byPrimaryKeyException(albumId);
-        Course course = courseService.byId(albumCourse.getCourseId());
+        Course course = courseService.byPrimaryKey(albumCourse.getCourseId());
         AlbumCourseViewResponse albumCourseViewResponse = new AlbumCourseViewResponse();
         albumCourseViewResponse.setAlbumId(album.getAlbumId());
         albumCourseViewResponse.setAlbumName(album.getAlbumName());
@@ -179,7 +183,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
     public Integer updateById(AlbumCourseUpdateRequest request) {
         AlbumCourse albumCourse = bySecondPrimaryKeyException(request.getAlbumId());
         Album album = albumService.byPrimaryKeyException(request.getAlbumId());
-        courseService.byId(request.getCourseId());
+        courseService.byPrimaryKey(request.getCourseId());
         Album updateAlbum = new Album();
         AlbumCourse updateAlbumCourse = new AlbumCourse();
         updateAlbum.setAlbumId(album.getAlbumId());
