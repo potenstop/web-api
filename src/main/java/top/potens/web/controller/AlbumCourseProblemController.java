@@ -12,14 +12,13 @@ import top.potens.framework.model.ApiResult;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.model.TokenUser;
 import top.potens.web.request.*;
-import top.potens.web.response.AlbumCourseListItemResponse;
-import top.potens.web.response.AlbumCourseTopicViewResponse;
-import top.potens.web.response.AlbumCourseViewResponse;
+import top.potens.web.response.*;
 import top.potens.web.service.AlbumCourseProblemService;
 import top.potens.web.service.AlbumCourseService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 功能描述:
@@ -43,6 +42,24 @@ public class AlbumCourseProblemController {
     public ApiResult<Integer> albumCourseProblemAdd(@RequestBody @Valid AlbumCourseProblemAddRequest request, TokenUser tokenUser) {
         ApiResult<Integer> result = new ApiResult<>();
         result.setData(albumCourseProblemService.insertOne(request, tokenUser.getUserId()));
+        return result;
+    }
+
+    @PostMapping("/list")
+    @ApiOperation("列表查询")
+    @UserAuthToken
+    public ApiResult<PageResponse<AlbumCourseProblemListItemResponse>> albumCourseProblemList(@RequestBody @Valid AlbumCourseProblemListItemRequest request, TokenUser tokenUser) {
+        ApiResult<PageResponse<AlbumCourseProblemListItemResponse>> result = new ApiResult<>();
+        result.setData(albumCourseProblemService.selectList(request));
+        return result;
+    }
+
+    @GetMapping("/topic")
+    @ApiOperation("查询试卷下已经答题目列表")
+    @UserAuthToken
+    public ApiResult<List<AlbumCourseProblemTopicResponse>> albumCourseProblemList1(@ApiParam(value = "试卷id", example = "1") @RequestParam @NotNull Integer albumCourseProblemTopicId, TokenUser tokenUser) {
+        ApiResult<List<AlbumCourseProblemTopicResponse>> result = new ApiResult<>();
+        result.setData(albumCourseProblemService.selectTopicList(albumCourseProblemTopicId));
         return result;
     }
 }

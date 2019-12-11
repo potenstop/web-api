@@ -6,6 +6,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="album_course_problem_id" jdbcType="INTEGER" property="albumCourseProblemId" />
+    <result column="input_select_option" jdbcType="VARCHAR" property="inputSelectOption" />
     <result column="input_problem" jdbcType="VARCHAR" property="inputProblem" />
     <result column="state" jdbcType="TINYINT" property="state" />
     <result column="grade_amount" jdbcType="DECIMAL" property="gradeAmount" />
@@ -70,7 +71,7 @@
   </sql>
   <sql id="Base_Column_List">
     album_course_problem_topic_id, create_time, update_time, album_course_problem_id, 
-    input_problem, `state`, grade_amount
+    input_select_option, input_problem, `state`, grade_amount
   </sql>
   <select id="selectByExample" parameterType="top.potens.web.model.AlbumCourseProblemTopicExample" resultMap="BaseResultMap">
     select
@@ -107,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into `album_course_problem_topic` (create_time, update_time, album_course_problem_id, 
-      input_problem, `state`, grade_amount
-      )
+      input_select_option, input_problem, `state`, 
+      grade_amount)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{albumCourseProblemId,jdbcType=INTEGER}, 
-      #{inputProblem,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, #{gradeAmount,jdbcType=DECIMAL}
-      )
+      #{inputSelectOption,jdbcType=VARCHAR}, #{inputProblem,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, 
+      #{gradeAmount,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="top.potens.web.model.AlbumCourseProblemTopic">
     <selectKey keyProperty="albumCourseProblemTopicId" order="AFTER" resultType="java.lang.Integer">
@@ -127,6 +128,9 @@
       </if>
       <if test="albumCourseProblemId != null">
         album_course_problem_id,
+      </if>
+      <if test="inputSelectOption != null">
+        input_select_option,
       </if>
       <if test="inputProblem != null">
         input_problem,
@@ -147,6 +151,9 @@
       </if>
       <if test="albumCourseProblemId != null">
         #{albumCourseProblemId,jdbcType=INTEGER},
+      </if>
+      <if test="inputSelectOption != null">
+        #{inputSelectOption,jdbcType=VARCHAR},
       </if>
       <if test="inputProblem != null">
         #{inputProblem,jdbcType=VARCHAR},
@@ -180,6 +187,9 @@
       <if test="record.albumCourseProblemId != null">
         album_course_problem_id = #{record.albumCourseProblemId,jdbcType=INTEGER},
       </if>
+      <if test="record.inputSelectOption != null">
+        input_select_option = #{record.inputSelectOption,jdbcType=VARCHAR},
+      </if>
       <if test="record.inputProblem != null">
         input_problem = #{record.inputProblem,jdbcType=VARCHAR},
       </if>
@@ -200,6 +210,7 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       album_course_problem_id = #{record.albumCourseProblemId,jdbcType=INTEGER},
+      input_select_option = #{record.inputSelectOption,jdbcType=VARCHAR},
       input_problem = #{record.inputProblem,jdbcType=VARCHAR},
       `state` = #{record.state,jdbcType=TINYINT},
       grade_amount = #{record.gradeAmount,jdbcType=DECIMAL}
@@ -219,6 +230,9 @@
       <if test="albumCourseProblemId != null">
         album_course_problem_id = #{albumCourseProblemId,jdbcType=INTEGER},
       </if>
+      <if test="inputSelectOption != null">
+        input_select_option = #{inputSelectOption,jdbcType=VARCHAR},
+      </if>
       <if test="inputProblem != null">
         input_problem = #{inputProblem,jdbcType=VARCHAR},
       </if>
@@ -236,6 +250,7 @@
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       album_course_problem_id = #{albumCourseProblemId,jdbcType=INTEGER},
+      input_select_option = #{inputSelectOption,jdbcType=VARCHAR},
       input_problem = #{inputProblem,jdbcType=VARCHAR},
       `state` = #{state,jdbcType=TINYINT},
       grade_amount = #{gradeAmount,jdbcType=DECIMAL}

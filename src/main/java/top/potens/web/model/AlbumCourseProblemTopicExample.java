@@ -346,6 +346,76 @@ public class AlbumCourseProblemTopicExample {
             return (Criteria) this;
         }
 
+        public Criteria andInputSelectOptionIsNull() {
+            addCriterion("input_select_option is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionIsNotNull() {
+            addCriterion("input_select_option is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionEqualTo(String value) {
+            addCriterion("input_select_option =", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionNotEqualTo(String value) {
+            addCriterion("input_select_option <>", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionGreaterThan(String value) {
+            addCriterion("input_select_option >", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionGreaterThanOrEqualTo(String value) {
+            addCriterion("input_select_option >=", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionLessThan(String value) {
+            addCriterion("input_select_option <", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionLessThanOrEqualTo(String value) {
+            addCriterion("input_select_option <=", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionLike(String value) {
+            addCriterion("input_select_option like", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionNotLike(String value) {
+            addCriterion("input_select_option not like", value, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionIn(List<String> values) {
+            addCriterion("input_select_option in", values, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionNotIn(List<String> values) {
+            addCriterion("input_select_option not in", values, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionBetween(String value1, String value2) {
+            addCriterion("input_select_option between", value1, value2, "inputSelectOption");
+            return (Criteria) this;
+        }
+
+        public Criteria andInputSelectOptionNotBetween(String value1, String value2) {
+            addCriterion("input_select_option not between", value1, value2, "inputSelectOption");
+            return (Criteria) this;
+        }
+
         public Criteria andInputProblemIsNull() {
             addCriterion("input_problem is null");
             return (Criteria) this;
