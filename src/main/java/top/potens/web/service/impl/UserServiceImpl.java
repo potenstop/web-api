@@ -133,7 +133,8 @@ public class UserServiceImpl extends AbstractSimpleTableCommonServiceImpl<User> 
 
         UserAuthExample userAuthExample = new UserAuthExample();
         userAuthExample.createCriteria()
-                .andChannelIdEqualTo(channelId);
+                .andChannelIdEqualTo(channelId)
+                .andIdentifierEqualTo(identifier);
         List<UserAuth> userAuthList = userAuthMapper.selectByExample(userAuthExample);
         
         if (userAuthList.isEmpty()) {
