@@ -11,6 +11,6 @@ package top.potens.web.common.constant;
 public class CommonConstant {
     public static class IsDelete {
         public static final Integer YES = 1;
-        public static final Integer NO = 2;
+        public static final Integer NO = 0;
     }
 }
