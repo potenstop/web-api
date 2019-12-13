@@ -39,4 +39,10 @@ public class AlbumCourseProblemListItemResponse {
 
     @ApiModelProperty(value = "状态 1 保存试卷 2 提交试卷", name = "state", required = true, example = "1")
     private Integer state;
+
+    @ApiModelProperty(value = "题目总数", name = "totalContentCount", required = true, example = "1")
+    private Long totalContentCount;
+
+    @ApiModelProperty(value = "已答题目总数", name = "answerContentCount", required = true, example = "1")
+    private Long answerContentCount;
 }
