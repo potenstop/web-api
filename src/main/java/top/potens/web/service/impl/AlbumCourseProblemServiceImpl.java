@@ -260,7 +260,7 @@ public class AlbumCourseProblemServiceImpl extends AbstractSimpleTableCommonServ
                 }
             }
         });
-        problemServiceLogic.updateProblemTopic(updateAlbumCourseProblemTopicList, insertAlbumCourseProblemTopicList);
+        problemServiceLogic.updateProblemTopic(updateAlbumCourseProblemTopicList, insertAlbumCourseProblemTopicList, request.getAlbumCourseProblemId());
         return 1;
     }
 }
