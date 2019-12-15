@@ -152,6 +152,7 @@ public class AlbumCourseProblemServiceImpl extends AbstractSimpleTableCommonServ
         AlbumCourseProblemTopicExample albumCourseProblemTopicExample = new AlbumCourseProblemTopicExample();
         albumCourseProblemTopicExample.createCriteria().andAlbumCourseProblemIdEqualTo(albumCourseProblemTopicId);
         List<AlbumCourseProblemTopic> albumCourseProblemTopics = albumCourseProblemTopicMapper.selectByExample(albumCourseProblemTopicExample);
+
         return BeanCopierUtil.convert(albumCourseProblemTopics, AlbumCourseProblemTopicResponse.class);
     }
     /**

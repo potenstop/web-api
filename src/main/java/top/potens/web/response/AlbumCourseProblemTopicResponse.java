@@ -7,6 +7,7 @@ import top.potens.framework.annotation.JsonFormatDatetime;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 功能描述:
@@ -46,4 +47,13 @@ public class AlbumCourseProblemTopicResponse {
 
     @ApiModelProperty(value = "分数", name = "gradeAmount", required = true, example = "0.00")
     private BigDecimal gradeAmount;
+
+    @ApiModelProperty(value = "选择题的id列表", name = "topicOptionIdList", required = true)
+    private List<Integer> topicOptionIdList;
+
+    @ApiModelProperty(value = "简答的输入的作答内容", name = "topicInput", required = true)
+    private String topicInput;
+
+    @ApiModelProperty(value = "题目的类型", name = "topicType", required = true)
+    private Integer topicType;
 }
