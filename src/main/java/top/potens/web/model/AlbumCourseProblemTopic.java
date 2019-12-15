@@ -13,6 +13,10 @@ public class AlbumCourseProblemTopic implements Serializable {
 
     private Integer albumCourseProblemId;
 
+    private Integer contentId;
+
+    private Integer contentTopicId;
+
     private String inputSelectOption;
 
     private String inputProblem;
@@ -53,6 +57,22 @@ public class AlbumCourseProblemTopic implements Serializable {
 
     public void setAlbumCourseProblemId(Integer albumCourseProblemId) {
         this.albumCourseProblemId = albumCourseProblemId;
+    }
+
+    public Integer getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(Integer contentId) {
+        this.contentId = contentId;
+    }
+
+    public Integer getContentTopicId() {
+        return contentTopicId;
+    }
+
+    public void setContentTopicId(Integer contentTopicId) {
+        this.contentTopicId = contentTopicId;
     }
 
     public String getInputSelectOption() {

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.potens.framework.annotation.UserAuthToken;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.model.PageResponse;
 import top.potens.web.request.ContentTopicAddRequest;
@@ -38,6 +39,7 @@ import java.util.List;
 public class ContentTopicController {
     private final ContentTopicService contentTopicService;
 
+    @UserAuthToken
     @PostMapping("/list")
     @ApiOperation("查询题目列表")
     public ApiResult<PageResponse<ContentTopicListItemResponse>> contentTopicList(@RequestBody @Valid ContentTopicListItemRequest request) {
@@ -46,6 +48,8 @@ public class ContentTopicController {
         result.setData(response);
         return result;
     }
+
+    @UserAuthToken
     @PostMapping("/add")
     @ApiOperation("添加题目")
     public ApiResult<Integer> contentTopicAdd(@RequestBody @Valid ContentTopicAddRequest request) {
@@ -53,6 +57,8 @@ public class ContentTopicController {
         result.setData(contentTopicService.insertOne(request));
         return result;
     }
+
+    @UserAuthToken
     @GetMapping("/view")
     @ApiOperation("查看题目")
     public ApiResult<ContentTopicViewResponse> contentTopicView(@ApiParam(value = "内容id", example = "1") @RequestParam @NotNull Integer contentId) {
@@ -60,6 +66,8 @@ public class ContentTopicController {
         result.setData(contentTopicService.selectById(contentId));
         return result;
     }
+
+    @UserAuthToken
     @PostMapping("/update")
     @ApiOperation("更新题目")
     public ApiResult<Integer> contentTopicUpdate(@RequestBody @Valid ContentTopicUpdateRequest request) {
@@ -67,6 +75,8 @@ public class ContentTopicController {
         result.setData(contentTopicService.updateById(request));
         return result;
     }
+
+    @UserAuthToken
     @PostMapping("/mul-add")
     @ApiOperation("批量添加题目")
     public ApiResult<Integer> contentTopicMulAdd(@RequestBody @Valid ContentTopicMulAddRequest request) {

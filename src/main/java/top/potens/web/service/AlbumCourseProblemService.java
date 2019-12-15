@@ -5,6 +5,7 @@ import top.potens.framework.service.TableCommonService;
 import top.potens.web.model.AlbumCourseProblem;
 import top.potens.web.request.AlbumCourseProblemAddRequest;
 import top.potens.web.request.AlbumCourseProblemListItemRequest;
+import top.potens.web.request.AlbumCourseProblemUpdateRequest;
 import top.potens.web.response.AlbumCourseProblemListItemResponse;
 import top.potens.web.response.AlbumCourseProblemTopicResponse;
 
@@ -45,14 +46,26 @@ public interface AlbumCourseProblemService extends TableCommonService<AlbumCours
     PageResponse<AlbumCourseProblemListItemResponse> selectList(AlbumCourseProblemListItemRequest request);
 
     /**
-    *
-    * 方法功能描述: 查询试卷下的已答题目
-    *
-    * @author yanshaowen
-    * @date 2019/12/11 15:02
-    * @param albumCourseProblemTopicId
-    * @return
-    * @throws
-    */
+     *
+     * 方法功能描述: 查询试卷下的已答题目
+     *
+     * @author yanshaowen
+     * @date 2019/12/11 15:02
+     * @param albumCourseProblemTopicId
+     * @return
+     * @throws
+     */
     List<AlbumCourseProblemTopicResponse> selectTopicList(Integer albumCourseProblemTopicId);
+
+    /**
+     *
+     * 方法功能描述: 更新用户的作答
+     *
+     * @author yanshaowen
+     * @date 2019/12/11 15:02
+     * @param request
+     * @return
+     * @throws
+     */
+    Integer updateTopic(AlbumCourseProblemUpdateRequest request);
 }

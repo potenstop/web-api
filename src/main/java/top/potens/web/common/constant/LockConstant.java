@@ -23,4 +23,9 @@ public class LockConstant {
      * 题目更新
      */
     public static final String CONTENT_TOPIC_UPDATE = "content:topic:update:";
+
+    /**
+     * 试卷更新
+     */
+    public static final String PROBLEM_UPDATE = "problem:update:";
 }

@@ -57,9 +57,20 @@ public class AlbumCourseProblemController {
     @GetMapping("/topic")
     @ApiOperation("查询试卷下已经答题目列表")
     @UserAuthToken
-    public ApiResult<List<AlbumCourseProblemTopicResponse>> albumCourseProblemList1(@ApiParam(value = "试卷id", example = "1") @RequestParam @NotNull Integer albumCourseProblemTopicId, TokenUser tokenUser) {
+    public ApiResult<List<AlbumCourseProblemTopicResponse>> albumCourseProblemTopicList(
+            @ApiParam(value = "试卷id", example = "1") @RequestParam @NotNull Integer albumCourseProblemTopicId,
+            TokenUser tokenUser
+    ) {
         ApiResult<List<AlbumCourseProblemTopicResponse>> result = new ApiResult<>();
         result.setData(albumCourseProblemService.selectTopicList(albumCourseProblemTopicId));
+        return result;
+    }
+    @PostMapping("/update")
+    @ApiOperation("更新试卷的答案")
+    @UserAuthToken
+    public ApiResult<Integer> albumCourseProblemUpdate(@RequestBody @Valid AlbumCourseProblemUpdateRequest request, TokenUser tokenUser) {
+        ApiResult<Integer> result = new ApiResult<>();
+        result.setData(albumCourseProblemService.updateTopic(request));
         return result;
     }
 }

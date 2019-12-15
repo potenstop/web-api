@@ -36,6 +36,7 @@ import top.potens.web.service.logic.AlbumCourseServiceLogic;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -144,7 +145,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
     @Override
     public Integer insertOne(AlbumCourseAddRequest request) {
         // 判断课程id是否存在
-        courseService.byPrimaryKey(request.getCourseId());
+        courseService.byPrimaryKeyException(request.getCourseId());
         // 组装数据
         Album album = new Album();
         AlbumCourse albumCourse = new AlbumCourse();
@@ -160,7 +161,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
     public AlbumCourseViewResponse selectById(Integer albumId) {
         AlbumCourse albumCourse = bySecondPrimaryKeyException(albumId);
         Album album = albumService.byPrimaryKeyException(albumId);
-        Course course = courseService.byPrimaryKey(albumCourse.getCourseId());
+        Course course = courseService.byPrimaryKeyException(albumCourse.getCourseId());
         AlbumCourseViewResponse albumCourseViewResponse = new AlbumCourseViewResponse();
         albumCourseViewResponse.setAlbumId(album.getAlbumId());
         albumCourseViewResponse.setAlbumName(album.getAlbumName());
@@ -183,7 +184,7 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
     public Integer updateById(AlbumCourseUpdateRequest request) {
         AlbumCourse albumCourse = bySecondPrimaryKeyException(request.getAlbumId());
         Album album = albumService.byPrimaryKeyException(request.getAlbumId());
-        courseService.byPrimaryKey(request.getCourseId());
+        courseService.byPrimaryKeyException(request.getCourseId());
         Album updateAlbum = new Album();
         AlbumCourse updateAlbumCourse = new AlbumCourse();
         updateAlbum.setAlbumId(album.getAlbumId());
@@ -227,5 +228,21 @@ public class AlbumCourseServiceImpl extends AbstractSimpleTableCommonServiceImpl
         List<ContentTopicViewResponse> contentTopicViewResponses = contentTopicService.selectByIdList(albumCourseViewResponse.getContentIdList());
         albumCourseTopicViewResponse.setContentList(contentTopicViewResponses);
         return albumCourseTopicViewResponse;
+    }
+
+    @Override
+    public Map<Integer, ContentTopic> selectTopicListByAlbumId(Integer albumId) {
+        Map<Integer, ContentTopic> contentTopicMap = new HashMap<>();
+        AlbumContentRelationExample albumContentRelationExample = new AlbumContentRelationExample();
+        albumContentRelationExample.createCriteria().andAlbumIdEqualTo(albumId);
+        List<AlbumContentRelation> albumContentRelations = albumContentRelationMapper.selectByExample(albumContentRelationExample);
+        List<Integer> idList = new ArrayList<>();
+        albumContentRelations.forEach(item -> {
+            idList.add(item.getContentId());
+        });
+        if (CollectionUtils.isEmpty(idList)) {
+            return contentTopicMap;
+        }
+        return contentTopicService.byIdListResultMap(idList);
     }
 }

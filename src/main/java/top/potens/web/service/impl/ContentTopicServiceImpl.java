@@ -177,8 +177,8 @@ public class ContentTopicServiceImpl extends AbstractSimpleTableCommonServiceImp
 
     @Override
     public ContentTopicViewResponse selectById(Integer contentId) {
-        Content content = contentService.byPrimaryKey(contentId);
-        ContentTopic contentTopic = byPrimaryKeyException(content.getContentId());
+        Content content = contentService.byPrimaryKeyException(contentId);
+        ContentTopic contentTopic = bySecondPrimaryKeyException(content.getContentId());
 
         ContentTopicViewResponse contentTopicViewResponse = BeanCopierUtil.convert(content, ContentTopicViewResponse.class);
         BeanCopierUtil.convert(contentTopic, contentTopicViewResponse);

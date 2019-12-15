@@ -237,7 +237,7 @@ public class CourseServiceImpl extends AbstractSimpleTableCommonServiceImpl<Cour
     @Override
     public Integer updateById(CourseUpdateRequest request) {
         // 判断id是否存在
-        byPrimaryKey(request.getCourseId());
+        byPrimaryKeyException(request.getCourseId());
         // 校验关系
         List<CourseTypeRelation> courseTypeRelationList = checkCourseRelation(request.getCourseStairId(), request.getCourseSecondId(), request.getCourseThreeIdList());
         // 入库

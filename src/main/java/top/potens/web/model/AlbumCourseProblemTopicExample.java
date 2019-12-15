@@ -346,6 +346,126 @@ public class AlbumCourseProblemTopicExample {
             return (Criteria) this;
         }
 
+        public Criteria andContentIdIsNull() {
+            addCriterion("content_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdIsNotNull() {
+            addCriterion("content_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdEqualTo(Integer value) {
+            addCriterion("content_id =", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdNotEqualTo(Integer value) {
+            addCriterion("content_id <>", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdGreaterThan(Integer value) {
+            addCriterion("content_id >", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("content_id >=", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdLessThan(Integer value) {
+            addCriterion("content_id <", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("content_id <=", value, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdIn(List<Integer> values) {
+            addCriterion("content_id in", values, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdNotIn(List<Integer> values) {
+            addCriterion("content_id not in", values, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdBetween(Integer value1, Integer value2) {
+            addCriterion("content_id between", value1, value2, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("content_id not between", value1, value2, "contentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdIsNull() {
+            addCriterion("content_topic_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdIsNotNull() {
+            addCriterion("content_topic_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdEqualTo(Integer value) {
+            addCriterion("content_topic_id =", value, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdNotEqualTo(Integer value) {
+            addCriterion("content_topic_id <>", value, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdGreaterThan(Integer value) {
+            addCriterion("content_topic_id >", value, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("content_topic_id >=", value, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdLessThan(Integer value) {
+            addCriterion("content_topic_id <", value, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdLessThanOrEqualTo(Integer value) {
+            addCriterion("content_topic_id <=", value, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdIn(List<Integer> values) {
+            addCriterion("content_topic_id in", values, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdNotIn(List<Integer> values) {
+            addCriterion("content_topic_id not in", values, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdBetween(Integer value1, Integer value2) {
+            addCriterion("content_topic_id between", value1, value2, "contentTopicId");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentTopicIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("content_topic_id not between", value1, value2, "contentTopicId");
+            return (Criteria) this;
+        }
+
         public Criteria andInputSelectOptionIsNull() {
             addCriterion("input_select_option is null");
             return (Criteria) this;

@@ -94,4 +94,5 @@ public class CacheServiceLogic {
         CourseExample courseExample = new CourseExample();
         return courseMapper.selectByExample(courseExample);
     }
+
 }

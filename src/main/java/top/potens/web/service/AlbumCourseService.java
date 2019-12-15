@@ -3,6 +3,7 @@ package top.potens.web.service;
 import top.potens.framework.model.PageResponse;
 import top.potens.framework.service.TableCommonService;
 import top.potens.web.model.AlbumCourse;
+import top.potens.web.model.ContentTopic;
 import top.potens.web.request.AlbumCourseAddRequest;
 import top.potens.web.request.AlbumCourseListItemRequest;
 import top.potens.web.request.AlbumCourseUpdateCourseRelationRequest;
@@ -12,6 +13,7 @@ import top.potens.web.response.AlbumCourseTopicViewResponse;
 import top.potens.web.response.AlbumCourseViewResponse;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述:
@@ -93,5 +95,17 @@ public interface AlbumCourseService extends TableCommonService<AlbumCourse> {
      * @throws
      */
     AlbumCourseTopicViewResponse selectTopicListById(Integer albumId);
+
+    /**
+     *
+     * 方法功能描述: 按专辑id查询课程题目列表
+     *
+     * @author yanshaowen
+     * @date 2019/11/5 14:35
+     * @param albumId
+     * @return
+     * @throws
+     */
+    Map<Integer, ContentTopic> selectTopicListByAlbumId(Integer albumId);
 
 }
