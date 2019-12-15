@@ -32,11 +32,14 @@ public class AlbumCourseProblemTopicResponse {
     @ApiModelProperty(value = "记录id", name = "albumCourseProblemId", required = true, example = "1")
     private Integer albumCourseProblemId;
 
-    @ApiModelProperty(value = "如果是选择则题 则为选项的id 多个以逗号分隔 非选择题为空字符串", name = "inputSelectOption", required = true, example = "")
+    @ApiModelProperty(value = "如果是选择题 则为选项的id 多个以逗号分隔 非选择题为空字符串", name = "inputSelectOption", required = true, example = "")
     private String inputSelectOption;
 
     @ApiModelProperty(value = "输入的答案 选择题为选项的描述 多选的逗号隔开", name = "inputProblem", required = true, example = "")
     private String inputProblem;
+
+    @ApiModelProperty(value = "内容id", name = "contentId", required = true, example = "1")
+    private Integer contentId;
 
     @ApiModelProperty(value = "状态 1 未答 2 : 正确 3: 错误 4 部分正确", name = "state", required = true, example = "1")
     private Integer state;
