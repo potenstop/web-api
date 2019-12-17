@@ -55,7 +55,9 @@ public class AlbumCourseController {
     }
     @GetMapping("/view")
     @ApiOperation("查看课程专辑")
-    public ApiResult<AlbumCourseViewResponse> albumCourseView(@ApiParam(value = "专辑id", example = "1") @RequestParam @NotNull Integer albumId) {
+    public ApiResult<AlbumCourseViewResponse> albumCourseView(
+            @ApiParam(value = "专辑id", example = "1") @RequestParam @NotNull Integer albumId
+    ) {
         ApiResult<AlbumCourseViewResponse> result = new ApiResult<>();
         result.setData(albumCourseService.selectById(albumId));
         return result;
