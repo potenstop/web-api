@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.potens.framework.model.ApiResult;
+import top.potens.wechat.service.TokenService;
 
 /**
  * 功能描述:
@@ -18,12 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/token")
-@Api(description = "微信token管理的接口")
+@Api(description = "token管理的接口")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TokenController {
+    private final TokenService tokenService;
     @GetMapping("/wxmp")
     @ApiOperation(value = "获取h5的token")
-    public String getWxmpToken() {
-        return null;
+    public ApiResult<String> getWxmpToken() {
+        ApiResult<String> result = new ApiResult<>();
+        result.setData(tokenService.getWxmpToken());
+        return result;
     }
 }
