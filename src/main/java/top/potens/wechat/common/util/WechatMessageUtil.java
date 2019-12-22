@@ -4,6 +4,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import top.potens.framework.log.AppLogger;
+import top.potens.framework.serialization.JSON;
 import top.potens.wechat.aec.wechat.WXBizMsgCrypt;
 
 import javax.servlet.http.HttpServletRequest;
@@ -166,7 +167,7 @@ public class WechatMessageUtil {
         inputStream.close();
         // 解密
         if (map.containsKey("Encrypt")) {
-            AppLogger.info("data === {} {} {} {} {}", msgSignature, timestamp, nonce, document.getXMLEncoding());
+            AppLogger.info("data === {} {} {} {} {} {}", msgSignature, timestamp, nonce, JSON.toJSONString(document));
             WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
             String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, document.getXMLEncoding());
             AppLogger.info("result2 === {} ", result2);
