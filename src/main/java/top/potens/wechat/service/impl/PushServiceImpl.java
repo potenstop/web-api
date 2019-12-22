@@ -73,9 +73,7 @@ public class PushServiceImpl implements PushService {
             AppLogger.info("map[{}]", JSON.toJSONString(map));
             respMessage = "111";
         } catch (Exception e) {
-            e.printStackTrace();
-            AppLogger.error("系统出错");
-            System.err.println("系统出错");
+            AppLogger.error("系统出错 message:[{}]", e, e.getMessage());
             respMessage = null;
         } finally {
 

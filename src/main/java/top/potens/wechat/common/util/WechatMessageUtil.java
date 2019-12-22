@@ -9,6 +9,8 @@ import top.potens.framework.serialization.JSON;
 import top.potens.wechat.aec.wechat.WXBizMsgCrypt;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -128,6 +130,24 @@ public class WechatMessageUtil {
      */
     public final static String EVENT_TYPE_TEMPLATESENDJOBFINISH = "TEMPLATESENDJOBFINISH";
 
+    public static String readAsChars(HttpServletRequest request) throws IOException {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder("");
+        try {
+            br = request.getReader();
+            String str;
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            br.close();
+        } finally {
+            if (null != br) {
+                br.close();
+            }
+        }
+        return sb.toString();
+    }
 
     /***
      * 解析微信服务器发过来的xml格式的消息将其转换为map
@@ -141,24 +161,17 @@ public class WechatMessageUtil {
         // 随机数
         String nonce = request.getParameter("nonce");
         String msgSignature = request.getParameter("msg_signature");
-
-        byte[] buffer = new byte[64*1024];
-        InputStream in = request.getInputStream();
-        int length = in.read(buffer);
-        String encode = request.getCharacterEncoding();
-
-        byte[] data = new byte[length];
-        System.arraycopy(buffer, 0, data, 0, length);
-        String context = new String(data, encode);
-        AppLogger.info("------------- {}", context);
+        String context = readAsChars(request);
+        AppLogger.info("data === {} {} {} {} {}", msgSignature, timestamp, nonce, context);
+        WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+        String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, context);
+        AppLogger.info("result2 === {} ", result2);
 
         // 将解析结果存储在HashMap中
         Map<String, String> map = new HashMap<>();
-        // 从request中得到输入流
-        InputStream inputStream = request.getInputStream();
         // 读取输入流
         SAXReader reader = new SAXReader();
-        Document document = reader.read(inputStream);
+        Document document = reader.read(context);
 
         // 得到XML的根元素
         Element root = document.getRootElement();
@@ -174,14 +187,9 @@ public class WechatMessageUtil {
             }
 
         }
-        // 释放资源
-        inputStream.close();
         // 解密
         if (map.containsKey("Encrypt")) {
-            AppLogger.info("data === {} {} {} {} {}", msgSignature, timestamp, nonce, context);
-            WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
-            String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, context);
-            AppLogger.info("result2 === {} ", result2);
+
         }
 
         return map;
