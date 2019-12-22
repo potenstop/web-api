@@ -3,6 +3,7 @@ package top.potens.wechat.common.util;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import top.potens.framework.log.App;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.serialization.JSON;
 import top.potens.wechat.aec.wechat.WXBizMsgCrypt;
@@ -140,6 +141,16 @@ public class WechatMessageUtil {
         // 随机数
         String nonce = request.getParameter("nonce");
         String msgSignature = request.getParameter("msg_signature");
+
+        byte[] buffer = new byte[64*1024];
+        InputStream in = request.getInputStream();
+        int length = in.read(buffer);
+        String encode = request.getCharacterEncoding();
+
+        byte[] data = new byte[length];
+        System.arraycopy(buffer, 0, data, 0, length);
+        String context = new String(data, encode);
+        AppLogger.info("------------- {}", context);
 
         // 将解析结果存储在HashMap中
         Map<String, String> map = new HashMap<>();
