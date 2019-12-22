@@ -10,11 +10,14 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.potens.cms.service.QiniuService;
+import top.potens.framework.log.AppLogger;
 import top.potens.framework.model.ApiResult;
 import top.potens.framework.util.CollectionUtil;
 import top.potens.framework.util.StringUtil;
 import top.potens.wechat.service.PushService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,12 +52,9 @@ public class PushController {
 
     @PostMapping("/message")
     @ApiOperation(value = "接受微信的消息推送")
-    public String receiveMessage(
-            @ApiParam(value = "signature", example = "1") @RequestParam @NotNull String signature,
-            @ApiParam(value = "echostr", example = "1") @RequestParam @NotNull String echostr,
-            @ApiParam(value = "nonce", example = "1") @RequestParam @NotNull String nonce,
-            @ApiParam(value = "timestamp", example = "1") @RequestParam @NotNull Long timestamp
-    ) {
-        return echostr;
+    public String receiveMessage(HttpServletRequest request, HttpServletResponse response) {
+        AppLogger.info("----------------开始处理微信发过来的消息------------------");
+        String respXml = pushService.receiveMessage(request, response);
+        return respXml;
     }
 }

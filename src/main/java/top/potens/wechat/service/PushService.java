@@ -1,5 +1,8 @@
 package top.potens.wechat.service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 功能描述:
  *
@@ -23,4 +26,7 @@ public interface PushService {
     * @throws
     */
     String pushCheckMessageToken(String signature, String echostr, String nonce, String timestamp);
+
+    String receiveMessage(HttpServletRequest request,
+                   HttpServletResponse response);
 }
