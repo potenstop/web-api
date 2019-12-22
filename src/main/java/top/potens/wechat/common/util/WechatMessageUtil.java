@@ -3,6 +3,8 @@ package top.potens.wechat.common.util;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import top.potens.framework.log.AppLogger;
+import top.potens.wechat.aec.wechat.WXBizMsgCrypt;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
@@ -131,7 +133,13 @@ public class WechatMessageUtil {
      * @return
      * @throws Exception
      */
-    public static Map<String, String> parseXml(HttpServletRequest request) throws Exception {
+    public static Map<String, String> parseXml(HttpServletRequest request, String token, String encodingAesKey, String appId) throws Exception {
+        // 时间戳
+        String timestamp = request.getParameter("timestamp");
+        // 随机数
+        String nonce = request.getParameter("nonce");
+        String msgSignature = request.getParameter("msg_signature");
+
         // 将解析结果存储在HashMap中
         Map<String, String> map = new HashMap<>();
         // 从request中得到输入流
@@ -139,6 +147,7 @@ public class WechatMessageUtil {
         // 读取输入流
         SAXReader reader = new SAXReader();
         Document document = reader.read(inputStream);
+
         // 得到XML的根元素
         Element root = document.getRootElement();
         // 得到根元素的所有子节点
@@ -148,12 +157,21 @@ public class WechatMessageUtil {
         if (elementList.size() == 0) {
             map.put(root.getName(), root.getText());
         } else {
-            for (Element e : elementList)
+            for (Element e : elementList) {
                 map.put(e.getName(), e.getText());
+            }
+
         }
         // 释放资源
         inputStream.close();
-        inputStream = null;
+        // 解密
+        if (map.containsKey("Encrypt")) {
+            WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+            AppLogger.info("data === {} {} {} {} {}", msgSignature, timestamp, nonce, document.getXMLEncoding());
+            String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, document.getXMLEncoding());
+            AppLogger.info("result2 === {} ", result2);
+        }
+
         return map;
     }
 }

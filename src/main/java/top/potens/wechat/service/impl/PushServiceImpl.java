@@ -3,6 +3,7 @@ package top.potens.wechat.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.potens.framework.log.AppLogger;
 import top.potens.framework.serialization.JSON;
@@ -28,6 +29,15 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PushServiceImpl implements PushService {
+    @Value("${wxmp.app.id}")
+    private String wxmpAppId;
+    @Value("${wxmp.app.encodingAesKey}")
+    private String wxmpEncodingAesKey;
+    @Value("${wxmp.app.secret}")
+    private String wxmpAppSecrect;
+    @Value("${wxmp.app.token}")
+    private String wxmpToken;
+
     @Override
     public String pushCheckMessageToken(String signature, String echostr, String nonce, String timestamp) {
         List<String> result = new ArrayList<>();
@@ -59,7 +69,7 @@ public class PushServiceImpl implements PushService {
             String respContent = null;
             // xml分析
             // 调用消息工具类WechatMessageUtil解析微信发来的xml格式的消息，解析的结果放在HashMap里；
-            Map<String, String> map = WechatMessageUtil.parseXml(request);
+            Map<String, String> map = WechatMessageUtil.parseXml(request, wxmpToken, this.wxmpEncodingAesKey, this.wxmpAppId);
             AppLogger.info("map[{}]", JSON.toJSONString(map));
             respMessage = "111";
         } catch (Exception e) {
