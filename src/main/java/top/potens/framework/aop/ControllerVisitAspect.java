@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -44,8 +45,11 @@ public class ControllerVisitAspect {
 
         String uri = request.getRequestURI().replace(request.getContextPath(), "");
         AppLogger.info("request.getContentType() {}" , request.getContentType());
-        if (!"multipart/form-data".equals(request.getContentType())) {
+        boolean isJson = MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType()) || MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(request.getContentType());
+        if (isJson) {
             AppLogger.info("controller-start-request uri:[{}] methodName:[{}] param:[{}]", uri, joinPoint.getSignature().getName(), JSON.toJSONStringNotEx(joinPoint.getArgs()));
+        } else {
+            AppLogger.info("controller-start-request uri:[{}] methodName:[{}]", uri, joinPoint.getSignature().getName());
         }
         Object result = joinPoint.proceed();
         AppLogger.info("controller-end-request uri:[{}] methodName:[{}] result:[{}]", uri, joinPoint.getSignature().getName(), JSON.toJSONStringNotEx(result));
