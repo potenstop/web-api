@@ -162,7 +162,7 @@ public class WechatMessageUtil {
         String nonce = request.getParameter("nonce");
         String msgSignature = request.getParameter("msg_signature");
         String context = readAsChars(request);
-        AppLogger.info("data === {} {} {} {} {}", msgSignature, timestamp, nonce, context);
+        AppLogger.info("data === {} {} {} {}", msgSignature, timestamp, nonce, context);
         WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
         String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, context);
         AppLogger.info("result2 === {} ", result2);
