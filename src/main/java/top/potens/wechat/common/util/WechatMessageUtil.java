@@ -10,6 +10,7 @@ import top.potens.wechat.aec.wechat.WXBizMsgCrypt;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -156,6 +157,8 @@ public class WechatMessageUtil {
      * @throws Exception
      */
     public static Map<String, String> parseXml(HttpServletRequest request, String token, String encodingAesKey, String appId) throws Exception {
+        // 微信服务器POST消息时用的是UTF-8编码，在接收时也要用同样的编码，否则中文会乱码；
+        request.setCharacterEncoding("UTF-8");
         // 时间戳
         String timestamp = request.getParameter("timestamp");
         // 随机数
@@ -164,14 +167,14 @@ public class WechatMessageUtil {
         String context = readAsChars(request);
         AppLogger.info("data === {} {} {} {}", msgSignature, timestamp, nonce, context);
         WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
-        String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, context);
-        AppLogger.info("result2 === {} ", result2);
+        String xml = pc.decryptMsg(msgSignature, timestamp, nonce, context);
+        AppLogger.info("result2 === {} ", xml);
 
         // 将解析结果存储在HashMap中
         Map<String, String> map = new HashMap<>();
         // 读取输入流
         SAXReader reader = new SAXReader();
-        Document document = reader.read(context);
+        Document document = reader.read(new ByteArrayInputStream(xml.getBytes("UTF-8")));
 
         // 得到XML的根元素
         Element root = document.getRootElement();
@@ -185,13 +188,7 @@ public class WechatMessageUtil {
             for (Element e : elementList) {
                 map.put(e.getName(), e.getText());
             }
-
         }
-        // 解密
-        if (map.containsKey("Encrypt")) {
-
-        }
-
         return map;
     }
 }
