@@ -166,8 +166,8 @@ public class WechatMessageUtil {
         inputStream.close();
         // 解密
         if (map.containsKey("Encrypt")) {
-            WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
             AppLogger.info("data === {} {} {} {} {}", msgSignature, timestamp, nonce, document.getXMLEncoding());
+            WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
             String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, document.getXMLEncoding());
             AppLogger.info("result2 === {} ", result2);
         }

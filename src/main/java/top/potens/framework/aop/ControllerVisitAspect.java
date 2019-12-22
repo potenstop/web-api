@@ -1,5 +1,6 @@
 package top.potens.framework.aop;
 
+import org.apache.http.entity.ContentType;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
