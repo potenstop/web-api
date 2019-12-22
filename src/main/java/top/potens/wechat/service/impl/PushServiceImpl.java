@@ -57,7 +57,6 @@ public class PushServiceImpl implements PushService {
     public String receiveMessage(HttpServletRequest request, HttpServletResponse response) {
         AppLogger.info("------------微信消息开始处理-------------");
         // 返回给微信服务器的消息,默认为null
-
         String respMessage = null;
 
         try {
@@ -65,7 +64,6 @@ public class PushServiceImpl implements PushService {
             response.setCharacterEncoding("UTF-8");
             // 默认返回的文本消息内容
             String respContent = null;
-            // xml分析
             // 调用消息工具类WechatMessageUtil解析微信发来的xml格式的消息，解析的结果放在HashMap里；
             Map<String, String> map = WechatMessageUtil.parseXml(request, wxmpToken, this.wxmpEncodingAesKey, this.wxmpAppId);
             AppLogger.info("map[{}]", JSON.toJSONString(map));
