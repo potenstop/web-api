@@ -1,5 +1,6 @@
 package top.potens.wechat.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
  * @date 2019/12/23 13:01
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WechatMessagePostRequest {
     @JsonProperty(value = "ToUserName")
     @ApiModelProperty(value = "开发者微信号")

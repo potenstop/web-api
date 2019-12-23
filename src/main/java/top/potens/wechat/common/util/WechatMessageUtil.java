@@ -50,7 +50,7 @@ public class WechatMessageUtil {
     }
 
     /***
-     * 解析微信服务器发过来的xml格式的消息将其转换为map
+     * 解析微信服务器发过来的xml格式的消息将其转换为request
      * @param request
      * @return
      * @throws Exception
