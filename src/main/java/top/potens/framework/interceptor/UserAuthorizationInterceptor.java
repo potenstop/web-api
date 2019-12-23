@@ -75,7 +75,7 @@ public class UserAuthorizationInterceptor implements HandlerInterceptor {
                 PrintWriter out = null;
                 try {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     ApiResult<Object> result = new ApiResult<>();
                     result.setCode("401");
                     result.setMessage("401 unauthorized");
