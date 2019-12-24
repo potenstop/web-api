@@ -47,7 +47,7 @@ public class PushServiceImpl implements PushService {
     @Override
     public String pushCheckMessageToken(String signature, String echostr, String nonce, String timestamp) {
         List<String> result = new ArrayList<>();
-        result.add("Wendi_1209");
+        result.add(wxmpToken);
         result.add(timestamp);
         result.add(nonce);
         Collections.sort(result);

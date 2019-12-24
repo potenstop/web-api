@@ -30,7 +30,7 @@ public class WechatMessagePostRequest {
     @ApiModelProperty(value = "消息创建时间 （整型）")
     private Long createTime;
 
-    @JsonProperty(value = "msgType")
+    @JsonProperty(value = "MsgType")
     @ApiModelProperty(value = "消息类型")
     private String msgType;
 
