@@ -15,7 +15,7 @@ public class LockConstant {
     public static final String CONTENT_NEWS_OUT_KEY = "content:news:out:";
 
     /**
-     * 外部新闻id
+     * ldap 用户登录
      */
     public static final String LDAP_LOGIN = "ldap:login:";
 
@@ -28,4 +28,9 @@ public class LockConstant {
      * 试卷更新
      */
     public static final String PROBLEM_UPDATE = "problem:update:";
+
+    /**
+     * 公众号 用户登录
+     */
+    public static final String WXMP_LOGIN = "wxmp:login:";
 }

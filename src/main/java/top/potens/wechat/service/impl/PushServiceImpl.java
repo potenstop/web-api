@@ -1,5 +1,6 @@
 package top.potens.wechat.service.impl;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import top.potens.framework.util.StringUtil;
 import top.potens.wechat.common.constant.WechatMessageTypeConstant;
 import top.potens.wechat.common.util.WechatMessageUtil;
 import top.potens.wechat.pattern.message.AbstractTemplateMessage;
+import top.potens.wechat.pattern.message.WechatSubscribeMessage;
 import top.potens.wechat.pattern.message.WechatTextMessage;
+import top.potens.wechat.pattern.message.WechatUnsubscribeMessage;
 import top.potens.wechat.request.WechatMessageBaseRequest;
 import top.potens.wechat.request.WechatMessagePostRequest;
 import top.potens.wechat.service.PushService;
@@ -23,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 功能描述:
@@ -35,6 +41,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PushServiceImpl implements PushService {
+    private ThreadPoolExecutor pushExecutor = new ThreadPoolExecutor(5, 20, 5, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5000), new ThreadFactoryBuilder().setNameFormat("push-%d").build());
     @Value("${wxmp.app.id}")
     private String wxmpAppId;
     @Value("${wxmp.app.encodingAesKey}")
@@ -43,6 +50,9 @@ public class PushServiceImpl implements PushService {
     private String wxmpAppSecrect;
     @Value("${wxmp.app.token}")
     private String wxmpToken;
+    private final WechatTextMessage wechatTextMessage;
+    private final WechatSubscribeMessage wechatSubscribeMessage;
+    private final WechatUnsubscribeMessage wechatUnsubscribeMessage;
 
     @Override
     public String pushCheckMessageToken(String signature, String echostr, String nonce, String timestamp) {
@@ -64,37 +74,38 @@ public class PushServiceImpl implements PushService {
         if (type == null) {
             throw new ApiException("100", "消息类型错误");
         }
-        AbstractTemplateMessage abstractTemplateMessage = new WechatTextMessage();;
+        AbstractTemplateMessage abstractTemplateMessage = null;
+        AppLogger.debug("处理微信消息 选择模板 type:[{}]", type);
         if (WechatMessageTypeConstant.InType.TEXT.equals(type)) {
-            abstractTemplateMessage = new WechatTextMessage();
+            abstractTemplateMessage = wechatTextMessage;
+        } else if (WechatMessageTypeConstant.InType.SUBSCRIBE.equals(type)) {
+            abstractTemplateMessage = wechatSubscribeMessage;
+        } else if (WechatMessageTypeConstant.InType.UNSUBSCRIBE.equals(type)) {
+            abstractTemplateMessage = wechatUnsubscribeMessage;
+        } else {
+            throw new ApiException("100", "消息类型错误");
         }
         return abstractTemplateMessage;
-
     }
 
+    private void syncHandleMessage (HttpServletRequest request) {
+        pushExecutor.execute(() -> {
+
+        });
+    }
     @Override
     public String receiveMessage(HttpServletRequest request, HttpServletResponse response) {
-        AppLogger.info("------------微信消息开始处理-------------");
-        // 返回给微信服务器的消息,默认为null
-        String respMessage = null;
+        String responseStr = "success";
         try {
-            // 在响应消息（回复消息给用户）时，也将编码方式设置为UTF-8，原理同上；
-            response.setCharacterEncoding("UTF-8");
             // 默认返回的文本消息内容
-            // 调用消息工具类WechatMessageUtil解析微信发来的xml格式的消息，解析的结果放在HashMap里；
+            // 调用消息工具类WechatMessageUtil解析微信发来的xml格式的消息
             WechatMessagePostRequest wechatMessagePostRequest = WechatMessageUtil.parseXml(request, wxmpToken, this.wxmpEncodingAesKey, this.wxmpAppId);
             AppLogger.info("微信消息开始处理 wechatMessagePostRequest:[{}]", JSON.toJSONString(wechatMessagePostRequest));
             AbstractTemplateMessage template = getTemplate(wechatMessagePostRequest);
-            String responseContent = template.start(wechatMessagePostRequest);
-            // 转为xml 并加密
-
-            respMessage = "111";
+            responseStr = template.start(wechatMessagePostRequest);
         } catch (Exception e) {
-            AppLogger.error("系统出错 message:[{}]", e, e.getMessage());
-            respMessage = null;
-        } finally {
-
+            AppLogger.error("微信消息开始处理 系统出错 message:[{}]", e, e.getMessage());
         }
-        return respMessage;
+        return responseStr;
     }
 }

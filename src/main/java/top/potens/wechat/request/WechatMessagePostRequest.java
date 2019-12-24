@@ -110,5 +110,8 @@ public class WechatMessagePostRequest {
     @ApiModelProperty(value = "事件KEY值")
     private String eventKey;
 
+    @JsonProperty(value = "Ticket")
+    @ApiModelProperty(value = "二维码的ticket，可用来换取二维码图片")
+    private String ticket;
 
 }

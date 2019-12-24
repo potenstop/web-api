@@ -91,6 +91,7 @@ public interface UserService extends TableCommonService<User> {
      *
      * @author yanshaowen
      * @date 2019/8/6 18:41
+     * @param channel    channel
      * @param username   username
      * @param password   password
      * @return
@@ -109,4 +110,17 @@ public interface UserService extends TableCommonService<User> {
      * @throws
      */
     PageResponse<UserListItemResponse> userList(UserListRequest request);
+
+    /**
+    *
+    * 方法功能描述: 微信公众号用户登录
+    *
+    * @author yanshaowen
+    * @date 2019/12/24 11:22
+    * @param wxmpDevName    开发者微信号
+    * @param openId
+    * @return
+    * @throws
+    */
+    UserMoreAuthBo wxmpLogin(String wxmpDevName, String openId);
 }

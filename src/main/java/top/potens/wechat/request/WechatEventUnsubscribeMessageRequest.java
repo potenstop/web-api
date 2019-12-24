@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 功能描述: 关注事件
+ * 功能描述: 取消关注事件
  *
  * @author yanshaowen
  * @className WechatEventSubscribeMessageRequest
@@ -15,10 +15,6 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class WechatEventSubscribeMessageRequest extends WechatEventMessageBaseRequest {
-    @ApiModelProperty(value = "事件KEY值，qrscene_为前缀，后面为二维码的参数值")
-    private String eventKey;
+public class WechatEventUnsubscribeMessageRequest extends WechatEventMessageBaseRequest {
 
-    @ApiModelProperty(value = "二维码的ticket，可用来换取二维码图片")
-    private String ticket;
 }

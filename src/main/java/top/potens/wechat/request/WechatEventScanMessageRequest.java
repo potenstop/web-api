@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 功能描述: 关注的扫码事件
+ * 功能描述: 用户扫描带场景值二维码时  已关注公众号
  *
  * @author yanshaowen
  * @className WechatEventSubscribeMessageRequest
@@ -16,11 +16,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class WechatEventScanMessageRequest extends WechatEventMessageBaseRequest {
-    @JsonProperty(value = "EventKey")
     @ApiModelProperty(value = "事件KEY值，qrscene_为前缀，后面为二维码的参数值")
     private String eventKey;
 
-    @JsonProperty(value = "Ticket")
     @ApiModelProperty(value = "二维码的ticket，可用来换取二维码图片")
     private String ticket;
 }

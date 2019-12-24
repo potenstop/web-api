@@ -7,7 +7,12 @@ import top.potens.web.model.UserAuth;
 import java.util.List;
 
 /**
- * Created by wenshao on 2019/6/23.
+ * 功能描述:
+ *
+ * @author yanshaowen
+ * @className UserMoreAuthBo
+ * @projectName web-api
+ * @date 2019/8/6 17:59
  */
 public class UserMoreAuthBo extends User {
     private List<UserAuth> userAuthList;

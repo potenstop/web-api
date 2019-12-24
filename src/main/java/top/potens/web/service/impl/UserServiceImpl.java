@@ -41,10 +41,13 @@ import top.potens.web.request.UserListRequest;
 import top.potens.web.request.UserOutRequest;
 import top.potens.web.request.UserRegisterRequest;
 import top.potens.web.response.UserListItemResponse;
+import top.potens.web.service.ChannelService;
 import top.potens.web.service.UserService;
 import top.potens.web.service.logic.CacheServiceLogic;
 import top.potens.web.service.logic.UserServiceLogic;
 import top.potens.web.service.noe4j.Neo4jService;
+import top.potens.wechat.response.WechatUserBasicInfoResponse;
+import top.potens.wechat.service.WechatUserService;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -66,7 +69,7 @@ public class UserServiceImpl extends AbstractSimpleTableCommonServiceImpl<User> 
     private final LdapTemplate ldapTemplate;
     private final RestTemplate restTemplate;
     private final ApolloConfiguration apolloConfiguration;
-
+    private final WechatUserService wechatUserService;
     @Override
     protected User mapperByPrimaryKey(Integer id) {
         return userMapper.selectByPrimaryKey(id);
@@ -327,5 +330,36 @@ public class UserServiceImpl extends AbstractSimpleTableCommonServiceImpl<User> 
         List<User> list = userPageSerializable.getList();
         BeanCopierUtil.convert(list, response.getList(), UserListItemResponse.class);
         return response;
+    }
+
+    @Override
+    @Lock(lockModel = LockModel.FAIR, keys = LockConstant.WXMP_LOGIN + "#{#wxmpDevName}" + ":" + "#{#openId}", attemptTimeout = 10, lockWatchTimeout = 100)
+    public UserMoreAuthBo wxmpLogin(String wxmpDevName, String openId) {
+        Channel channel = cacheServiceLogic.getChannelByCode(wxmpDevName);
+        // 判断用户是否存在
+        UserAuth userAuth = existAuth(channel.getChannelId(), openId, null);
+        UserMoreAuthBo userMoreAuthBo = new UserMoreAuthBo();
+        List<UserAuth> userAuthList = new ArrayList<>();
+        if (userAuth == null) {
+            WechatUserBasicInfoResponse userInfo = wechatUserService.getUserInfo(openId);
+            // 用户不存在 需要创建用户
+            User user = new User();
+            user.setNickname(userInfo.getNickname());
+            user.setAvatar(userInfo.getHeadImgUrl());
+            UserAuth userAuthInsert = new UserAuth();
+            userAuthInsert.setChannelId(channel.getChannelId());
+            userAuthInsert.setIdentifier(openId);
+            userAuthInsert.setCredential("");
+            userServiceLogic.create(user, userAuthInsert);
+            BeanCopierUtil.convert(user, userMoreAuthBo);
+
+            userAuthList.add(userAuthInsert);
+            userMoreAuthBo.setUserAuthList(userAuthList);
+        } else {
+            User user = byPrimaryKey(userAuth.getUserId());
+            BeanCopierUtil.convert(user, userMoreAuthBo);
+            userAuthList.add(userAuth);
+        }
+        return userMoreAuthBo;
     }
 }

@@ -1,5 +1,12 @@
 package top.potens.wechat.pattern.message;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import top.potens.framework.log.AppLogger;
+import top.potens.framework.serialization.JSON;
+import top.potens.web.bmo.UserMoreAuthBo;
+import top.potens.web.service.UserService;
 import top.potens.wechat.common.constant.WechatMessageTypeConstant;
 import top.potens.wechat.request.WechatMessageBaseRequest;
 import top.potens.wechat.request.WechatMessagePostRequest;
@@ -14,8 +21,13 @@ import java.util.HashMap;
  * @projectName web-api
  * @date 2019/12/23 16:48
  */
+@Component
+@Scope("prototype")
 abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest> {
+    @Autowired
+    private UserService userService;
     protected WechatMessagePostRequest wechatMessagePostRequest;
+    protected UserMoreAuthBo userMoreAuthBo;
     /**
      *
      * 方法功能描述: 微信的消息类型转换为内部系统的消息类型
@@ -83,11 +95,16 @@ abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest
     }
 
     public String start(WechatMessagePostRequest wechatMessagePostRequest) {
+        AppLogger.debug("处理微信消息 公共处理 wechatMessagePostRequest:[{}]", JSON.toJSONString(wechatMessagePostRequest));
         this.wechatMessagePostRequest = wechatMessagePostRequest;
-        // 1 构建 base request
+        // 创建用户
+        userMoreAuthBo = userService.wxmpLogin(wechatMessagePostRequest.getToUserName(), wechatMessagePostRequest.getOpenId());
+        // 构建 base request
         T request = this.assembleConcrete();
-        // 2 响应消息
-        return this.response(request);
+        // 响应消息
+        String response = this.response(request);
+        AppLogger.debug("处理微信消息 公共处理 处理结束 response:[{}]", response);
+        return response;
     }
 
     /**
