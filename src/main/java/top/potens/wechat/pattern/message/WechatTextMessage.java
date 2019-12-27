@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import top.potens.wechat.common.constant.WechatMessageTypeConstant;
 import top.potens.wechat.request.WechatMessageBaseRequest;
 import top.potens.wechat.request.WechatMessagePostRequest;
 import top.potens.wechat.request.WechatStandardTextMessageRequest;
+import top.potens.wechat.response.WechatMessageBasicResponse;
+import top.potens.wechat.response.WechatTextMessageResponse;
 
 /**
  * 功能描述:
@@ -27,20 +30,17 @@ public class WechatTextMessage extends AbstractTemplateMessage<WechatStandardTex
 
     @Override
     public WechatStandardTextMessageRequest assembleConcrete() {
-        WechatStandardTextMessageRequest request = this.assembleCommon();
+        WechatStandardTextMessageRequest request = this.assembleCommonRequest();
         request.setMsgId(this.wechatMessagePostRequest.getMsgId());
         request.setContent(this.wechatMessagePostRequest.getContent());
         return request;
     }
 
     @Override
-    public String response(WechatStandardTextMessageRequest request) {
-        return "<xml>\n" +
-                "  <ToUserName><![CDATA[" + request.getOpenId() +"]]></ToUserName>\n" +
-                "  <FromUserName><![CDATA[" + request.getToUserName() + "]]></FromUserName>\n" +
-                "  <CreateTime>"+ request.getCreateTime() + "</CreateTime>\n" +
-                "  <MsgType><![CDATA[text]]></MsgType>\n" +
-                "  <Content><![CDATA[你好]]></Content>\n" +
-                "</xml>";
+    public WechatMessageBasicResponse response(WechatStandardTextMessageRequest request) {
+        WechatTextMessageResponse wechatTextMessageResponse = this.assembleCommonResponse(WechatTextMessageResponse.class);
+        wechatTextMessageResponse.setMsgType(WechatMessageTypeConstant.OutType.TEXT);
+        wechatTextMessageResponse.setContent("你好");
+        return wechatTextMessageResponse;
     }
 }

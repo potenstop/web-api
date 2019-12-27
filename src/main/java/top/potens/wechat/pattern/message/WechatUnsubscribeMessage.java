@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import top.potens.framework.log.AppLogger;
+import top.potens.framework.serialization.JSON;
 import top.potens.wechat.request.WechatEventUnsubscribeMessageRequest;
+import top.potens.wechat.response.WechatMessageBasicResponse;
 
 /**
  * 功能描述:
@@ -25,11 +28,12 @@ public class WechatUnsubscribeMessage extends AbstractTemplateMessage<WechatEven
 
     @Override
     public WechatEventUnsubscribeMessageRequest assembleConcrete() {
-        return this.assembleCommon();
+        return this.assembleCommonRequest();
     }
 
     @Override
-    public String response(WechatEventUnsubscribeMessageRequest request) {
-        return "122";
+    public WechatMessageBasicResponse response(WechatEventUnsubscribeMessageRequest request) {
+        AppLogger.info("有用户取消了关注 request:[{}]", JSON.toJSONString(request));
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package top.potens.wechat.pattern.message;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,7 +12,9 @@ import top.potens.web.service.UserService;
 import top.potens.wechat.common.constant.WechatMessageTypeConstant;
 import top.potens.wechat.request.WechatMessageBaseRequest;
 import top.potens.wechat.request.WechatMessagePostRequest;
+import top.potens.wechat.response.WechatMessageBasicResponse;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -23,7 +27,7 @@ import java.util.HashMap;
  */
 @Component
 @Scope("prototype")
-abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest> {
+abstract public class AbstractTemplateMessage<Request extends WechatMessageBaseRequest> {
     @Autowired
     private UserService userService;
     protected WechatMessagePostRequest wechatMessagePostRequest;
@@ -79,8 +83,8 @@ abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest
     * @return
     * @throws
     */
-    protected T assembleCommon() {
-        T request = newInstance();
+    protected Request assembleCommonRequest() {
+        Request request = newInstance();
         request.setOpenId(this.wechatMessagePostRequest.getOpenId());
         request.setCreateTime(this.wechatMessagePostRequest.getCreateTime());
         request.setToUserName(this.wechatMessagePostRequest.getToUserName());
@@ -94,17 +98,48 @@ abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest
         return request;
     }
 
+    /**
+     *
+     * 方法功能描述: 构建通用的request
+     *
+     * @author yanshaowen
+     * @date 2019/12/23 19:26
+     * @param * @param
+     * @return
+     * @throws
+     */
+    protected <Response extends WechatMessageBasicResponse> Response assembleCommonResponse(Class<Response> targetClass) {
+        try {
+            Response target = targetClass.newInstance();
+            target.setFromUserName(wechatMessagePostRequest.getToUserName());
+            target.setCreateTime(wechatMessagePostRequest.getCreateTime());
+            target.setToUserName(wechatMessagePostRequest.getOpenId());
+            return target;
+        } catch (Exception e) {
+            throw new RuntimeException("创建公共响应失败" + targetClass);
+        }
+    }
+
     public String start(WechatMessagePostRequest wechatMessagePostRequest) {
         AppLogger.debug("处理微信消息 公共处理 wechatMessagePostRequest:[{}]", JSON.toJSONString(wechatMessagePostRequest));
         this.wechatMessagePostRequest = wechatMessagePostRequest;
         // 创建用户
         userMoreAuthBo = userService.wxmpLogin(wechatMessagePostRequest.getToUserName(), wechatMessagePostRequest.getOpenId());
         // 构建 base request
-        T request = this.assembleConcrete();
+        Request request = this.assembleConcrete();
         // 响应消息
-        String response = this.response(request);
-        AppLogger.debug("处理微信消息 公共处理 处理结束 response:[{}]", response);
-        return response;
+        WechatMessageBasicResponse response = this.response(request);
+        AppLogger.debug("处理微信消息 公共处理 处理结束 response:[{}]", JSON.toJSONString(response));
+        if (response == null) {
+            return "success";
+        }
+        XmlMapper xmlMapper = new XmlMapper();
+        try {
+            return xmlMapper.writeValueAsString(response);
+        } catch (JsonProcessingException e) {
+            AppLogger.error("处理微信消息 转换xml失败", e);
+            return "success";
+        }
     }
 
     /**
@@ -116,7 +151,7 @@ abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest
      * @return
      * @throws
      */
-    abstract public T newInstance();
+    abstract public Request newInstance();
     /**
     *
     * 方法功能描述: 构建业务的request
@@ -126,7 +161,7 @@ abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest
     * @return
     * @throws
     */
-    abstract public T assembleConcrete();
+    abstract public Request assembleConcrete();
     /**
     *
     * 方法功能描述:
@@ -137,5 +172,5 @@ abstract public class AbstractTemplateMessage<T extends WechatMessageBaseRequest
     * @return
     * @throws
     */
-    abstract public String response(T request);
+    abstract public WechatMessageBasicResponse response(Request request);
 }
